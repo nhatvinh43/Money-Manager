@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SignUpActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/loginbg"
+        android:tint="#BFA8A8A8"
+        android:tintMode="multiply" />
+
+    <ImageView
+        android:id="@+id/piggyBankIcon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/ic_piggy_bank"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/signupText"/>
+
+    <TextView
+        android:id="@+id/signupText"
+        android:layout_above="@+id/editTextArea"
+        android:layout_marginTop="55dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:text="@string/signupText"/>
+
+
+    <LinearLayout
+        android:id="@+id/editTextArea"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true">
+
+        <EditText
+            android:id="@+id/username_signup"
+            android:fontFamily="sans-serif-light"
+            android:textAlignment="center"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="45dp"
+            android:background="@drawable/authforms"
+            android:hint="@string/username"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/white"
+            android:textColorHint="@color/hintText"
+            android:selectAllOnFocus="true"
+            android:textSize="15sp"/>
+
+        <EditText
+            android:id="@+id/fullName_signup"
+            android:fontFamily="sans-serif-light"
+            android:textAlignment="center"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/authforms"
+            android:hint="@string/fullName"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/white"
+            android:textColorHint="@color/hintText"
+            android:selectAllOnFocus="true"
+            android:textSize="15sp"/>
+
+        <EditText
+            android:id="@+id/password_signup"
+            android:layout_width="300dp"
+            android:textSize="15sp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/hintText"
+            android:fontFamily="sans-serif-light"
+            android:textAlignment="center"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/authforms"
+            android:autofillHints="@string/prompt_password"
+            android:hint="@string/password"
+            android:imeActionLabel="@string/action_sign_in_short"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
+            android:selectAllOnFocus="true"
+            />
+
+        <EditText
+            android:id="@+id/passwordConfirm_signup"
+            android:layout_width="300dp"
+            android:textSize="15sp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/hintText"
+            android:fontFamily="sans-serif-light"
+            android:textAlignment="center"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/authforms"
+            android:autofillHints="@string/prompt_password"
+            android:hint="@string/passwordConfirm"
+            android:imeActionLabel="@string/action_sign_in_short"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
+            android:selectAllOnFocus="true"
+            />
+
+    </LinearLayout>
+
+
+
+    <Button
+        android:id="@+id/signupButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextArea"
+        android:layout_marginTop="45dp"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="start"
+        android:enabled="true"
+        android:text="@string/signupText"
+        android:background="@drawable/authbtns"
+        android:textColor="@color/white"
+        android:fontFamily="sans-serif-light"
+        android:textAllCaps="false"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="100dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/loginSuggestion"
+            android:layout_marginTop="55dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/loginSuggestion" />
+
+        <TextView
+            android:id="@+id/loginPrompt"
+            android:layout_marginTop="55dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccentText"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/loginText" />
+
+    </LinearLayout>
+
+
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        />
+</RelativeLayout>
