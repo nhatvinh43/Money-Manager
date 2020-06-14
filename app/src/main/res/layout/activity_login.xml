@@ -11,9 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/loginbg"
-        android:tint="#BFA8A8A8"
-        android:tintMode="multiply" />
+        android:src="@drawable/loginbg" />
 
     <ImageView
         android:id="@+id/piggyBankIcon"
@@ -25,7 +23,7 @@
 
     <TextView
         android:id="@+id/loginText"
-        android:layout_above="@+id/username_login"
+        android:layout_above="@+id/email_login"
         android:layout_marginTop="55dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -38,7 +36,7 @@
 
 
     <EditText
-        android:id="@+id/username_login"
+        android:id="@+id/email_login"
         android:fontFamily="sans-serif-light"
         android:textAlignment="center"
         android:layout_width="300dp"
@@ -48,7 +46,7 @@
         android:layout_marginTop="45dp"
         android:autofillHints="@string/prompt_email"
         android:background="@drawable/authforms"
-        android:hint="@string/username"
+        android:hint="@string/email"
         android:inputType="textEmailAddress"
         android:textColor="@color/white"
         android:textColorHint="@color/hintText"
@@ -64,7 +62,7 @@
         android:fontFamily="sans-serif-light"
         android:textAlignment="center"
         android:layout_height="wrap_content"
-        android:layout_below="@id/username_login"
+        android:layout_below="@id/email_login"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
         android:background="@drawable/authforms"
@@ -76,50 +74,52 @@
         android:selectAllOnFocus="true"
         />
 
-    <Button
-        android:id="@+id/loginButton"
+    <TextView
+        android:id="@+id/forgotPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:text="@string/forgetPassword"
         android:layout_below="@id/password_login"
-        android:layout_marginTop="45dp"
+        android:textAlignment="center"
         android:layout_centerHorizontal="true"
-        android:layout_gravity="start"
-        android:enabled="true"
-        android:text="@string/loginText"
-        android:background="@drawable/authbtns"
-        android:textColor="@color/white"
-        android:fontFamily="sans-serif-light"
-        android:textAllCaps="false"/>
+        android:layout_marginTop="25dp"
+        android:textColor="@color/colorAccentText"
+        android:fontFamily="sans-serif-light"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="100dp"
-        android:orientation="horizontal">
+        android:layout_below="@id/password_login"
+        android:orientation="horizontal"
+        android:layout_marginTop="75dp">
 
-        <TextView
-            android:id="@+id/signupSuggestion"
-            android:layout_marginTop="55dp"
+        <Button
+            android:id="@+id/loginButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:textAlignment="center"
+            android:layout_gravity="start"
+            android:enabled="true"
+            android:layout_marginEnd="15dp"
+            android:text="@string/loginText"
+            android:background="@drawable/authbtns"
             android:textColor="@color/white"
             android:fontFamily="sans-serif-light"
-            android:text="@string/signupSuggestion" />
+            android:textAllCaps="false"/>
 
-        <TextView
+        <Button
             android:id="@+id/signupPrompt"
-            android:layout_marginTop="55dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:textAlignment="center"
-            android:textColor="@color/colorAccentText"
+            android:layout_gravity="start"
+            android:enabled="true"
+            android:text="@string/signupText"
+            android:background="@drawable/emptybtns"
+            android:textColor="@color/white"
             android:fontFamily="sans-serif-light"
-            android:text="@string/signupText" />
+            android:textAllCaps="false"/>
+
 
     </LinearLayout>
 

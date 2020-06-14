@@ -11,11 +11,15 @@
     <string name="login_failed">"Login failed"</string>
     <string name="loginText">Đăng nhập</string>
     <string name="signupText">Đăng ký</string>
-    <string name="username">Tên đăng nhập</string>
+    <string name="email">Email</string>
     <string name="password">Mật khẩu</string>
     <string name="passwordConfirm">Nhập lại mật khẩu</string>
     <string name="fullName">Họ và tên</string>
     <string name="signupSuggestion">Chưa có tài khoản? </string>
     <string name="loginSuggestion">Đã có tài khoản? </string>
     <string name="appName">Money Manager</string>
+    <string name="forgetPassword">Quên mật khẩu</string>
+    <string name="confirm">Xác nhận</string>
+    <string name="enterCode">Nhập mã xác nhận</string>
+    <string name="sendOTP">Gửi OTP</string>
 </resources>
