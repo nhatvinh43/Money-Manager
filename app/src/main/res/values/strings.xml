@@ -22,4 +22,19 @@
     <string name="confirm">Xác nhận</string>
     <string name="enterCode">Nhập mã xác nhận</string>
     <string name="sendOTP">Gửi OTP</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <!--> Navigation bar <-->
+    <string name="home">Trang chính</string>
+    <string name="statistics">Thống kê</string>
+    <string name="add">Thêm</string>
+    <string name="utilities">Tiện ích</string>
+    <string name="settings">Cài đặt</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
