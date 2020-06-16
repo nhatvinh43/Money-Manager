@@ -34,7 +34,24 @@
     <string name="utilities">Tiện ích</string>
     <string name="settings">Cài đặt</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--Home-->
+    <string name="today">Hôm nay</string>
+    <string name="yesterday">Hôm qua</string>
+    <string name="monday">Thứ 2</string>
+    <string name="tuesday">Thứ 3</string>
+    <string name="wednesday">Thứ 4</string>
+    <string name="thursday">Thứ 5</string>
+    <string name="friday">Thứ 6</string>
+    <string name="saturday">Thứ 7</string>
+    <string name="sunday">Chủ nhật</string>
+    <string name="todaySample">06/11/2020 </string>
+    <string name="downArrow">▾</string>
+    <string name="limit">Hạn mức chi tiêu</string>
+    <string name="todaySpending">Chi hôm nay</string>
+    <string name="todayIncome">Thu hôm nay</string>
+    <string name="moneyPH">10,000,000</string>
+    <string name="moneyPHSmall">25,000</string>
+    <string name="currencyPH">VNĐ</string>
+    <string name="details">Chi tiết</string>
 
 </resources>
