@@ -56,6 +56,24 @@
     <string name="moneySourceNamePH">Tiền ăn uống</string>
     <string name="timePH">07:31</string>
     <string name="moneyPlusPH">+250,000</string>
+
+    <!--Settings-->
+    <string name="data">Dữ liệu</string>
+    <string name="account">Tài khoản</string>
+    <string name="backup">Sao lưu</string>
+    <string name="restore">Khôi phục</string>
+    <string name="changeInfo">Sửa thông tin</string>
+    <string name="namePH">Nguyễn Văn X</string>
+    <string name="logout">Đăng xuất</string>
+    <string name="logoutConfirm">Bạn có chắc muốn đăng xuất?</string>
+    <string name="cancel">Hủy</string>
+
+    <!--Edit user info-->
+    <string name="accountInfo">Thông tin tài khoản</string>
+    <string name="newPassword">Mật khẩu mới</string>
+    <string name="newPasswordConfirm">Nhập lại mật khẩu mới</string>
+    <string name="save">Lưu</string>
+    <string name="emailPH">Nguyenvanx@gmail.com</string>
     
     <!--Categories-->
     <string name="food">Ăn uống</string>

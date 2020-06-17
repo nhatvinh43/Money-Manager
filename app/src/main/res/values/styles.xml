@@ -17,7 +17,7 @@
     </style>
 
     <style name="BottomNavigationView.Active" parent="@style/TextAppearance.AppCompat.Caption">
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">11sp</item>
         <item name="fontFamily">sans-serif-light</item>
         <item name="android:textColor">@color/colorAccentText</item>
     </style>

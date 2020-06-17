@@ -1,12 +1,18 @@
 package com.example.moneymanager;
 
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,4 +66,33 @@ public class SettingsFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_settings, container, false);
     }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
+
+        //Nút Sửa thông tin
+        getView().findViewById(R.id.editInfoButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),EditUserInfoActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        //NÚt đăng xuất
+        getView().findViewById(R.id.logoutButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Taọ dialog, lấy layout ở file dialog_logout
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(v.getContext());
+                dialogBuilder.setView(R.layout.dialog_logout);
+                AlertDialog alertDialog = dialogBuilder.create();
+                alertDialog.show();
+
+                alertDialog.getWindow().setLayout(900,450);
+                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            }
+        });
+    }
 }
+
