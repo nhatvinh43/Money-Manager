@@ -88,6 +88,7 @@
         android:fontFamily="sans-serif-light"/>
 
     <LinearLayout
+        android:id="@+id/buttonArea"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -121,6 +122,28 @@
             android:textAllCaps="false"/>
 
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/buttonArea"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp">
+
+        <ImageButton
+            android:id="@+id/ggLoginButton"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/google_box"
+            android:layout_width="60dp"
+            android:layout_height="60dp" />
+        <ImageButton
+            android:id="@+id/fbLoginButton"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/facebook_box"
+            android:layout_width="60dp"
+            android:layout_height="60dp" />
     </LinearLayout>
 
 

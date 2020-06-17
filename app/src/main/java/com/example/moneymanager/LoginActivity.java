@@ -1,6 +1,7 @@
 package com.example.moneymanager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -12,14 +13,25 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 public class LoginActivity extends AppCompatActivity {
     EditText email_login;
@@ -30,6 +42,14 @@ public class LoginActivity extends AppCompatActivity {
 
     FirebaseAuth fAuth;
     ProgressBar progressBar;
+
+    //google login
+    ImageButton ggButton;
+    GoogleSignInClient mGoogleSignInClient;
+    int RC_SIGN_IN = 1;
+
+    //facebook login
+    ImageButton fbButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +62,9 @@ public class LoginActivity extends AppCompatActivity {
         signupPrompt = findViewById(R.id.signupPrompt); // Switch to sign up
         forgotPassword = findViewById(R.id.forgotPassword); //Forgot password
 
+        ggButton = findViewById(R.id.ggLoginButton);
+        fbButton = findViewById(R.id.fbLoginButton);
+
         fAuth = FirebaseAuth.getInstance();
         progressBar = findViewById(R.id.loading);
 
@@ -50,6 +73,7 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         }
 
+        // Email login
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,12 +95,7 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
-                progressBar.setVisibility(View.VISIBLE);
-                email_login.setVisibility(View.INVISIBLE);
-                password_login.setVisibility(View.INVISIBLE);
-                loginButton.setVisibility(View.INVISIBLE);
-                signupPrompt.setVisibility(View.INVISIBLE);
-                forgotPassword.setVisibility(View.INVISIBLE);
+                Loading();
 
                 fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -84,19 +103,34 @@ public class LoginActivity extends AppCompatActivity {
                         if(task.isSuccessful()) {
                             Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            finish();
                         } else {
                             Toast.makeText(LoginActivity.this, "Thất bại: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            progressBar.setVisibility(View.GONE);
-                            email_login.setVisibility(View.VISIBLE);
-                            password_login.setVisibility(View.VISIBLE);
-                            loginButton.setVisibility(View.VISIBLE);
-                            signupPrompt.setVisibility(View.VISIBLE);
-                            forgotPassword.setVisibility(View.VISIBLE);
+                            unLoading();
                         }
                     }
                 });
             }
         });
+
+
+        // Google login
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        ggButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent ggLoginIntent = mGoogleSignInClient.getSignInIntent();
+                startActivityForResult(ggLoginIntent, RC_SIGN_IN);
+            }
+        });
+
+        //facebook login
 
         signupPrompt.setOnClickListener(new Button.OnClickListener() {
             @Override
@@ -111,6 +145,65 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), PasswordRecoveryActivity.class);
                 startActivity(intent);
+            }
+        });
+    }
+
+    private void Loading() {
+        progressBar.setVisibility(View.VISIBLE);
+        email_login.setVisibility(View.INVISIBLE);
+        password_login.setVisibility(View.INVISIBLE);
+        loginButton.setVisibility(View.INVISIBLE);
+        signupPrompt.setVisibility(View.INVISIBLE);
+        forgotPassword.setVisibility(View.INVISIBLE);
+        ggButton.setVisibility(View.INVISIBLE);
+        fbButton.setVisibility(View.INVISIBLE);
+    }
+
+    private void unLoading() {
+        progressBar.setVisibility(View.GONE);
+        email_login.setVisibility(View.VISIBLE);
+        password_login.setVisibility(View.VISIBLE);
+        loginButton.setVisibility(View.VISIBLE);
+        signupPrompt.setVisibility(View.VISIBLE);
+        forgotPassword.setVisibility(View.VISIBLE);
+        ggButton.setVisibility(View.VISIBLE);
+        fbButton.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                Toast.makeText(LoginActivity.this, "Đăng nhập Google thành công", Toast.LENGTH_SHORT).show();
+                Loading();
+                firebaseAuthWithGoogle(account.getIdToken());
+            } catch (ApiException e) {
+                Toast.makeText(LoginActivity.this, "Đăng nhập Google thất bại", Toast.LENGTH_SHORT).show();
+                unLoading();
+            }
+        }
+    }
+
+    private void firebaseAuthWithGoogle(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        fAuth.signInWithCredential(credential)
+        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    FirebaseUser user = fAuth.getCurrentUser();
+                    Toast.makeText(LoginActivity.this, "Hello, " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    finish();
+                } else {
+                    Toast.makeText(LoginActivity.this, "Thất bại: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    unLoading();
+                }
             }
         });
     }
