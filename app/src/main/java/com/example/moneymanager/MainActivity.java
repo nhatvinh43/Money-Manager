@@ -2,10 +2,12 @@ package com.example.moneymanager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.annotation.NonNull;
@@ -27,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     final FragmentManager fm = getSupportFragmentManager();
     Fragment active = fragment1;
 
+    FirebaseAuth fAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        fAuth = FirebaseAuth.getInstance();
 
         //Fragment controls
         fm.beginTransaction().add(R.id.main_container, fragment4, "4").hide(fragment4).commit();
@@ -61,6 +67,10 @@ public class MainActivity extends AppCompatActivity {
                     {
                         fm.beginTransaction().hide(active).show(fragment2).commit();
                         active = fragment2;
+
+                        fAuth.signOut();
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        finish();
                         return true;
                     }
                     case R.id.navigation_add:
