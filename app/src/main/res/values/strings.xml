@@ -98,4 +98,6 @@
     <string name="gift">Được tặng</string>
 
 
+    <string name="facebook_app_id">886246855208820</string> <string name="fb_login_protocol_scheme">fb886246855208820</string>
+
 </resources>
