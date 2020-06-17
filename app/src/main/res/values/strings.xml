@@ -53,5 +53,20 @@
     <string name="moneyPHSmall">25,000</string>
     <string name="currencyPH">VNĐ</string>
     <string name="details">Chi tiết</string>
+    <string name="moneySourceNamePH">Tiền ăn uống</string>
+    <string name="timePH">07:31</string>
+    <string name="moneyPlusPH">+250,000</string>
+    
+    <!--Categories-->
+    <string name="food">Ăn uống</string>
+    <string name="bill">Sinh hoạt</string>
+    <string name="travel">Đi lại</string>
+    <string name="health">Sức khỏe</string>
+    <string name="more">Khác</string>
+    <string name="bonus">Tiền Thưởng</string>
+    <string name="profit">Tiền Lãi</string>
+    <string name="salary">Tiền lương</string>
+    <string name="gift">Được tặng</string>
+
 
 </resources>
