@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="170dp"
+    android:layout_height="200dp"
+    android:background="@drawable/transaction_item">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true">
+        <ImageView
+            android:id="@+id/transactionIcon_item"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_category_gift"
+            android:layout_gravity="center_horizontal"/>
+        <TextView
+            android:id="@+id/transactionName_item"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:textColor="@color/white"
+            android:text="@string/gift"
+            android:layout_marginTop="10dp"
+            android:fontFamily="sans-serif-light"/>
+        <TextView
+            android:id="@+id/transactionTime_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/white"
+            android:text="@string/timePH"
+            android:layout_marginTop="5dp"
+            android:fontFamily="sans-serif-light"/>
+        <TextView
+            android:id="@+id/transactionAmount_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/greenAccent"
+            android:text="@string/moneyPlusPH"
+            android:layout_marginTop="5dp"
+            android:fontFamily="sans-serif"/>
+        <TextView
+            android:id="@+id/transactionMoneySource_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/white"
+            android:text="@string/moneySourceNamePH"
+            android:layout_marginTop="5dp"
+            android:fontFamily="sans-serif-light"/>
+
+    </LinearLayout>
+</RelativeLayout>
