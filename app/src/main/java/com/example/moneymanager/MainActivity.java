@@ -4,10 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
+import android.widget.Toast;
 import android.view.View;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.UserInfo;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.annotation.NonNull;
@@ -68,7 +73,25 @@ public class MainActivity extends AppCompatActivity {
                         fm.beginTransaction().hide(active).show(fragment2).commit();
                         active = fragment2;
 
-                        fAuth.signOut();
+                        // test sign-out
+
+                        UserInfo user = FirebaseAuth.getInstance().getCurrentUser().getProviderData().get(1);
+                        if (user.getProviderId().equals("google.com")) {
+                                GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                        .requestIdToken(getString(R.string.default_web_client_id))
+                                        .requestEmail()
+                                        .build();
+
+                                GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(), gso);
+                                mGoogleSignInClient.signOut();
+                            Toast.makeText(MainActivity.this, "User use google",Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(MainActivity.this, "User use email",Toast.LENGTH_SHORT).show();
+                        }
+
+
+                        fAuth.getInstance().signOut();
                         startActivity(new Intent(MainActivity.this, LoginActivity.class));
                         finish();
                         return true;
