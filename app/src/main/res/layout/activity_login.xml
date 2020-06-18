@@ -129,21 +129,20 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/buttonArea"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="50dp">
 
         <ImageButton
             android:id="@+id/ggLoginButton"
-            android:layout_marginRight="15dp"
-            android:layout_marginLeft="15dp"
-            android:background="@drawable/google_box"
-            android:layout_width="60dp"
-            android:layout_height="60dp" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/ic_google" />
+
         <ImageButton
             android:id="@+id/fbLoginButton"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/facebook_box"
-            android:layout_width="60dp"
-            android:layout_height="60dp" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_facebook" />
 
 
     </LinearLayout>
