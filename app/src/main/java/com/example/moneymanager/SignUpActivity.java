@@ -1,11 +1,14 @@
 package com.example.moneymanager;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -64,33 +67,59 @@ public class SignUpActivity extends AppCompatActivity {
                 String password = password_signup.getText().toString().trim();
                 String rePassword = passwordConfirm_signup.getText().toString().trim();
 
+                //Tạo dialog lỗi
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setView(R.layout.dialog_one_button);
+                final AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+                alertDialog.getWindow().setLayout(850,400);
+                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                TextView message = alertDialog.findViewById(R.id.message_one_button_dialog);
+                alertDialog.findViewById(R.id.confirm_one_button_dialog).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.hide();
+                    }
+                });
+                alertDialog.hide();
+
                 if(TextUtils.isEmpty(email)) {
-                    email_signup.setError("Email không được để trống !");
+                    //email_signup.setError("Email không được để trống !");
+                    alertDialog.show();
+                    message.setText("Email không được để trống!");
                     return;
                 }
 
                 if(TextUtils.isEmpty(fullName_signup.getText().toString())) {
-                    fullName_signup.setError("Họ và tên không được để trống !");
+                    //fullName_signup.setError("Họ và tên không được để trống !");
+                    alertDialog.show();
+                    message.setText("Họ và tên không được để trống!");
                     return;
                 }
 
-                if(TextUtils.isEmpty(password)) {
+                /*if(TextUtils.isEmpty(password)) {
                     password_signup.setError("Mật khẩu không được để trống !");
                     return;
-                }
+                }*/
 
                 if(password.length() < 6) {
-                    password_signup.setError("Mật khẩu phải nhiều hơn 5 kí tự !");
+                    //password_signup.setError("Mật khẩu phải nhiều hơn 5 kí tự !");
+                    alertDialog.show();
+                    message.setText("Mật khẩu phải nhiều hơn 5 kí tự!");
                     return;
                 }
 
                 if(TextUtils.isEmpty(rePassword)) {
-                    passwordConfirm_signup.setError("Nhập lại mật khẩu !");
+                    //passwordConfirm_signup.setError("Nhập lại mật khẩu !");
+                    alertDialog.show();
+                    message.setText("Vui lòng nhập lại mật khẩu!");
                     return;
                 }
 
                 if(!TextUtils.equals(password,rePassword)) {
-                    passwordConfirm_signup.setError("Nhập lại mật khẩu không chính xác!");
+                    //passwordConfirm_signup.setError("Nhập lại mật khẩu không chính xác!");
+                    alertDialog.show();
+                    message.setText("Nhập lại mật khẩu không chính xác");
                     return;
                 }
 

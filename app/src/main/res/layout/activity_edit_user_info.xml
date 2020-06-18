@@ -86,6 +86,7 @@
                 android:text="@string/namePH"
                 android:textAlignment="center"
                 android:textColor="@color/white"
+                android:enabled="false"
                 android:inputType="textPassword"/>
             <TextView
                 android:layout_marginTop="20dp"

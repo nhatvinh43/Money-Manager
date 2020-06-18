@@ -85,6 +85,8 @@
     <string name="newPasswordConfirm">Nhập lại mật khẩu mới</string>
     <string name="save">Lưu</string>
     <string name="emailPH">Nguyenvanx@gmail.com</string>
+    <string name="passwordMismatch">Mật khẩu không khớp!</string>
+    <string name="infoMissing">Vui lòng nhập đầy đủ thông tin!</string>
     
     <!--Categories-->
     <string name="food">Ăn uống</string>

@@ -36,6 +36,7 @@
 
 
     <EditText
+        android:paddingHorizontal="20dp"
         android:id="@+id/email_login"
         android:fontFamily="sans-serif-light"
         android:textAlignment="center"
@@ -54,6 +55,7 @@
         android:textSize="15sp"/>
 
     <EditText
+        android:paddingHorizontal="20dp"
         android:id="@+id/password_login"
         android:layout_width="300dp"
         android:textSize="15sp"

@@ -19,5 +19,7 @@ public class EditUserInfoActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        //Nhớ gọi dialog và set message như ở login và signup activity
     }
 }

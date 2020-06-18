@@ -20,7 +20,7 @@ public class SplashActivity extends AppCompatActivity {
                 startActivity(splashIntent);
                 finish();
             }
-        },2000);
+        },1500);
 
     }
 }
