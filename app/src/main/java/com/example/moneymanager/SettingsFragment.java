@@ -1,6 +1,5 @@
 package com.example.moneymanager;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -13,7 +12,6 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -113,9 +111,9 @@ public class SettingsFragment extends Fragment {
         getView().findViewById(R.id.logoutButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Taọ dialog, lấy layout ở file dialog_logout
+                //Taọ dialog, lấy layout ở file dialog_logout_confirm
                 LayoutInflater factory = LayoutInflater.from(getContext());
-                View DialogView = factory.inflate(R.layout.dialog_logout, null);
+                View DialogView = factory.inflate(R.layout.dialog_logout_confirm, null);
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(v.getContext());
                 dialogBuilder.setView(DialogView);
                 final AlertDialog alertDialog = dialogBuilder.create();
@@ -155,7 +153,7 @@ public class SettingsFragment extends Fragment {
 
                 alertDialog.show();
 
-                alertDialog.getWindow().setLayout(900,450);
+                alertDialog.getWindow().setLayout(850,450);
                 alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             }
         });

@@ -68,6 +68,16 @@
     <string name="timePH">07:31</string>
     <string name="moneyPlusPH">+250,000</string>
 
+    <!--Add transaction-->
+    <string name="addTransaction">Thêm ghi chép</string>
+    <string name="enterMoneyAmount">Nhập số tiền</string>
+    <string name="chooseMoneySource">Chọn nguồn tiền</string>
+    <string name="chooseDate">Chọn ngày</string>
+    <string name="chooseCategory">Chọn danh mục</string>
+    <string name="enterDescription">Nhập mô tả</string>
+    <string name="choose">Chọn</string>
+    <string name="description">Mô tả</string>
+
     <!--Settings-->
     <string name="data">Dữ liệu</string>
     <string name="account">Tài khoản</string>
@@ -85,6 +95,8 @@
     <string name="newPasswordConfirm">Nhập lại mật khẩu mới</string>
     <string name="save">Lưu</string>
     <string name="emailPH">Nguyenvanx@gmail.com</string>
+    <string name="passwordMismatch">Mật khẩu không khớp!</string>
+    <string name="infoMissing">Vui lòng nhập đầy đủ thông tin!</string>
     
     <!--Categories-->
     <string name="food">Ăn uống</string>
@@ -92,10 +104,15 @@
     <string name="travel">Đi lại</string>
     <string name="health">Sức khỏe</string>
     <string name="more">Khác</string>
-    <string name="bonus">Tiền Thưởng</string>
+    <string name="bonus">T.Thưởng</string>
     <string name="profit">Tiền Lãi</string>
-    <string name="salary">Tiền lương</string>
+    <string name="salary">T.Lương</string>
     <string name="gift">Được tặng</string>
+    <string name="spend">Tiền Chi</string>
+    <string name="income">Tiền Thu</string>
+    <string name="party">Đám tiệc</string>
+
+    <!--Money Source-->
 
 
     <string name="facebook_app_id">886246855208820</string> <string name="fb_login_protocol_scheme">fb886246855208820</string>

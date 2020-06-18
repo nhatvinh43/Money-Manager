@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/transaction_item">
+
+    <TextView
+        android:id="@+id/moneySourceName_moneySourceListSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
+        android:textSize="15sp"
+        android:textColor="@color/white"
+        android:text="@string/moneySourceNamePH"
+        android:layout_marginTop="15dp"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:layout_below="@id/moneySourceName_moneySourceListSmall"
+        android:id="@+id/moneySourceAmount_moneySourceListSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:text="@string/moneyPH"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="15dp"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>

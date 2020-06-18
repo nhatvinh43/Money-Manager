@@ -2,11 +2,14 @@ package com.example.moneymanager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MotionEvent;
@@ -94,18 +97,40 @@ public class LoginActivity extends AppCompatActivity {
                 String email = email_login.getText().toString().trim();
                 String password = password_login.getText().toString().trim();
 
+                //Tạo dialog lỗi
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setView(R.layout.dialog_one_button);
+                final AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+                alertDialog.getWindow().setLayout(850,400);
+                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                TextView message = alertDialog.findViewById(R.id.message_one_button_dialog);
+                alertDialog.findViewById(R.id.confirm_one_button_dialog).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.hide();
+                    }
+                });
+                alertDialog.hide();
+
                 if(TextUtils.isEmpty(email)) {
-                    email_login.setError("Email không được để trống !");
+                    /*email_login.setError("Email không được để trống !");
+                    return;*/
+                    alertDialog.show();
+                    message.setText("Email không được để trống!");
                     return;
                 }
 
-                if(TextUtils.isEmpty(password)) {
+                /*if(TextUtils.isEmpty(password)) {
                     password_login.setError("Mật khẩu không được để trống !");
                     return;
-                }
+                }*/
 
                 if(password.length() < 6) {
-                    password_login.setError("Mật khẩu phải nhiều hơn 5 kí tự !");
+                    /*password_login.setError("Mật khẩu phải nhiều hơn 5 kí tự !");
+                    return;*/
+                    alertDialog.show();
+                    message.setText("Mật khẩu phải nhiều hơn 5 kí tự!");
                     return;
                 }
 
