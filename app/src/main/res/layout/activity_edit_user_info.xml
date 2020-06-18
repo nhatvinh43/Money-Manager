@@ -58,7 +58,7 @@
                 android:text="@string/fullName"
                 android:textColor="@color/white"
                 android:textSize="18sp"
-                android:fontFamily="sans-serif-black"/>
+                android:fontFamily="sans-serif-medium"/>
             <EditText
                 android:id="@+id/fullName_editUserInfo"
                 android:layout_width="match_parent"
@@ -76,7 +76,7 @@
                 android:text="@string/password"
                 android:textColor="@color/white"
                 android:textSize="18sp"
-                android:fontFamily="sans-serif-black"/>
+                android:fontFamily="sans-serif-medium"/>
             <EditText
                 android:id="@+id/password_editUserInfo"
                 android:layout_width="match_parent"
@@ -95,7 +95,7 @@
                 android:text="@string/newPassword"
                 android:textColor="@color/white"
                 android:textSize="18sp"
-                android:fontFamily="sans-serif-black"/>
+                android:fontFamily="sans-serif-medium"/>
             <EditText
                 android:id="@+id/newPassword_editUserInfo"
                 android:layout_width="match_parent"
@@ -113,7 +113,7 @@
                 android:text="@string/newPasswordConfirm"
                 android:textColor="@color/white"
                 android:textSize="18sp"
-                android:fontFamily="sans-serif-black"/>
+                android:fontFamily="sans-serif-medium"/>
             <EditText
                 android:id="@+id/newPasswordConfirm_editUserInfo"
                 android:layout_width="match_parent"

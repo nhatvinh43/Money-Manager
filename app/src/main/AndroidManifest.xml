@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".EditUserInfoActivity"/>
-        <activity android:name=".AddTransactionActivity" />
+        <activity android:name=".AddTransactionActivity" android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"

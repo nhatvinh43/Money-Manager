@@ -153,7 +153,7 @@ public class SettingsFragment extends Fragment {
 
                 alertDialog.show();
 
-                alertDialog.getWindow().setLayout(900,450);
+                alertDialog.getWindow().setLayout(850,450);
                 alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             }
         });
