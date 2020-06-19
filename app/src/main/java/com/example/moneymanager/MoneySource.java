@@ -1,6 +1,8 @@
 package com.example.moneymanager;
 
 
+import java.util.ArrayList;
+
 public class MoneySource {
     private Number amount;
     private String currencyId;

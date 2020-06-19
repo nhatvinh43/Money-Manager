@@ -10,11 +10,11 @@ public class Transaction {
     private String expenditureName;
     private Number transactionAmout;
     private String transactionId;
-    private String transactionIsIncome;
-    private Date transactionTime;
+    private boolean transactionIsIncome;
+    private Timestamp transactionTime;
 
     public Transaction(String description, String expenditureId, String expenditureName,
-                       Number transactionAmout, String transactionId, String transactionIsIncome, Date transactionTime) {
+                       Number transactionAmout, String transactionId, boolean transactionIsIncome, Timestamp transactionTime) {
         this.description = description;
         this.expenditureId = expenditureId;
         this.expenditureName = expenditureName;
@@ -64,19 +64,19 @@ public class Transaction {
         this.transactionId = transactionId;
     }
 
-    public String getTransactionIsIncome() {
+    public boolean getTransactionIsIncome() {
         return transactionIsIncome;
     }
 
-    public void setTransactionIsIncome(String transactionIsIncome) {
+    public void setTransactionIsIncome(boolean transactionIsIncome) {
         this.transactionIsIncome = transactionIsIncome;
     }
 
-    public Date getTransactionTime() {
+    public Timestamp getTransactionTime() {
         return transactionTime;
     }
 
-    public void setTransactionTime(Date transactionTime) {
+    public void setTransactionTime(Timestamp transactionTime) {
         this.transactionTime = transactionTime;
     }
 }

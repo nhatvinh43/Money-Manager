@@ -108,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
                 alertDialog.findViewById(R.id.confirm_one_button_dialog).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        alertDialog.hide();
+                        alertDialog.dismiss();
                     }
                 });
                 alertDialog.hide();
