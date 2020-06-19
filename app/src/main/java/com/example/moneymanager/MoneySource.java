@@ -77,7 +77,7 @@ public class MoneySource {
         return currencyID;
     }
 
-    public void setCurrencyID(int currencyID) {
+    public void setCurrencyID(int currency) {
         this.currencyID = currencyID;
     }
 }
