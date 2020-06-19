@@ -1,72 +1,37 @@
 package com.example.moneymanager;
 
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
-
-@Entity
 public class User {
+    private String avatarURL;
+    private String email;
+    private String fullName;
 
-    //UserID sẽ được tạo tự động
-    @PrimaryKey(autoGenerate = true)
-    private int userID;
-
-    @ColumnInfo(name = "col_Name")
-    private String name;
-
-    @ColumnInfo(name = "col_Username")
-    private String userName;
-
-    @ColumnInfo(name = "col_Password")
-    private String password;
-
-    @ColumnInfo(name = "col_Avatar")
-    private String avatar;
-
-    public User(String name, String userName, String password, String avatar) {
-        this.name = name;
-        this.userName = userName;
-        this.password = password;
-        this.avatar = avatar;
+    public User(String avatarURL, String email, String fullName) {
+        this.avatarURL = avatarURL;
+        this.email = email;
+        this.fullName = fullName;
     }
 
-    public int getUserID() {
-        return userID;
+    public String getAvatarURL() {
+        return avatarURL;
     }
 
-    public void setUserID(int userID) {
-        this.userID = userID;
+    public void setAvatarURL(String avatarURL) {
+        this.avatarURL = avatarURL;
     }
 
-    public String getName() {
-        return name;
+    public String getEmail() {
+        return email;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 }

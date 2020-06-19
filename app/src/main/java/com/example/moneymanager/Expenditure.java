@@ -1,63 +1,39 @@
 package com.example.moneymanager;
 
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
-
-@Entity
 public class Expenditure {
     //expenditure sẽ cố định và được khởi tạo từ khi cài đặt ứng dụng
+    private String expenditureId;
+    private String expenditureName;
+    private boolean isIncome;
 
-    //expenditureID sẽ được tạo tự động
-    @PrimaryKey(autoGenerate = true)
-    private int expenditureID;
-
-    @ColumnInfo(name = "col_Name")
-    private String name;
-
-    //type lưu giá trị thu hoặc chi có thể dùng boolean
-    @ColumnInfo(name = "col_Type")
-    private boolean type;
-
-    @ColumnInfo(name = "col_Icon")
-    private String icon;
-
-    public Expenditure(String name, boolean type, String icon) {
-        this.name = name;
-        this.type = type;
-        this.icon = icon;
+    public Expenditure(String expenditureId, String expenditureName, boolean isIncome) {
+        this.expenditureId = expenditureId;
+        this.expenditureName = expenditureName;
+        this.isIncome = isIncome;
     }
 
-    public int getExpenditureID() {
-        return expenditureID;
+    public String getExpenditureId() {
+        return expenditureId;
     }
 
-    public void setExpenditureID(int expenditureID) {
-        this.expenditureID = expenditureID;
+    public void setExpenditureId(String expenditureId) {
+        this.expenditureId = expenditureId;
     }
 
-    public String getName() {
-        return name;
+    public String getExpenditureName() {
+        return expenditureName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setExpenditureName(String expenditureName) {
+        this.expenditureName = expenditureName;
     }
 
-    public boolean getType() {
-        return type;
+    public boolean isExpenditureType() {
+        return isIncome;
     }
 
-    public void setType(boolean type) {
-        this.type = type;
-    }
-
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
+    public void setExpenditureType(boolean expenditureType) {
+        this.isIncome = expenditureType;
     }
 }
 

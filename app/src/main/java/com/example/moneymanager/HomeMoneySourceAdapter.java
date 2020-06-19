@@ -29,15 +29,14 @@ public class HomeMoneySourceAdapter extends RecyclerView.Adapter<HomeMoneySource
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.moneySourceName.setText(mainModel.get(position).getName());
-        holder.moneySourceTotal.setText(Double.toString(mainModel.get(position).getCurrentMoney()));
-        holder.moneySourceCurrency.setText(mainModel.get(position).getCurrencyID());
+        holder.moneySourceName.setText(mainModel.get(position).getMoneySourceName());
+        holder.moneySourceTotal.setText(mainModel.get(position).getAmount().toString());
+        holder.moneySourceCurrency.setText(mainModel.get(position).getCurrencyName());
     }
 
     @Override
     public int getItemCount() {
-        mainModel.size();
-        return 0;
+        return mainModel.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -49,7 +48,7 @@ public class HomeMoneySourceAdapter extends RecyclerView.Adapter<HomeMoneySource
             super(itemView);
             moneySourceName = itemView.findViewById(R.id.moneySourceName);
             moneySourceTotal = itemView.findViewById(R.id.moneySourceTotal);
-            moneySourceTotal = itemView.findViewById(R.id.moneySourceCurrency);
+            moneySourceCurrency = itemView.findViewById(R.id.moneySourceCurrency);
         }
     }
 }

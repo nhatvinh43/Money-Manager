@@ -1,42 +1,38 @@
 package com.example.moneymanager;
 
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
-@Entity
+
 public class Currency {
     //Currency sẽ cố định/
-
-    //CurrencyID sẽ được khởi tạo tự động
-    @PrimaryKey(autoGenerate = true)
-    private int currencyID;
-
-    @ColumnInfo(name = "col_CurrencyUnit")
-    private String currencyUnit;
-
-    @ColumnInfo(name = "col_Nation")
+    private String currencyId;
+    private String getCurrencyName;
     private String nation;
 
-    public Currency(String currencyUnit, String nation) {
-        this.currencyUnit = currencyUnit;
+    public Currency(String currencyId, String getCurrencyName, String nation) {
+        this.currencyId = currencyId;
+        this.getCurrencyName = getCurrencyName;
         this.nation = nation;
     }
 
-    public int getCurrencyID() {
-        return currencyID;
+    public Currency(String currencyId, String getCurrencyName) {
+        this.currencyId = currencyId;
+        this.getCurrencyName = getCurrencyName;
     }
 
-    public void setCurrencyID(int currencyID) {
-        this.currencyID = currencyID;
+    public String getCurrencyId() {
+        return currencyId;
     }
 
-    public String getCurrencyUnit() {
-        return currencyUnit;
+    public void setCurrencyId(String currencyId) {
+        this.currencyId = currencyId;
     }
 
-    public void setCurrencyUnit(String currencyUnit) {
-        this.currencyUnit = currencyUnit;
+    public String getCurrencyName() {
+        return getCurrencyName;
+    }
+
+    public void setCurrencyName(String getCurrencyName) {
+        this.getCurrencyName = getCurrencyName;
     }
 
     public String getNation() {
