@@ -1,6 +1,8 @@
 package com.example.moneymanager;
 
 
+import java.util.ArrayList;
+
 public class MoneySource {
     private Number amount;
     private String currencyId;
@@ -75,5 +77,18 @@ public class MoneySource {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getCurrencyName(ArrayList<Currency> currencyList) {
+        String name = "";
+
+        for(Currency i : currencyList) {
+            if(i.getCurrencyId().compareTo(this.currencyId) == 0) {
+                name = i.getCurrencyName();
+                break;
+            }
+        }
+
+        return name;
     }
 }

@@ -27,11 +27,11 @@ public class Currency {
         this.currencyId = currencyId;
     }
 
-    public String getGetCurrencyName() {
+    public String getCurrencyName() {
         return getCurrencyName;
     }
 
-    public void setGetCurrencyName(String getCurrencyName) {
+    public void setCurrencyName(String getCurrencyName) {
         this.getCurrencyName = getCurrencyName;
     }
 
