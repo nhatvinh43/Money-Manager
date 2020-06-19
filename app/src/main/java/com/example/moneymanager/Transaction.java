@@ -1,60 +1,27 @@
 package com.example.moneymanager;
 
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
-@Entity
+import java.sql.Timestamp;
+import java.util.Date;
+
 public class Transaction {
-
-    @PrimaryKey(autoGenerate = true)
-    private int transactionID;
-
-    @ColumnInfo(name = "col_ExpenditureID")
-    private int expenditureID;
-
-    @ColumnInfo(name = "col_MoneySourceID")
-    private int moneySourceID;
-
-    @ColumnInfo(name = "col_Description")
     private String description;
+    private String expenditureId;
+    private String expenditureName;
+    private Number transactionAmout;
+    private String transactionId;
+    private String transactionIsIncome;
+    private Date transactionTime;
 
-    @ColumnInfo(name = "col_Money")
-    private float money;
-
-    @ColumnInfo(name = "col_Time")
-    private long time;
-
-    public Transaction(int expenditureID, int moneySourceID, String description, float money, long time) {
-        this.expenditureID = expenditureID;
-        this.moneySourceID = moneySourceID;
+    public Transaction(String description, String expenditureId, String expenditureName,
+                       Number transactionAmout, String transactionId, String transactionIsIncome, Date transactionTime) {
         this.description = description;
-        this.money = money;
-        this.time = time;
-    }
-
-    public int getTransactionID() {
-        return transactionID;
-    }
-
-    public void setTransactionID(int transactionID) {
-        this.transactionID = transactionID;
-    }
-
-    public int getExpenditureID() {
-        return expenditureID;
-    }
-
-    public void setExpenditureID(int expenditureID) {
-        this.expenditureID = expenditureID;
-    }
-
-    public int getMoneySourceID() {
-        return moneySourceID;
-    }
-
-    public void setMoneySourceID(int moneySourceID) {
-        this.moneySourceID = moneySourceID;
+        this.expenditureId = expenditureId;
+        this.expenditureName = expenditureName;
+        this.transactionAmout = transactionAmout;
+        this.transactionId = transactionId;
+        this.transactionIsIncome = transactionIsIncome;
+        this.transactionTime = transactionTime;
     }
 
     public String getDescription() {
@@ -65,19 +32,51 @@ public class Transaction {
         this.description = description;
     }
 
-    public float getMoney() {
-        return money;
+    public String getExpenditureId() {
+        return expenditureId;
     }
 
-    public void setMoney(float money) {
-        this.money = money;
+    public void setExpenditureId(String expenditureId) {
+        this.expenditureId = expenditureId;
     }
 
-    public long getTime() {
-        return time;
+    public String getExpenditureName() {
+        return expenditureName;
     }
 
-    public void setTime(long time) {
-        this.time = time;
+    public void setExpenditureName(String expenditureName) {
+        this.expenditureName = expenditureName;
+    }
+
+    public Number getTransactionAmout() {
+        return transactionAmout;
+    }
+
+    public void setTransactionAmout(Number transactionAmout) {
+        this.transactionAmout = transactionAmout;
+    }
+
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
+    }
+
+    public String getTransactionIsIncome() {
+        return transactionIsIncome;
+    }
+
+    public void setTransactionIsIncome(String transactionIsIncome) {
+        this.transactionIsIncome = transactionIsIncome;
+    }
+
+    public Date getTransactionTime() {
+        return transactionTime;
+    }
+
+    public void setTransactionTime(Date transactionTime) {
+        this.transactionTime = transactionTime;
     }
 }
