@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddMoneySourceActivity"
+    android:background="@color/black">
+
+    <ImageButton
+        android:id="@+id/backButton_addMoneySource"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_arrow"
+        android:tint="@color/white"
+        android:background="@android:color/transparent"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="50dp"/>
+    <TextView
+        android:layout_below="@id/backButton_addMoneySource"
+        android:id="@+id/addTransactionTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-black"
+        android:textSize="22sp"
+        android:text="@string/addMoneySource"
+        android:textColor="@color/white"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="30dp"/>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/addTransactionTitle"
+        android:layout_marginTop="15dp"
+        android:paddingHorizontal="30dp"
+        android:scrollbars="none">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:paddingBottom="40dp"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_alignParentBottom="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_height="200dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="0dp">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/moneysource"
+                        android:scaleType="centerCrop"/>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_gravity="center_horizontal"
+                                android:id="@+id/moneySourceNameDisplay_addMoneySource"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:textColor="@color/white"
+                                android:textSize="15sp"
+                                android:text="@string/moneySourceNamePH"/>
+                            <TextView
+                                android:layout_marginTop="5dp"
+                                android:layout_gravity="center_horizontal"
+                                android:id="@+id/moneySourceAmountDisplay_addMoneySource"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:textStyle="bold"
+                                android:textColor="@color/white"
+                                android:textSize="30sp"
+                                android:text="@string/moneyPH"/>
+                            <TextView
+                                android:layout_marginTop="5dp"
+                                android:layout_gravity="center_horizontal"
+                                android:id="@+id/moneySourceUnitDisplay_addMoneySource"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:textColor="@color/white"
+                                android:textSize="15sp"
+                                android:text="@string/currencyPH"/>
+                        </LinearLayout>
+
+                    </RelativeLayout>
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:layout_marginTop="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/moneySourceName"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:fontFamily="sans-serif-medium"/>
+
+                <EditText
+                    android:layout_marginTop="15dp"
+                    android:id="@+id/moneySourceName_addMoneySource"
+                    android:fontFamily="sans-serif-light"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/transaction_item"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:inputType="text"/>
+
+                <TextView
+                    android:layout_marginTop="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/moneySourceAmount"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:fontFamily="sans-serif-medium"/>
+
+                <EditText
+                    android:layout_marginTop="15dp"
+                    android:id="@+id/moneySourceAmount_addMoneySource"
+                    android:fontFamily="sans-serif-light"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/transaction_item"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:inputType="number"/>
+
+                <TextView
+                    android:layout_marginTop="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/moneySourceUnit"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:fontFamily="sans-serif-medium"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="20dp"
+                    android:weightSum="4">
+                    <EditText
+                        android:id="@+id/moneySourceUnit_addMoneySource"
+                        android:enabled="false"
+                        android:layout_width="0dp"
+                        android:fontFamily="sans-serif-light"
+                        android:layout_weight="3"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/transaction_item"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:inputType="text"/>
+                    <Button
+                        android:id="@+id/chooseMoneySourceUnitButton_addMoneySource"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="45dp"
+                        android:layout_marginStart="20dp"
+                        android:background="@drawable/transaction_item"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textAllCaps="false"
+                        android:textSize="15sp"
+                        android:fontFamily="sans-serif-light"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:text="@string/choose"/>
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/save_addMoneySource"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="50dp"
+                    android:layout_width="100dp"
+                    android:layout_height="45dp"
+                    android:textAllCaps="false"
+                    android:background="@drawable/authbtns"
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="15sp"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:textColor="@color/white"
+                    android:text="@string/save"/>
+
+            </LinearLayout>
+        </RelativeLayout>
+
+
+    </ScrollView>
+
+</RelativeLayout>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/innershape">
+    <TextView
+        android:id="@+id/unit_currencyList"
+        android:layout_width="match_parent"
+        android:textAlignment="center"
+        android:textSize="15sp"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/currencyPH"
+        android:textColor="@color/white"
+        android:layout_marginVertical="15dp"
+        android:layout_height="wrap_content"/>
+</RelativeLayout>
