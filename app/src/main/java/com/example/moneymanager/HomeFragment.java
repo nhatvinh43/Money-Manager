@@ -10,6 +10,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.core.math.MathUtils;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -20,6 +21,8 @@ import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +35,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -114,19 +118,25 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         // Sample Test Data
         moneySourceList = new ArrayList<>();
-        moneySourceList.add(new MoneySource(10000, "a","VND",500000, "a", "Ví chung", "1"));
-        moneySourceList.add(new MoneySource(130000, "a","VND",600000, "b", "Ví ăn vặt", "1"));
-        moneySourceList.add(new MoneySource(140000, "a","VND",1000000, "c", "Ví tiết kiệm", "1"));
+        moneySourceList.add(new MoneySource(10000.0, "a","VND",500000.0, "a", "Ví chung", "1"));
+        moneySourceList.add(new MoneySource(130000.0, "a","VND",600000.0, "b", "Ví ăn vặt", "1"));
+        moneySourceList.add(new MoneySource(140000.0, "a","VND",1000000.0, "c", "Ví tiết kiệm", "1"));
+
+//        transactionList.add(new Transaction("vui", "1", "Tiền lương", 1000000, "a", "MS01",true, new Timestamp(100000)));
+//        transactionList.add(new Transaction("vui quá", "2", "Tiền điện", 120000, "b", "MS01",false, new Timestamp(200000)));
+//        transactionList.add(new Transaction("vui à", "3", "Tiền uống", 100000, "c","MS01", false, new Timestamp(300000)));
+//        transactionList.add(new Transaction("vui ghê", "1", "Tiền lương", 3000000, "d","MS01", true, new Timestamp(450000)));
+//        transactionList.add(new Transaction("vui bla", "4", "Tiền ăn", 650000, "e","MS01", false, new Timestamp(678000)));
 
         ArrayList<Transaction> transactionList1 = new ArrayList<>();
-        transactionList1.add(new Transaction("vui à", "3", "Tiền uống", 100000, "c","MS01", false, new Timestamp(300000)));
-        transactionList1.add(new Transaction("vui ghê", "1", "Tiền lương", 3000000, "d","MS01", true, new Timestamp(450000)));
-        transactionList1.add(new Transaction("vui bla", "4", "Tiền ăn", 650000, "e","MS01", false, new Timestamp(678000)));
+        transactionList1.add(new Transaction("vui à", "3", "Tiền uống", 100000.0, "c","MS01", false, new Timestamp(Calendar.getInstance().get(Calendar.MILLISECOND))));
+        transactionList1.add(new Transaction("vui ghê", "1", "Tiền lương", 3000000.0, "d","MS01", true, new Timestamp(Calendar.getInstance().get(Calendar.MILLISECOND) - 60*60*24*1000)));
+        transactionList1.add(new Transaction("vui bla", "4", "Tiền ăn", 650000.0, "e","MS01", false, new Timestamp(Calendar.getInstance().get(Calendar.MILLISECOND))));
         ArrayList<Transaction> transactionList2 = new ArrayList<>();
-        transactionList2.add(new Transaction("vui à", "3", "Tiền uống", 100000, "c","MS01", false, new Timestamp(300000)));
-        transactionList2.add(new Transaction("vui ghê", "1", "Tiền lương", 3000000, "d","MS01", true, new Timestamp(450000)));
+        transactionList2.add(new Transaction("vui à", "3", "Tiền uống", 100000.0, "c","MS01", false, new Timestamp(Calendar.getInstance().get(Calendar.MILLISECOND))));
+        transactionList2.add(new Transaction("vui ghê", "1", "Tiền lương", 3000000.0, "d","MS01", true, new Timestamp(Calendar.getInstance().get(Calendar.MILLISECOND))));
         ArrayList<Transaction> transactionList3 = new ArrayList<>();
-        transactionList3.add(new Transaction("vui à", "3", "Tiền uống", 100000, "c","MS01", false, new Timestamp(300000)));
+        transactionList3.add(new Transaction("vui à", "3", "Tiền uống", 100000.0, "c","MS01", false, new Timestamp(Calendar.getInstance().get(Calendar.MILLISECOND))));
 
         moneySourceList.get(0).setTransactionsList(transactionList1);
         moneySourceList.get(1).setTransactionsList(transactionList2);
@@ -139,7 +149,7 @@ public class HomeFragment extends Fragment {
         todayIncome = view.findViewById(R.id.todayIncome_home);
         todaySpending = view.findViewById(R.id.todaySpending_home);
 
-        moneySourceLimit.setText(selectedMoneySource.getLimit().toString());
+        moneySourceLimit.setText(moneyToString((double)selectedMoneySource.getLimit()));
         todayIncome.setText("Thêm sau");
         todaySpending.setText("Thêm sau");
 
@@ -179,6 +189,10 @@ public class HomeFragment extends Fragment {
                        mYear = myCalendar.get(Calendar.YEAR);
                        mMonth = myCalendar.get(Calendar.MONTH);
                        mDay = myCalendar.get(Calendar.DAY_OF_MONTH);
+
+                       transactionList.clear();
+                       transactionList.addAll(modifierTransactionListByDate());
+                       transactionAdapter.notifyDataSetChanged();
                    }
                };
 
@@ -211,14 +225,13 @@ public class HomeFragment extends Fragment {
                 int pos = moneySourceLayoutManager.getPosition(v);
 
                 selectedMoneySource = moneySourceList.get(pos);
-                moneySourceLimit.setText(selectedMoneySource.getLimit().toString());
+                moneySourceLimit.setText(moneyToString((double)selectedMoneySource.getLimit()));
                 todayIncome.setText("Thêm sau");
                 todaySpending.setText("Thêm sau");
 
                 transactionList.clear();
-                transactionList.addAll(selectedMoneySource.getTransactionsList());
+                transactionList.addAll(modifierTransactionListByDate());
                 transactionAdapter.notifyDataSetChanged();
-
             }
 
             @Override
@@ -231,12 +244,7 @@ public class HomeFragment extends Fragment {
         // Transaction RecycleView Initiation
         transactionRecycleView = view.findViewById(R.id.transactionList);
         transactionList = new ArrayList<>();
-        transactionList.addAll(selectedMoneySource.getTransactionsList());
-//        transactionList.add(new Transaction("vui", "1", "Tiền lương", 1000000, "a", "MS01",true, new Timestamp(100000)));
-//        transactionList.add(new Transaction("vui quá", "2", "Tiền điện", 120000, "b", "MS01",false, new Timestamp(200000)));
-//        transactionList.add(new Transaction("vui à", "3", "Tiền uống", 100000, "c","MS01", false, new Timestamp(300000)));
-//        transactionList.add(new Transaction("vui ghê", "1", "Tiền lương", 3000000, "d","MS01", true, new Timestamp(450000)));
-//        transactionList.add(new Transaction("vui bla", "4", "Tiền ăn", 650000, "e","MS01", false, new Timestamp(678000)));
+        transactionList.addAll(modifierTransactionListByDate());
 
         GridLayoutManager transactionLayoutManager = new GridLayoutManager(getContext(), 2);
         transactionRecycleView.setLayoutManager(transactionLayoutManager);
@@ -274,20 +282,40 @@ public class HomeFragment extends Fragment {
         return day;
     }
 
+    private ArrayList<Transaction> modifierTransactionListByDate() {
+        ArrayList<Transaction> modifierTransactionList = new ArrayList<>();
+        for(Transaction t : selectedMoneySource.getTransactionsList()) {
+            Calendar c = Calendar.getInstance();
+            c.set(Calendar.MILLISECOND, (int)t.getTransactionTime().getTime());
+            int transactionDay = c.get(Calendar.DAY_OF_MONTH);
+            int transactionMonth = c.get(Calendar.MONTH);
+            int transactionYeah = c.get(Calendar.YEAR);
+
+            if(transactionDay == mDay && transactionMonth == mMonth && transactionYeah == mYear) modifierTransactionList.add(t);
+        }
+        return modifierTransactionList;
+    }
+
     private String moneyToString(double amount) {
         StringBuilder mString = new StringBuilder();
+        long mAmount = (long)amount;
+        double remainder = amount - mAmount;
         int count = 0;
-        while(amount > 0) {
-            mString.insert(0, Double.toString(amount % 10));
-            amount /= 10;
+        while(mAmount > 0) {
+            mString.insert(0, Long.toString(Math.floorMod(mAmount, 10)));
+            mAmount /= 10;
             count++;
 
-            if(count == 3 && amount != 0) {
+            if(count == 3 && mAmount != 0) {
                 mString.insert(0, ",");
                 count = 0;
             }
         }
 
-        return mString.toString();
+        String decimal =  "";
+        if (remainder > 0)
+            decimal = String.valueOf(remainder).substring(String.valueOf(remainder).indexOf("."));
+
+        return mString.toString() + decimal;
     }
 }

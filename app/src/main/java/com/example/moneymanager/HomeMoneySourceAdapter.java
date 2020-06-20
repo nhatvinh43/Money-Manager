@@ -30,7 +30,7 @@ public class HomeMoneySourceAdapter extends RecyclerView.Adapter<HomeMoneySource
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.moneySourceName.setText(mainModel.get(position).getMoneySourceName());
-        holder.moneySourceTotal.setText(mainModel.get(position).getAmount().toString());
+        holder.moneySourceTotal.setText(moneyToString((double)mainModel.get(position).getAmount()));
         holder.moneySourceCurrency.setText(mainModel.get(position).getCurrencyName());
     }
 
@@ -54,18 +54,24 @@ public class HomeMoneySourceAdapter extends RecyclerView.Adapter<HomeMoneySource
 
     private String moneyToString(double amount) {
         StringBuilder mString = new StringBuilder();
+        long mAmount = (long) amount;
+        double remainder = amount - mAmount;
         int count = 0;
-        while(amount > 0) {
-            mString.insert(0, Double.toString(amount % 10));
-            amount /= 10;
+        while (mAmount > 0) {
+            mString.insert(0, Long.toString(Math.floorMod(mAmount, 10)));
+            mAmount /= 10;
             count++;
 
-            if(count == 3 && amount != 0) {
+            if (count == 3 && mAmount != 0) {
                 mString.insert(0, ",");
                 count = 0;
             }
         }
 
-        return mString.toString();
+        String decimal = "";
+        if (remainder > 0)
+            decimal = String.valueOf(remainder).substring(String.valueOf(remainder).indexOf("."));
+
+        return mString.toString() + decimal;
     }
 }

@@ -36,7 +36,7 @@ public class HomeTransactionAdapter extends RecyclerView.Adapter<HomeTransaction
 
         holder.transactionName.setText(mainModel.get(position).getExpenditureName());
         holder.transactionTime.setText(sfd.format(new Date(mainModel.get(position).getTransactionTime().getTime())));
-        holder.transactionAmount.setText((mainModel.get(position).getTransactionIsIncome() == true ? "+" : "-") + mainModel.get(position).getTransactionAmount().toString());
+        holder.transactionAmount.setText((mainModel.get(position).getTransactionIsIncome() == true ? "+" : "-") + moneyToString((double)mainModel.get(position).getTransactionAmount()));
         holder.transactionAmount.setTextColor(mainModel.get(position).getTransactionIsIncome() == true ? Color.GREEN : Color.RED);
         holder.transactionMoneySource.setText("Thêm sau");
     }
@@ -64,19 +64,24 @@ public class HomeTransactionAdapter extends RecyclerView.Adapter<HomeTransaction
 
     private String moneyToString(double amount) {
         StringBuilder mString = new StringBuilder();
-        int nAmount = (int)amount;
+        long mAmount = (long) amount;
+        double remainder = amount - mAmount;
         int count = 0;
-        while(nAmount > 0) {
-            mString.insert(0, Double.toString(nAmount % 10));
-            nAmount /= 10;
+        while (mAmount > 0) {
+            mString.insert(0, Long.toString(Math.floorMod(mAmount, 10)));
+            mAmount /= 10;
             count++;
 
-            if(count == 3 && nAmount != 0) {
+            if (count == 3 && mAmount != 0) {
                 mString.insert(0, ",");
                 count = 0;
             }
         }
 
-        return mString.toString();
+        String decimal = "";
+        if (remainder > 0)
+            decimal = String.valueOf(remainder).substring(String.valueOf(remainder).indexOf("."));
+
+        return mString.toString() + decimal;
     }
 }
