@@ -5,8 +5,10 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
@@ -104,6 +106,11 @@ public class HomeFragment extends Fragment {
 
         moneySourceAdapter = new HomeMoneySourceAdapter(moneySourceList, getContext());
         moneySourceRecycleView.setAdapter(moneySourceAdapter);
+        moneySourceRecycleView.setClipToPadding(false);
+        final int activeColor = ContextCompat.getColor(view.getContext(), R.color.white);
+        final int inactiveColor = ContextCompat.getColor(view.getContext(), R.color.colorPrimaryDark);
+        moneySourceRecycleView.addItemDecoration(new DotsIndicatorDecoration(9,20,100,inactiveColor,activeColor));
+
 
         // Transaction RecycleView Initiation
         transactionRecycleView = view.findViewById(R.id.transactionList);
@@ -120,6 +127,6 @@ public class HomeFragment extends Fragment {
 
         transactionAdapter = new HomeTransactionAdapter(transactionList, getContext());
         transactionRecycleView.setAdapter(transactionAdapter);
-        transactionRecycleView.addItemDecoration(new SpaceItemDecoration(20));
+        transactionRecycleView.addItemDecoration(new SpaceItemDecoration(2,30,false));
     }
 }
