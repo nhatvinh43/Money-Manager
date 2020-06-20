@@ -97,7 +97,7 @@
     <string name="emailPH">Nguyenvanx@gmail.com</string>
     <string name="passwordMismatch">Mật khẩu không khớp!</string>
     <string name="infoMissing">Vui lòng nhập đầy đủ thông tin!</string>
-    
+
     <!--Categories-->
     <string name="food">Ăn uống</string>
     <string name="bill">Sinh hoạt</string>
@@ -112,9 +112,27 @@
     <string name="income">Tiền Thu</string>
     <string name="party">Đám tiệc</string>
 
+    <!--Utilities-->
+    <string name="mainMoneySource">Ng.Tiền chính</string>
+    <string name="manageMoneySources">Q.Lý nguồn tiền</string>
+    <string name="notification">Thông báo</string>
+    <string name="currencyConverter">Ngoại tệ</string>
+    <string name="calculateTax">Thuế TN</string>
+    <string name="calculateProfit">Lãi suất</string>
+    <string name="manageMoneySourceFull">Quản lý nguồn tiền</string>
+
     <!--Money Source-->
+    <string name="addMoneySource">Thêm nguồn tiền</string>
+    <string name="moneySourceName">Tên nguồn tiền</string>
+    <string name="moneySourceUnit">Đơn vị</string>
+    <string name="moneySourceAmount">Số tiền</string>
+
+    <!--Currency-->
+    <string name="chooseUnit">Chọn đơn vị</string>
+    <string name="searchUnit">Tìm kiếm đơn vị</string>
 
 
-    <string name="facebook_app_id">886246855208820</string> <string name="fb_login_protocol_scheme">fb886246855208820</string>
+    <string name="facebook_app_id">886246855208820</string>
+    <string name="fb_login_protocol_scheme">fb886246855208820</string>
 
 </resources>

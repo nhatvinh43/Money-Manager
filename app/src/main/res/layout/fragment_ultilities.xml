@@ -2,12 +2,227 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".UltilitiesFragment">
+    android:layout_height="match_parent">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="@color/black">
+        <TextView
+            android:id="@+id/utilitiesTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-black"
+            android:textSize="22sp"
+            android:text="@string/utilities"
+            android:textColor="@color/white"
+            android:layout_marginTop="50dp"
+            android:layout_marginStart="30dp"/>
+        <LinearLayout
+            android:id="@+id/mainUtilitiesRow"
+            android:layout_below="@id/utilitiesTitle"
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <RelativeLayout
+                android:clickable="true"
+                android:focusable="true"
+                android:id="@+id/manageMainMoneySourceButton"
+                android:layout_width="0dp"
+                android:layout_height="90dp"
+                android:layout_weight="1"
+                android:layout_marginStart="30dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/greengradient" >
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_centerInParent="true">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_money"
+                        android:tint="@color/white"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="5dp"
+                        android:fontFamily="sans-serif"
+                        android:text="@string/mainMoneySource"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+                </LinearLayout>
+            </RelativeLayout>
+            <RelativeLayout
+                android:clickable="true"
+                android:focusable="true"
+                android:id="@+id/manageMoneySourcesButton"
+                android:layout_width="0dp"
+                android:layout_height="90dp"
+                android:layout_weight="1"
+                android:layout_marginStart="5dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/bluegradient">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_centerInParent="true">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_wallet_utils"
+                        android:tint="@color/white"/>
+                    <TextView
+                        android:layout_marginStart="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif"
+                        android:textSize="15sp"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@color/white"
+                        android:text="@string/manageMoneySources"/>
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:layout_below="@id/mainUtilitiesRow"
+            android:id="@+id/subUtilitiesRow"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:id="@+id/convertCurrencyButton"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:background="@drawable/redgradient">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_euro"
+                        android:tint="@color/white"
+                        android:layout_centerInParent="true"/>
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:text="@string/currencyConverter"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:layout_marginTop="5dp"
+                    android:textSize="15sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical"
+                android:layout_marginStart="10dp">
+
+                <RelativeLayout
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:id="@+id/calculateTaxButton"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:background="@drawable/redgradient">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_tax"
+                        android:tint="@color/white"
+                        android:layout_centerInParent="true"/>
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:text="@string/calculateTax"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:layout_marginTop="5dp"
+                    android:textSize="15sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical"
+                android:layout_marginStart="10dp">
+
+                <RelativeLayout
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:id="@+id/calculateProfit"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:background="@drawable/redgradient">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_profit"
+                        android:tint="@color/white"
+                        android:layout_centerInParent="true"/>
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:text="@string/calculateProfit"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:layout_marginTop="5dp"
+                    android:textSize="15sp"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/notificationTitle"
+            android:layout_below="@id/subUtilitiesRow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-black"
+            android:textSize="22sp"
+            android:text="@string/notification"
+            android:textColor="@color/white"
+            android:layout_marginTop="25dp"
+            android:layout_marginStart="30dp"/>
+
+    </RelativeLayout>
+
 
 </FrameLayout>
