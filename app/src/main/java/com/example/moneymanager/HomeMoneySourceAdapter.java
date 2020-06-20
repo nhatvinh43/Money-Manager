@@ -51,4 +51,21 @@ public class HomeMoneySourceAdapter extends RecyclerView.Adapter<HomeMoneySource
             moneySourceCurrency = itemView.findViewById(R.id.moneySourceCurrency);
         }
     }
+
+    private String moneyToString(double amount) {
+        StringBuilder mString = new StringBuilder();
+        int count = 0;
+        while(amount > 0) {
+            mString.insert(0, Double.toString(amount % 10));
+            amount /= 10;
+            count++;
+
+            if(count == 3 && amount != 0) {
+                mString.insert(0, ",");
+                count = 0;
+            }
+        }
+
+        return mString.toString();
+    }
 }

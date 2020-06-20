@@ -349,13 +349,13 @@ public class AddTransactionActivity extends AppCompatActivity {
                 else {
                     //Trường hợp đầy đủ thông tin
                     try {
-                        resTransaction.setTransactionAmout(NumberFormat.getInstance().parse(amount.getText().toString()));
+                        resTransaction.setTransactionAmount(NumberFormat.getInstance().parse(amount.getText().toString()));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
                     resTransaction.setDescription(description.getText().toString());
                     dialog.show();
-                    msg.setText("Tạo Thành Công" + resTransaction.getTransactionId() + " " + resTransaction.getTransactionAmout());
+                    msg.setText("Tạo Thành Công" + resTransaction.getTransactionId() + " " + resTransaction.getTransactionAmount());
                     finish();
                 }
             }
