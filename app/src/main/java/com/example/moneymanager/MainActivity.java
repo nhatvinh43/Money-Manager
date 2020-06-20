@@ -24,8 +24,11 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
+    //Template data for Expenditure
 
     final Fragment fragment1 = new HomeFragment();
     final Fragment fragment2 = new StatisticsFragment();

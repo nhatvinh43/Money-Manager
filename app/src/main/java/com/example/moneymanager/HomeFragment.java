@@ -115,11 +115,11 @@ public class HomeFragment extends Fragment {
         // Transaction RecycleView Initiation
         transactionRecycleView = view.findViewById(R.id.transactionList);
         transactionList = new ArrayList<>();
-        transactionList.add(new Transaction("vui", "1", "Tiền lương", 1000000, "a", true, new Timestamp(100000)));
-        transactionList.add(new Transaction("vui quá", "2", "Tiền điện", 120000, "b", false, new Timestamp(200000)));
-        transactionList.add(new Transaction("vui à", "3", "Tiền uống", 100000, "c", false, new Timestamp(300000)));
-        transactionList.add(new Transaction("vui ghê", "1", "Tiền lương", 3000000, "d", true, new Timestamp(450000)));
-        transactionList.add(new Transaction("vui bla", "4", "Tiền ăn", 650000, "e", false, new Timestamp(678000)));
+        transactionList.add(new Transaction("vui", "1", "Tiền lương", 1000000, "a", "MS01",true, new Timestamp(100000)));
+        transactionList.add(new Transaction("vui quá", "2", "Tiền điện", 120000, "b", "MS01",false, new Timestamp(200000)));
+        transactionList.add(new Transaction("vui à", "3", "Tiền uống", 100000, "c","MS01", false, new Timestamp(300000)));
+        transactionList.add(new Transaction("vui ghê", "1", "Tiền lương", 3000000, "d","MS01", true, new Timestamp(450000)));
+        transactionList.add(new Transaction("vui bla", "4", "Tiền ăn", 650000, "e","MS01", false, new Timestamp(678000)));
 
         GridLayoutManager transactionLayoutManager = new GridLayoutManager(getContext(), 2);
         transactionRecycleView.setLayoutManager(transactionLayoutManager);

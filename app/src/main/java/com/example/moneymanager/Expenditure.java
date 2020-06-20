@@ -35,5 +35,13 @@ public class Expenditure {
     public void setExpenditureType(boolean expenditureType) {
         this.isIncome = expenditureType;
     }
+
+    public boolean isIncome() {
+        return isIncome;
+    }
+
+    public void setIncome(boolean income) {
+        isIncome = income;
+    }
 }
 

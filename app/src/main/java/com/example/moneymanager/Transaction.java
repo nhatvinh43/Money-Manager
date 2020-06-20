@@ -10,16 +10,29 @@ public class Transaction {
     private String expenditureName;
     private Number transactionAmout;
     private String transactionId;
+    private String moneySourceId;
     private boolean transactionIsIncome;
     private Timestamp transactionTime;
 
+    public Transaction(){
+        this.description = "";
+        this.expenditureId = "";
+        this.expenditureName = "";
+        this.transactionAmout = 0;
+        this.transactionId = "";
+        this.moneySourceId = "";
+        this.transactionIsIncome = true;
+        this.transactionTime = null;
+    }
+
     public Transaction(String description, String expenditureId, String expenditureName,
-                       Number transactionAmout, String transactionId, boolean transactionIsIncome, Timestamp transactionTime) {
+                       Number transactionAmout, String transactionId, String moneySourceId, boolean transactionIsIncome, Timestamp transactionTime) {
         this.description = description;
         this.expenditureId = expenditureId;
         this.expenditureName = expenditureName;
         this.transactionAmout = transactionAmout;
         this.transactionId = transactionId;
+        this.moneySourceId = moneySourceId;
         this.transactionIsIncome = transactionIsIncome;
         this.transactionTime = transactionTime;
     }
@@ -78,5 +91,17 @@ public class Transaction {
 
     public void setTransactionTime(Timestamp transactionTime) {
         this.transactionTime = transactionTime;
+    }
+
+    public String getMoneySourceId() {
+        return moneySourceId;
+    }
+
+    public void setMoneySourceId(String moneySourceId) {
+        this.moneySourceId = moneySourceId;
+    }
+
+    public boolean isTransactionIsIncome() {
+        return transactionIsIncome;
     }
 }
