@@ -242,6 +242,11 @@ public class HomeFragment extends Fragment {
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
+                if(newState==RecyclerView.SCROLL_STATE_DRAGGING)
+                {
+                    return;
+                }
+
                 View v = snapHelper.findSnapView(moneySourceLayoutManager);
                 int pos = moneySourceLayoutManager.getPosition(v);
 
@@ -249,12 +254,12 @@ public class HomeFragment extends Fragment {
                 CardView cv = viewHolder.itemView.findViewById(R.id.cardContainer);
 
                 if(newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    cv.animate().setDuration(300).scaleX(1).scaleY(1).setInterpolator(new AccelerateDecelerateInterpolator()).start();
+                    cv.animate().setDuration(100).scaleX(1).scaleY(1).setInterpolator(new AccelerateDecelerateInterpolator()).start();
                 } else {
-                    cv.animate().setDuration(200).scaleX(0.98f).scaleY(0.98f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
+                    cv.animate().setDuration(100).scaleX(0.96f).scaleY(0.96f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
                 }
 
-                if(newState!=RecyclerView.SCROLL_STATE_IDLE)
+                if(newState!=RecyclerView.SCROLL_STATE_SETTLING)
                 {
                     selectedMoneySource = moneySourceList.get(pos);
                     moneySourceLimit.setText(moneyToString((double)selectedMoneySource.getLimit()));
