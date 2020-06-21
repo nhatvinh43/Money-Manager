@@ -15,8 +15,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingTop="50dp"
-                android:layout_marginStart="30dp">
+                android:paddingTop="40dp"
+                android:layout_marginStart="20dp">
                 <TextView
                     android:clickable="true"
                     android:focusable="true"
@@ -60,8 +60,8 @@
                 android:layout_height="match_parent"
                 android:scrollbars="none"
                 android:paddingTop="20dp"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp">
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp">
 
 
                 <RelativeLayout

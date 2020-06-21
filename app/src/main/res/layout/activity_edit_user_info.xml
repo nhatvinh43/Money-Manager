@@ -14,8 +14,8 @@
         android:src="@drawable/ic_arrow"
         android:tint="@color/white"
         android:background="@android:color/transparent"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="50dp"/>
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"/>
     <TextView
         android:layout_below="@id/backButton_editUserInfo"
         android:id="@+id/accountInfoTitle"
@@ -44,7 +44,7 @@
         android:layout_below="@id/userAvatar"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="40dp"
-        android:paddingHorizontal="30dp">
+        android:paddingHorizontal="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"

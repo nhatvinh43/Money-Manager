@@ -14,8 +14,8 @@
         android:src="@drawable/ic_arrow"
         android:tint="@color/white"
         android:background="@android:color/transparent"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="50dp"/>
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"/>
     <TextView
         android:layout_below="@id/backButton_addTransaction"
         android:id="@+id/addTransactionTitle"
@@ -34,7 +34,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/addTransactionTitle"
         android:layout_marginTop="15dp"
-        android:paddingHorizontal="30dp"
+        android:paddingHorizontal="20dp"
         android:scrollbars="none">
 
         <RelativeLayout
