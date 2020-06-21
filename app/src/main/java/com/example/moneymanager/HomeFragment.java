@@ -30,6 +30,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -77,6 +79,7 @@ public class HomeFragment extends Fragment {
     RecyclerView transactionRecycleView;
     ArrayList<Transaction> transactionList;
     HomeTransactionAdapter transactionAdapter;
+    LayoutAnimationController aController;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -196,6 +199,7 @@ public class HomeFragment extends Fragment {
                        transactionList.clear();
                        transactionList.addAll(modifierTransactionListByDate());
                        transactionAdapter.notifyDataSetChanged();
+                       transactionRecycleView.scheduleLayoutAnimation();
                    }
                };
 
@@ -254,6 +258,7 @@ public class HomeFragment extends Fragment {
                 transactionList.clear();
                 transactionList.addAll(modifierTransactionListByDate());
                 transactionAdapter.notifyDataSetChanged();
+                transactionRecycleView.scheduleLayoutAnimation();
             }
 
             @Override
@@ -274,6 +279,11 @@ public class HomeFragment extends Fragment {
         transactionAdapter = new HomeTransactionAdapter(transactionList, getContext());
         transactionRecycleView.setAdapter(transactionAdapter);
         transactionRecycleView.addItemDecoration(new SpaceItemDecoration(2,30,false));
+
+        aController = AnimationUtils.loadLayoutAnimation(transactionRecycleView.getContext(), R.anim.layout_fall_down);
+        transactionRecycleView.setLayoutAnimation(aController);
+        transactionAdapter.notifyDataSetChanged();
+        transactionRecycleView.scheduleLayoutAnimation();
     }
 
     private String getDayOfWeek(int value) {
