@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.core.math.MathUtils;
 import androidx.fragment.app.DialogFragment;
@@ -21,12 +22,14 @@ import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -217,12 +220,31 @@ public class HomeFragment extends Fragment {
         final int inactiveColor = ContextCompat.getColor(view.getContext(), R.color.colorPrimaryDark);
         moneySourceRecycleView.addItemDecoration(new DotsIndicatorDecoration(9,20,100,inactiveColor,activeColor));
 
+        // Money source item animation
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                RecyclerView.ViewHolder viewHolder = moneySourceRecycleView.findViewHolderForAdapterPosition(0);
+                CardView cv = viewHolder.itemView.findViewById(R.id.cardContainer);
+                cv.animate().setDuration(200).scaleX(1).scaleY(1).setInterpolator(new AccelerateInterpolator()).start();
+            }
+        }, 100);
+
         moneySourceRecycleView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 View v = snapHelper.findSnapView(moneySourceLayoutManager);
                 int pos = moneySourceLayoutManager.getPosition(v);
+
+                RecyclerView.ViewHolder viewHolder = moneySourceRecycleView.findViewHolderForAdapterPosition(pos);
+                CardView cv = viewHolder.itemView.findViewById(R.id.cardContainer);
+
+                if(newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    cv.animate().setDuration(200).scaleX(1).scaleY(1).setInterpolator(new AccelerateInterpolator()).start();
+                } else {
+                    cv.animate().setDuration(200).scaleX(0.90f).scaleY(0.90f).setInterpolator(new AccelerateInterpolator()).start();
+                }
 
                 selectedMoneySource = moneySourceList.get(pos);
                 moneySourceLimit.setText(moneyToString((double)selectedMoneySource.getLimit()));
