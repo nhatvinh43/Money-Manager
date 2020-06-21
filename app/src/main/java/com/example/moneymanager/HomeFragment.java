@@ -29,6 +29,7 @@ import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
@@ -172,40 +173,42 @@ public class HomeFragment extends Fragment {
         mMonth = mcurrentDate.get(Calendar.MONTH);
         mDay = mcurrentDate.get(Calendar.DAY_OF_MONTH);
         dateHome.setText(sdf.format(mcurrentDate.getTime()));
-        dayOfWeek.setText("Today");
+        dayOfWeek.setText("Hôm nay");
 
-        dateArrow.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener dateSelector = new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-               DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-                   @Override
-                   public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                       Calendar myCalendar = Calendar.getInstance();
-                       myCalendar.set(Calendar.YEAR, i);
-                       myCalendar.set(Calendar.MONTH, i1);
-                       myCalendar.set(Calendar.DAY_OF_MONTH, i2);
-                       dateHome.setText(sdf.format(myCalendar.getTime()));
+            public void onClick(View v) {
+                DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                        Calendar myCalendar = Calendar.getInstance();
+                        myCalendar.set(Calendar.YEAR, i);
+                        myCalendar.set(Calendar.MONTH, i1);
+                        myCalendar.set(Calendar.DAY_OF_MONTH, i2);
+                        dateHome.setText(sdf.format(myCalendar.getTime()));
 
-                       if (DateUtils.isToday(myCalendar.getTimeInMillis())) {
-                           dayOfWeek.setText("Today");
-                       } else {
-                           dayOfWeek.setText(getDayOfWeek(myCalendar.get(Calendar.DAY_OF_WEEK)));
-                       }
+                        if (DateUtils.isToday(myCalendar.getTimeInMillis())) {
+                            dayOfWeek.setText("Hôm nay");
+                        } else {
+                            dayOfWeek.setText(getDayOfWeek(myCalendar.get(Calendar.DAY_OF_WEEK)));
+                        }
 
-                       mYear = myCalendar.get(Calendar.YEAR);
-                       mMonth = myCalendar.get(Calendar.MONTH);
-                       mDay = myCalendar.get(Calendar.DAY_OF_MONTH);
+                        mYear = myCalendar.get(Calendar.YEAR);
+                        mMonth = myCalendar.get(Calendar.MONTH);
+                        mDay = myCalendar.get(Calendar.DAY_OF_MONTH);
 
-                       transactionList.clear();
-                       transactionList.addAll(modifierTransactionListByDate());
-                       transactionAdapter.notifyDataSetChanged();
-                       transactionRecycleView.scheduleLayoutAnimation();
-                   }
-               };
-
-               new DatePickerDialog(getContext(), R.style.MyDatePickerDialogTheme, date, mYear, mMonth, mDay).show();
+                        transactionList.clear();
+                        transactionList.addAll(modifierTransactionListByDate());
+                        transactionAdapter.notifyDataSetChanged();
+                        transactionRecycleView.scheduleLayoutAnimation();
+                    }
+                };
+                new DatePickerDialog(getContext(), R.style.DatePickerDialog, date, mYear, mMonth, mDay).show();
             }
-        });
+        };
+        dateArrow.setOnClickListener(dateSelector);
+        dayOfWeek.setOnClickListener(dateSelector);
+        dateHome.setOnClickListener(dateSelector);
 
         // Moneysource RecycleView Initiation
         moneySourceRecycleView = view.findViewById(R.id.moneySourceList);
@@ -230,7 +233,7 @@ public class HomeFragment extends Fragment {
             public void run() {
                 RecyclerView.ViewHolder viewHolder = moneySourceRecycleView.findViewHolderForAdapterPosition(0);
                 CardView cv = viewHolder.itemView.findViewById(R.id.cardContainer);
-                cv.animate().setDuration(200).scaleX(1).scaleY(1).setInterpolator(new AccelerateInterpolator()).start();
+                cv.animate().setDuration(100).scaleX(1).scaleY(1).setInterpolator(new AccelerateInterpolator()).start();
             }
         }, 100);
 
@@ -238,6 +241,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
+
                 View v = snapHelper.findSnapView(moneySourceLayoutManager);
                 int pos = moneySourceLayoutManager.getPosition(v);
 
@@ -245,20 +249,25 @@ public class HomeFragment extends Fragment {
                 CardView cv = viewHolder.itemView.findViewById(R.id.cardContainer);
 
                 if(newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    cv.animate().setDuration(200).scaleX(1).scaleY(1).setInterpolator(new AccelerateInterpolator()).start();
+                    cv.animate().setDuration(300).scaleX(1).scaleY(1).setInterpolator(new AccelerateDecelerateInterpolator()).start();
                 } else {
-                    cv.animate().setDuration(200).scaleX(0.90f).scaleY(0.90f).setInterpolator(new AccelerateInterpolator()).start();
+                    cv.animate().setDuration(200).scaleX(0.98f).scaleY(0.98f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
                 }
 
-                selectedMoneySource = moneySourceList.get(pos);
-                moneySourceLimit.setText(moneyToString((double)selectedMoneySource.getLimit()));
-                todayIncome.setText("Thêm sau");
-                todaySpending.setText("Thêm sau");
+                if(newState!=RecyclerView.SCROLL_STATE_IDLE)
+                {
+                    selectedMoneySource = moneySourceList.get(pos);
+                    moneySourceLimit.setText(moneyToString((double)selectedMoneySource.getLimit()));
+                    todayIncome.setText("Thêm sau");
+                    todaySpending.setText("Thêm sau");
 
-                transactionList.clear();
-                transactionList.addAll(modifierTransactionListByDate());
-                transactionAdapter.notifyDataSetChanged();
-                transactionRecycleView.scheduleLayoutAnimation();
+                    transactionList.clear();
+                    transactionList.addAll(modifierTransactionListByDate());
+                    transactionAdapter.notifyDataSetChanged();
+                    transactionRecycleView.scheduleLayoutAnimation();
+                }
+
+
             }
 
             @Override
@@ -282,33 +291,33 @@ public class HomeFragment extends Fragment {
 
         aController = AnimationUtils.loadLayoutAnimation(transactionRecycleView.getContext(), R.anim.layout_fall_down);
         transactionRecycleView.setLayoutAnimation(aController);
-        transactionAdapter.notifyDataSetChanged();
         transactionRecycleView.scheduleLayoutAnimation();
+        transactionAdapter.notifyDataSetChanged();
     }
 
     private String getDayOfWeek(int value) {
         String day = "";
         switch (value) {
             case 1:
-                day = "Sunday";
+                day = "Chủ nhật";
                 break;
             case 2:
-                day = "Monday";
+                day = "Thứ hai";
                 break;
             case 3:
-                day = "Tuesday";
+                day = "Thứ ba";
                 break;
             case 4:
-                day = "Wednesday";
+                day = "Thứ tư";
                 break;
             case 5:
-                day = "Thursday";
+                day = "Thứ năm";
                 break;
             case 6:
-                day = "Friday";
+                day = "Thứ 6";
                 break;
             case 7:
-                day = "Saturday";
+                day = "Thứ 7";
                 break;
         }
         return day;
