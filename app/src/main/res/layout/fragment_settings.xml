@@ -5,40 +5,31 @@
     android:layout_height="match_parent"
     tools:context=".SettingsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
    <RelativeLayout
        android:layout_width="match_parent"
        android:layout_height="match_parent"
        android:background="@color/black">
-       <TextView
-           android:id="@+id/accountTitle"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:fontFamily="sans-serif-black"
-           android:textSize="22sp"
-           android:text="@string/account"
-           android:textColor="@color/white"
-           android:layout_marginTop="40dp"
-           android:layout_marginStart="20dp"/>
+
        <LinearLayout
-           android:id="@+id/dataRow"
-           android:layout_below="@id/dataTitle"
-           android:layout_marginTop="15dp"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:orientation="horizontal"
-           android:weightSum="2">
-
+           android:weightSum="2"
+           android:id="@+id/toolRow"
+           android:layout_below="@id/accountPane"
+           android:layout_marginTop="30dp"
+           android:layout_marginHorizontal="50dp"
+           >
            <RelativeLayout
                android:clickable="true"
                android:focusable="true"
                android:id="@+id/backupButton"
                android:layout_width="0dp"
-               android:layout_height="75dp"
+               android:layout_height="wrap_content"
+               android:paddingVertical="20dp"
                android:layout_weight="1"
-               android:layout_marginStart="20dp"
                android:foreground="?attr/selectableItemBackground"
-               android:layout_marginEnd="5dp"
+               android:layout_marginEnd="7.5dp"
                android:background="@drawable/greengradient" >
                <LinearLayout
                    android:layout_width="wrap_content"
@@ -50,28 +41,30 @@
                        android:layout_height="wrap_content"
                        android:src="@drawable/ic_upload"
                        android:tint="@color/white"/>
+
                    <TextView
-                       android:layout_marginStart="10dp"
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
-                       android:fontFamily="sans-serif"
-                       android:textSize="15sp"
                        android:layout_gravity="center_vertical"
+                       android:layout_marginStart="10dp"
+                       android:fontFamily="sans-serif"
+                       android:text="@string/backup"
                        android:textColor="@color/white"
-                       android:text="@string/backup"/>
+                       android:textSize="15sp" />
                </LinearLayout>
            </RelativeLayout>
+
            <RelativeLayout
                android:clickable="true"
                android:focusable="true"
                android:id="@+id/restoreButton"
                android:layout_width="0dp"
-               android:layout_height="75dp"
+               android:layout_height="wrap_content"
+               android:paddingVertical="20dp"
                android:layout_weight="1"
-               android:layout_marginStart="5dp"
+               android:layout_marginStart="7.5dp"
                android:foreground="?attr/selectableItemBackground"
-               android:layout_marginEnd="20dp"
-               android:background="@drawable/redgradient">
+               android:background="@drawable/bluegradient">
                <LinearLayout
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
@@ -94,26 +87,114 @@
                </LinearLayout>
            </RelativeLayout>
        </LinearLayout>
+
        <TextView
-           android:id="@+id/dataTitle"
-           android:layout_below="@id/accountPane"
+           android:id="@+id/accountTitle"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:fontFamily="sans-serif-black"
            android:textSize="22sp"
-           android:text="@string/data"
+           android:text="@string/account"
            android:textColor="@color/white"
-           android:layout_marginTop="25dp"
-           android:layout_marginStart="30dp"/>
+           android:layout_marginTop="40dp"
+           android:layout_marginStart="20dp"/>
+       <LinearLayout
+           android:id="@+id/dataRow"
+           android:layout_below="@id/toolRow"
+           android:layout_marginTop="50dp"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="vertical">
+
+           <RelativeLayout
+               android:id="@+id/editInfoButton"
+               android:layout_gravity="center_horizontal"
+               android:layout_width="match_parent"
+               android:layout_height="70dp"
+               android:clickable="true"
+               android:focusable="true"
+               android:foreground="?attr/selectableItemBackground">
+               <ImageView
+                   android:layout_centerVertical="true"
+                   android:id="@+id/editIcon"
+                   android:layout_width="20dp"
+                   android:layout_height="20dp"
+                   android:src="@drawable/ic_user"
+                   android:tint="@color/overlay"
+                   android:layout_gravity="center_vertical"
+                   android:layout_marginStart="30dp"/>
+               <TextView
+                   android:layout_centerVertical="true"
+                   android:id="@+id/editText"
+                   android:layout_toEndOf="@id/editIcon"
+                   android:layout_width="wrap_content"
+                   android:layout_marginStart="30dp"
+                   android:layout_height="wrap_content"
+                   android:fontFamily="sans-serif"
+                   android:textSize="15sp"
+                   android:text="@string/changeInfo"
+                   android:textColor="@color/white"/>
+
+               <ImageView
+                   android:layout_centerVertical="true"
+                   android:layout_width="20dp"
+                   android:layout_height="20dp"
+                   android:tint="@color/overlay"
+                   android:src="@drawable/ic_right"
+                   android:layout_alignParentEnd="true"
+                   android:layout_marginEnd="30dp"/>
+
+           </RelativeLayout>
+
+           <RelativeLayout
+               android:clickable="true"
+               android:focusable="true"
+               android:id="@+id/logoutButton"
+               android:layout_width="match_parent"
+               android:layout_height="70dp"
+               android:foreground="?attr/selectableItemBackground" >
+
+               <ImageView
+                   android:id="@+id/logoutIcon"
+                   android:layout_alignParentStart="true"
+                   android:layout_centerVertical="true"
+                   android:layout_marginStart="30dp"
+                   android:layout_width="20dp"
+                   android:layout_height="20dp"
+                   android:src="@drawable/ic_logout"
+                   android:tint="@color/redAccent"/>
+               <TextView
+                   android:layout_toEndOf="@id/logoutIcon"
+                   android:layout_centerVertical="true"
+                   android:layout_marginStart="30dp"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:fontFamily="sans-serif"
+                   android:textSize="15sp"
+                   android:layout_gravity="center_vertical"
+                   android:textColor="@color/redAccent"
+                   android:text="@string/logout"/>
+
+               <ImageView
+                   android:layout_centerVertical="true"
+                   android:layout_width="20dp"
+                   android:layout_height="20dp"
+                   android:tint="@color/redAccent"
+                   android:src="@drawable/ic_right"
+                   android:layout_alignParentEnd="true"
+                   android:layout_marginEnd="30dp"/>
+
+           </RelativeLayout>
+       </LinearLayout>
        <RelativeLayout
            android:id="@+id/accountPane"
            android:layout_below="@id/accountTitle"
-           android:layout_marginTop="15dp"
+           android:layout_marginTop="30dp"
            android:layout_width="match_parent"
-           android:layout_height="300dp"
-           android:background="@drawable/transaction_item"
+           android:layout_height="wrap_content"
            android:layout_marginHorizontal="20dp">
            <LinearLayout
+               android:id="@+id/infoRow"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:layout_centerInParent="true"
@@ -121,8 +202,8 @@
                <ImageView
                    android:id="@+id/userAvatar"
                    android:layout_gravity="center_horizontal"
-                   android:layout_width="150dp"
-                   android:layout_height="150dp"
+                   android:layout_width="100dp"
+                   android:layout_height="100dp"
                    android:src="@drawable/ic_avatar"
                    android:background="@drawable/round_outline"/>
                <TextView
@@ -135,39 +216,12 @@
                    android:text="@string/emailPH"
                    android:textAlignment="center"
                    android:textColor="@color/white"/>
-               <Button
-                   android:id="@+id/editInfoButton"
-                   android:layout_gravity="center_horizontal"
-                   android:layout_marginTop="20dp"
-                   android:paddingHorizontal="20dp"
-                   android:layout_width="wrap_content"
-                   android:layout_height="45dp"
-                   android:textAllCaps="false"
-                   android:background="@drawable/bluegradient"
-                   android:fontFamily="sans-serif-light"
-                   android:textSize="15sp"
-                   android:foreground="?attr/selectableItemBackground"
-                   android:textColor="@color/white"
-                   android:text="@string/changeInfo"/>
+
            </LinearLayout>
        </RelativeLayout>
-       <Button
-           android:id="@+id/logoutButton"
-           android:layout_gravity="center_horizontal"
-           android:layout_alignParentBottom="true"
-           android:layout_centerHorizontal="true"
-           android:layout_marginBottom="100dp"
-           android:paddingHorizontal="20dp"
-           android:layout_width="wrap_content"
-           android:foreground="?attr/selectableItemBackground"
-           android:layout_height="45dp"
-           android:textAllCaps="false"
-           android:background="@drawable/logoutbtn"
-           android:fontFamily="sans-serif-light"
-           android:textSize="15sp"
-           android:textColor="@color/redAccent"
-           android:text="@string/logout"/>
    </RelativeLayout>
+
+
 
 
 </FrameLayout>
