@@ -8,7 +8,7 @@ public class Transaction {
     private String description;
     private String expenditureId;
     private String expenditureName;
-    private Number transactionAmout;
+    private Number transactionAmount;
     private String transactionId;
     private String moneySourceId;
     private boolean transactionIsIncome;
@@ -18,7 +18,7 @@ public class Transaction {
         this.description = "";
         this.expenditureId = "";
         this.expenditureName = "";
-        this.transactionAmout = 0;
+        this.transactionAmount = 0;
         this.transactionId = "";
         this.moneySourceId = "";
         this.transactionIsIncome = true;
@@ -26,11 +26,11 @@ public class Transaction {
     }
 
     public Transaction(String description, String expenditureId, String expenditureName,
-                       Number transactionAmout, String transactionId, String moneySourceId, boolean transactionIsIncome, Timestamp transactionTime) {
+                       Number transactionAmount, String transactionId, String moneySourceId, boolean transactionIsIncome, Timestamp transactionTime) {
         this.description = description;
         this.expenditureId = expenditureId;
         this.expenditureName = expenditureName;
-        this.transactionAmout = transactionAmout;
+        this.transactionAmount = transactionAmount;
         this.transactionId = transactionId;
         this.moneySourceId = moneySourceId;
         this.transactionIsIncome = transactionIsIncome;
@@ -61,12 +61,12 @@ public class Transaction {
         this.expenditureName = expenditureName;
     }
 
-    public Number getTransactionAmout() {
-        return transactionAmout;
+    public Number getTransactionAmount() {
+        return transactionAmount;
     }
 
-    public void setTransactionAmout(Number transactionAmout) {
-        this.transactionAmout = transactionAmout;
+    public void setTransactionAmount(Number transactionAmount) {
+        this.transactionAmount = transactionAmount;
     }
 
     public String getTransactionId() {

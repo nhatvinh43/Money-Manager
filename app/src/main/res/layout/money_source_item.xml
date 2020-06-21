@@ -9,6 +9,9 @@
         android:layout_marginHorizontal="5dp"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
+        android:scaleX="0.90"
+        android:scaleY="0.90"
+        android:id="@+id/cardContainer"
         app:cardCornerRadius="20dp"
         app:cardElevation="0dp">
         <ImageView

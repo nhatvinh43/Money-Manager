@@ -11,6 +11,7 @@ public class MoneySource {
     private String moneySourceId;
     private String moneySourceName;
     private String userId;
+    private ArrayList<Transaction> transactionsList;
 
     public MoneySource(){
         this.amount = 0;
@@ -87,5 +88,13 @@ public class MoneySource {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public ArrayList<Transaction> getTransactionsList() {
+        return transactionsList;
+    }
+
+    public void setTransactionsList(ArrayList<Transaction> transactionsList) {
+        this.transactionsList = transactionsList;
     }
 }
