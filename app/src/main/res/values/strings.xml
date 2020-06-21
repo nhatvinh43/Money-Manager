@@ -67,6 +67,7 @@
     <string name="moneySourceNamePH">Tiền ăn uống</string>
     <string name="timePH">07:31</string>
     <string name="moneyPlusPH">+250,000</string>
+    <string name="moneySubtractPH">- 25,000</string>
 
     <!--Add transaction-->
     <string name="addTransaction">Thêm ghi chép</string>
@@ -74,6 +75,7 @@
     <string name="chooseMoneySource">Chọn nguồn tiền</string>
     <string name="chooseDate">Chọn ngày</string>
     <string name="chooseCategory">Chọn danh mục</string>
+    <string name="chooseTime">Chọn giờ</string>
     <string name="enterDescription">Nhập mô tả</string>
     <string name="choose">Chọn</string>
     <string name="description">Mô tả</string>
@@ -120,6 +122,10 @@
     <string name="calculateTax">Thuế TN</string>
     <string name="calculateProfit">Lãi suất</string>
     <string name="manageMoneySourceFull">Quản lý nguồn tiền</string>
+
+    <!--Transaction Details-->
+    <string name="dateTime">Ngày giờ</string>
+    <string name="deleteTransaction">Xóa</string>
 
     <!--Money Source-->
     <string name="addMoneySource">Thêm nguồn tiền</string>

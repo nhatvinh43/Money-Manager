@@ -32,10 +32,12 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LayoutAnimationController;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -242,7 +244,7 @@ public class HomeFragment extends Fragment {
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
-                if(newState==RecyclerView.SCROLL_STATE_DRAGGING)
+                if(newState == RecyclerView.SCROLL_STATE_DRAGGING)
                 {
                     return;
                 }
@@ -254,9 +256,9 @@ public class HomeFragment extends Fragment {
                 CardView cv = viewHolder.itemView.findViewById(R.id.cardContainer);
 
                 if(newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    cv.animate().setDuration(100).scaleX(1).scaleY(1).setInterpolator(new AccelerateDecelerateInterpolator()).start();
+                    cv.animate().setDuration(400).scaleX(1).scaleY(1).setInterpolator(new DecelerateInterpolator()).start();
                 } else {
-                    cv.animate().setDuration(100).scaleX(0.96f).scaleY(0.96f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
+                    cv.animate().setDuration(400).scaleX(0.9f).scaleY(0.9f).setInterpolator(new AccelerateInterpolator()).start();
                 }
 
                 if(newState!=RecyclerView.SCROLL_STATE_SETTLING)
