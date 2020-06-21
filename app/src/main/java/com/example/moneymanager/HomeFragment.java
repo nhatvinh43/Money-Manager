@@ -46,6 +46,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import me.itangqi.waveloadingview.WaveLoadingView;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link HomeFragment#newInstance} factory method to
@@ -68,9 +70,9 @@ public class HomeFragment extends Fragment {
     int mYear, mMonth, mDay;
 
     // Money source infomation
-    TextView moneySourceLimit;
     TextView todayIncome;
     TextView todaySpending;
+    WaveLoadingView waveLoadingView; // For money source limit
 
     // Money source
     RecyclerView moneySourceRecycleView;
@@ -154,11 +156,11 @@ public class HomeFragment extends Fragment {
         selectedMoneySource = moneySourceList.get(0);
 
         // Moneysource Info Initiation
-        moneySourceLimit = view.findViewById(R.id.moneyLimit_home);
+        final WaveLoadingView waveLoadingView = view.findViewById(R.id.waveLoadingView);
         todayIncome = view.findViewById(R.id.todayIncome_home);
         todaySpending = view.findViewById(R.id.todaySpending_home);
 
-        moneySourceLimit.setText(moneyToString((double)selectedMoneySource.getLimit()));
+        waveLoadingView.setCenterTitle(moneyToString((double)selectedMoneySource.getLimit()));
         todayIncome.setText("Thêm sau");
         todaySpending.setText("Thêm sau");
 
@@ -264,7 +266,7 @@ public class HomeFragment extends Fragment {
                 if(newState!=RecyclerView.SCROLL_STATE_SETTLING)
                 {
                     selectedMoneySource = moneySourceList.get(pos);
-                    moneySourceLimit.setText(moneyToString((double)selectedMoneySource.getLimit()));
+                    waveLoadingView.setCenterTitle(moneyToString((double)selectedMoneySource.getLimit()));
                     todayIncome.setText("Thêm sau");
                     todaySpending.setText("Thêm sau");
 
