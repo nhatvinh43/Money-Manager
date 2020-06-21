@@ -11,7 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AddMoneySourceActivity"></activity>
+        <activity android:name=".MoneySourceDetailsActivity"></activity>
+        <activity android:name=".TransactionDetailsActivity" />
+        <activity android:name=".AddMoneySourceActivity" />
         <activity android:name=".EditUserInfoActivity" />
         <activity
             android:name=".AddTransactionActivity"
@@ -19,7 +21,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity android:name=".PasswordRecoveryActivity" />
         <activity android:name=".SplashActivity">
             <intent-filter>

@@ -32,10 +32,12 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LayoutAnimationController;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -242,6 +244,11 @@ public class HomeFragment extends Fragment {
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
+                if(newState == RecyclerView.SCROLL_STATE_DRAGGING)
+                {
+                    return;
+                }
+
                 View v = snapHelper.findSnapView(moneySourceLayoutManager);
                 int pos = moneySourceLayoutManager.getPosition(v);
 
@@ -249,12 +256,12 @@ public class HomeFragment extends Fragment {
                 CardView cv = viewHolder.itemView.findViewById(R.id.cardContainer);
 
                 if(newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    cv.animate().setDuration(300).scaleX(1).scaleY(1).setInterpolator(new AccelerateDecelerateInterpolator()).start();
+                    cv.animate().setDuration(400).scaleX(1).scaleY(1).setInterpolator(new DecelerateInterpolator()).start();
                 } else {
-                    cv.animate().setDuration(200).scaleX(0.98f).scaleY(0.98f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
+                    cv.animate().setDuration(400).scaleX(0.9f).scaleY(0.9f).setInterpolator(new AccelerateInterpolator()).start();
                 }
 
-                if(newState!=RecyclerView.SCROLL_STATE_IDLE)
+                if(newState!=RecyclerView.SCROLL_STATE_SETTLING)
                 {
                     selectedMoneySource = moneySourceList.get(pos);
                     moneySourceLimit.setText(moneyToString((double)selectedMoneySource.getLimit()));
