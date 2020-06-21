@@ -132,6 +132,7 @@
     <string name="moneySourceName">Tên nguồn tiền</string>
     <string name="moneySourceUnit">Đơn vị</string>
     <string name="moneySourceAmount">Số tiền</string>
+    <string name="moneySource">Nguồn tiền</string>
 
     <!--Currency-->
     <string name="chooseUnit">Chọn đơn vị</string>
