@@ -9,9 +9,7 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowDisablePreview">true</item>
-        <!--This line changes the color of text in Toolbar-->
         <item name="android:textColorPrimary">@color/white</item>
-        <!--This line changes the color of icons in toolbar (back, overflow menu icons)-->
         <item name="android:textColorSecondary">@color/white</item>
     </style>
 
