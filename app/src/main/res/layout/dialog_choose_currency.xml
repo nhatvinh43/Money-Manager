@@ -37,7 +37,6 @@
             android:id="@+id/unitList_chooseCurrency"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="30dp"
             android:paddingBottom="15dp" />
 
     </androidx.core.widget.NestedScrollView>

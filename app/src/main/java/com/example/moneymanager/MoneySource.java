@@ -13,6 +13,16 @@ public class MoneySource {
     private String userId;
     private ArrayList<Transaction> transactionsList;
 
+    public MoneySource(){
+        this.amount = 0;
+        this.currencyId = "";
+        this.currencyName = "";
+        this.limit = 0;
+        this.moneySourceId = "";
+        this.moneySourceName = "";
+        this.userId = "";
+    }
+
     public MoneySource(Number amount, String currencyId, String currencyName,
                        Number limit, String moneySourceId, String moneySourceName, String userId) {
         this.amount = amount;

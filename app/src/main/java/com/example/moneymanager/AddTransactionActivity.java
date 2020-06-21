@@ -59,17 +59,17 @@ public class AddTransactionActivity extends AppCompatActivity {
         //prepare data and model
         resTransaction.setTransactionId("Tran001");
         //prepare data
-        expenditures.add(new Expenditure("Exp01","Ăn Uống", false));
-        expenditures.add(new Expenditure("Exp02", "Sinh Hoạt", false));
-        expenditures.add(new Expenditure("Exp03", "Đi Lại", false));
-        expenditures.add(new Expenditure("Exp04", "Sức Khỏe", false));
-        expenditures.add(new Expenditure("Exp05", "Đám Tiệc", false));
-        expenditures.add(new Expenditure("Exp06", "Thu Khác", false));
-        expenditures.add(new Expenditure("Exp07", "Tiền Thưởng", true));
-        expenditures.add(new Expenditure("Exp08", "Tiền Lãi", true));
-        expenditures.add(new Expenditure("Exp09", "Tiền Lương", true));
-        expenditures.add(new Expenditure("Exp10", "Được Tặng", true));
-        expenditures.add(new Expenditure("Exp11", "Chi Khác", true));
+        expenditures.add(new Expenditure("Exp01","Ăn uống", false));
+        expenditures.add(new Expenditure("Exp02", "Sinh hoạt", false));
+        expenditures.add(new Expenditure("Exp03", "Đi lại", false));
+        expenditures.add(new Expenditure("Exp04", "Sức khỏe", false));
+        expenditures.add(new Expenditure("Exp05", "Đám tiệc", false));
+        expenditures.add(new Expenditure("Exp06", "Chi khác", false));
+        expenditures.add(new Expenditure("Exp07", "Tiền thưởng", true));
+        expenditures.add(new Expenditure("Exp08", "Tiền lãi", true));
+        expenditures.add(new Expenditure("Exp09", "Tiền lương", true));
+        expenditures.add(new Expenditure("Exp10", "Được tặng", true));
+        expenditures.add(new Expenditure("Exp11", "Thu khác", true));
 
         //prepare model
 
@@ -138,7 +138,7 @@ public class AddTransactionActivity extends AppCompatActivity {
                 final int mDay = calendar.get(Calendar.DAY_OF_MONTH);
                 final int mHour = calendar.get(Calendar.HOUR_OF_DAY);
                 final int mMin = calendar.get(Calendar.MINUTE);
-                DatePickerDialog datePickerDialog = new DatePickerDialog(AddTransactionActivity.this,
+                DatePickerDialog datePickerDialog = new DatePickerDialog(AddTransactionActivity.this,R.style.DatePickerDialog,
                         new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -155,7 +155,7 @@ public class AddTransactionActivity extends AppCompatActivity {
                     }
                 }, mYear, mMonth, mDay);
                 //show Time Picker Dialog
-                TimePickerDialog timePickerDialog = new TimePickerDialog(AddTransactionActivity.this,
+                TimePickerDialog timePickerDialog = new TimePickerDialog(AddTransactionActivity.this, R.style.TimePickerDialog,
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -207,7 +207,6 @@ public class AddTransactionActivity extends AppCompatActivity {
                 bill.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("11111111111111", "onClick: " + "Bill");
                         typeOfExpenditure.setText(expenditures.get(1).getExpenditureName());
                         resTransaction.setExpenditureId(expenditures.get(1).getExpenditureId());
                         resTransaction.setExpenditureName(expenditures.get(1).getExpenditureName());
@@ -218,7 +217,6 @@ public class AddTransactionActivity extends AppCompatActivity {
                 travel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("11111111111111", "onClick: " + "An UOng");
                         typeOfExpenditure.setText(expenditures.get(2).getExpenditureName());
                         resTransaction.setExpenditureId(expenditures.get(2).getExpenditureId());
                         resTransaction.setExpenditureName(expenditures.get(2).getExpenditureName());
@@ -229,7 +227,6 @@ public class AddTransactionActivity extends AppCompatActivity {
                 health.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("11111111111111", "onClick: " + "An UOng");
                         typeOfExpenditure.setText(expenditures.get(3).getExpenditureName());
                         resTransaction.setExpenditureId(expenditures.get(3).getExpenditureId());
                         resTransaction.setExpenditureName(expenditures.get(3).getExpenditureName());
@@ -240,7 +237,6 @@ public class AddTransactionActivity extends AppCompatActivity {
                 party.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("11111111111111", "onClick: " + "An UOng");
                         typeOfExpenditure.setText(expenditures.get(4).getExpenditureName());
                         resTransaction.setExpenditureId(expenditures.get(4).getExpenditureId());
                         resTransaction.setExpenditureName(expenditures.get(4).getExpenditureName());
@@ -251,7 +247,6 @@ public class AddTransactionActivity extends AppCompatActivity {
                 spendingOther.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("11111111111111", "onClick: " + "An UOng");
                         typeOfExpenditure.setText(expenditures.get(5).getExpenditureName());
                         resTransaction.setExpenditureId(expenditures.get(5).getExpenditureId());
                         resTransaction.setExpenditureName(expenditures.get(5).getExpenditureName());
@@ -262,7 +257,6 @@ public class AddTransactionActivity extends AppCompatActivity {
                 bonus.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("11111111111111", "onClick: " + "An UOng");
                         typeOfExpenditure.setText(expenditures.get(6).getExpenditureName());
                         resTransaction.setExpenditureId(expenditures.get(6).getExpenditureId());
                         resTransaction.setExpenditureName(expenditures.get(6).getExpenditureName());
@@ -273,7 +267,6 @@ public class AddTransactionActivity extends AppCompatActivity {
                 profit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("11111111111111", "onClick: " + "An UOng");
                         typeOfExpenditure.setText(expenditures.get(7).getExpenditureName());
                         resTransaction.setExpenditureId(expenditures.get(7).getExpenditureId());
                         resTransaction.setExpenditureName(expenditures.get(7).getExpenditureName());
@@ -284,7 +277,6 @@ public class AddTransactionActivity extends AppCompatActivity {
                 salary.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("11111111111111", "onClick: " + "An UOng");
                         typeOfExpenditure.setText(expenditures.get(8).getExpenditureName());
                         resTransaction.setExpenditureId(expenditures.get(8).getExpenditureId());
                         resTransaction.setExpenditureName(expenditures.get(8).getExpenditureName());
@@ -295,7 +287,6 @@ public class AddTransactionActivity extends AppCompatActivity {
                 gifted.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("11111111111111", "onClick: " + "An UOng");
                         typeOfExpenditure.setText(expenditures.get(9).getExpenditureName());
                         resTransaction.setExpenditureId(expenditures.get(9).getExpenditureId());
                         resTransaction.setExpenditureName(expenditures.get(9).getExpenditureName());
@@ -306,7 +297,6 @@ public class AddTransactionActivity extends AppCompatActivity {
                 incomingOther.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("11111111111111", "onClick: " + "An UOng");
                         typeOfExpenditure.setText(expenditures.get(10).getExpenditureName());
                         resTransaction.setExpenditureId(expenditures.get(10).getExpenditureId());
                         resTransaction.setExpenditureName(expenditures.get(10).getExpenditureName());
@@ -344,7 +334,7 @@ public class AddTransactionActivity extends AppCompatActivity {
                 if (moneySourceEditText.getText().toString().length() == 0 || dateTimeEditText.getText().toString().length() == 0
                 || typeOfExpenditure.getText().toString().length() == 0 || amount.getText().toString().length() == 0) {
                     dialog.show();
-                    msg.setText("Vui Lòng Điền Đầy Đủ Thông Tin");
+                    msg.setText("Vui lòng điền dầy đủ thông tin!");
                 }
                 else {
                     //Trường hợp đầy đủ thông tin

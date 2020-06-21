@@ -2,7 +2,9 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/transaction_item">
+    android:background="@drawable/innershape"
+    android:layout_marginBottom="15dp"
+    android:clickable="true" android:focusable="true" android:foreground="?attr/selectableItemBackground">
 
     <TextView
         android:id="@+id/moneySourceName_moneySourceListSmall"

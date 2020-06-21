@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/innershape">
+    android:layout_width="match_parent" android:layout_height="60dp" android:background="@drawable/innershape" android:layout_marginBottom="10dp"
+    android:clickable="true" android:focusable="true" android:foreground="?attr/selectableItemBackground">
     <TextView
+        android:layout_centerInParent="true"
         android:id="@+id/unit_currencyList"
         android:layout_width="match_parent"
         android:textAlignment="center"
@@ -10,5 +12,6 @@
         android:text="@string/currencyPH"
         android:textColor="@color/white"
         android:layout_marginVertical="15dp"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        />
 </RelativeLayout>
