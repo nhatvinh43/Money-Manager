@@ -109,6 +109,16 @@ public class UltilitiesFragment extends Fragment {
                 recyclerView.setLayoutManager(layoutManager);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
+                adapter.setOnItemClickListener(new UltilitiesMoneySourceManageAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(int position) {
+                        MoneySource moneySource = dataSet.get(position);
+                        Intent intent = new Intent(categoryPanel.getContext(), MoneySourceDetailsActivity.class);
+                        intent.putExtra("MSId", moneySource.getMoneySourceId());
+                        startActivity(intent);
+                    }
+                });
+
             }
         });
     }
