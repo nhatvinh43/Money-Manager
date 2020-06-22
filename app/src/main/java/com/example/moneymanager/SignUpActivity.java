@@ -28,6 +28,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
+import java.util.ArrayList;
+
 public class SignUpActivity extends AppCompatActivity {
     EditText email_signup;
     EditText fullName_signup;
@@ -132,20 +134,34 @@ public class SignUpActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()) {
                             Toast.makeText(SignUpActivity.this, "Đăng kí thành công", Toast.LENGTH_SHORT).show();
-                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                    .setDisplayName(fullName_signup.getText().toString())
-                                    .build();
+                            final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-                            user.updateProfile(profileUpdates)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                                            }
-                                        }
-                                    });
+                            new DataHelper().setUsersCollection(user.getUid(), fullName_signup.getText().toString(), email_signup.getText().toString().trim(), "");
+                            new DataHelper().setMoneySource(new MoneySourceCallBack() {
+                                @Override
+                                public void onCallBack(ArrayList<MoneySource> list) {
+                                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                            .setDisplayName(fullName_signup.getText().toString())
+                                            .build();
+
+                                    user.updateProfile(profileUpdates)
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                                                        finish();
+                                                    }
+                                                }
+                                            });
+                                }
+
+                                @Override
+                                public void onCallBackFail(String message) {
+
+                                }
+                            }, user.getUid(), "Ví chung", 0.0, 0.0, "curId", "VND");
+
                         } else {
                             Toast.makeText(SignUpActivity.this, "Thất bại: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.GONE);

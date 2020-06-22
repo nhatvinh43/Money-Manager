@@ -45,7 +45,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 
@@ -264,10 +268,36 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    FirebaseUser user = fAuth.getCurrentUser();
+                    final FirebaseUser user = fAuth.getCurrentUser();
                     Toast.makeText(LoginActivity.this, "Hello from google, " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                    finish();
+
+                    new DataHelper().setUsersCollection(user.getUid(), user.getDisplayName(), user.getEmail(), user.getPhotoUrl().toString());
+                    FirebaseFirestore.getInstance().collection("users").document(user.getUid()).get()
+                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if(task.isSuccessful()) {
+                                        if(!task.getResult().exists()) {
+                                            new DataHelper().setMoneySource(new MoneySourceCallBack() {
+                                                @Override
+                                                public void onCallBack(ArrayList<MoneySource> list) {
+                                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                                    finish();
+                                                }
+
+                                                @Override
+                                                public void onCallBackFail(String message) {
+                                                    unLoading();
+                                                }
+                                            }, user.getUid(), "Ví chung", 0.0, 0.0, "curId", "VND");
+                                        } else {
+                                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                            finish();
+                                        }
+                                    }
+                                }
+                            });
+
                 } else {
                     Toast.makeText(LoginActivity.this, "Thất bại: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     unLoading();
@@ -283,11 +313,38 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            unLoading();
-                            FirebaseUser user = fAuth.getCurrentUser();
+                            final FirebaseUser user = fAuth.getCurrentUser();
+
                             Toast.makeText(LoginActivity.this, "Hello from facebook, " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                            finish();
+                            new DataHelper().setUsersCollection(user.getUid(), user.getDisplayName(), user.getEmail(), user.getPhotoUrl().toString());
+                            FirebaseFirestore.getInstance().collection("users").document(user.getUid()).get()
+                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            if(task.isSuccessful()) {
+                                                if(!task.getResult().exists()) {
+                                                    new DataHelper().setMoneySource(new MoneySourceCallBack() {
+                                                        @Override
+                                                        public void onCallBack(ArrayList<MoneySource> list) {
+                                                            unLoading();
+                                                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                                            finish();
+                                                        }
+
+                                                        @Override
+                                                        public void onCallBackFail(String message) {
+                                                            unLoading();
+                                                        }
+                                                    }, user.getUid(), "Ví chung", 0.0, 0.0, "curId", "VND");
+                                                } else {
+                                                    unLoading();
+                                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                                    finish();
+                                                }
+                                            }
+                                        }
+                                    });
+
                         } else {
                             Toast.makeText(LoginActivity.this, "Thất bại: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             unLoading();
