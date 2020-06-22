@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -24,8 +25,10 @@ import androidx.recyclerview.widget.SnapHelper;
 
 import android.os.Handler;
 import android.text.Editable;
+import android.text.PrecomputedText;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,8 +39,12 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LayoutAnimationController;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -46,7 +53,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.xml.transform.Result;
+
 import me.itangqi.waveloadingview.WaveLoadingView;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,6 +73,10 @@ public class HomeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    // Firebase
+    FirebaseAuth fAuth;
+    DataHelper fDataHelper;
 
     // Calendar task
     TextView dayOfWeek;
@@ -125,35 +140,40 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // Sample Test Data
+        final ProgressBar loading = view.findViewById(R.id.loading);
+        final RelativeLayout rl = view.findViewById(R.id.homeContainer);
+
+        fAuth = FirebaseAuth.getInstance();
+        fDataHelper = new DataHelper();
         moneySourceList = new ArrayList<>();
-        moneySourceList.add(new MoneySource(10000.0, "a","VND",500000.0, "a", "Ví chung", "1"));
-        moneySourceList.add(new MoneySource(130000.0, "a","VND",600000.0, "b", "Ví ăn vặt", "1"));
-        moneySourceList.add(new MoneySource(140000.0, "a","VND",1000000.0, "c", "Ví tiết kiệm", "1"));
 
-//        transactionList.add(new Transaction("vui", "1", "Tiền lương", 1000000, "a", "MS01",true, new Timestamp(100000)));
-//        transactionList.add(new Transaction("vui quá", "2", "Tiền điện", 120000, "b", "MS01",false, new Timestamp(200000)));
-//        transactionList.add(new Transaction("vui à", "3", "Tiền uống", 100000, "c","MS01", false, new Timestamp(300000)));
-//        transactionList.add(new Transaction("vui ghê", "1", "Tiền lương", 3000000, "d","MS01", true, new Timestamp(450000)));
-//        transactionList.add(new Transaction("vui bla", "4", "Tiền ăn", 650000, "e","MS01", false, new Timestamp(678000)));
+        fDataHelper.getMoneySource(new MoneySourceCallBack() {
+            @Override
+            public void onCallBack(ArrayList<MoneySource> list) {
+                getMoneySourceData(list);
+                loading.setVisibility(View.GONE);
+                rl.setVisibility(View.VISIBLE);
+                initView(view);
+            }
 
-        ArrayList<Transaction> transactionList1 = new ArrayList<>();
-        transactionList1.add(new Transaction("vui à", "3", "Tiền uống", 100000.0, "c","MS01", false, new Timestamp(Calendar.getInstance().get(Calendar.MILLISECOND))));
-        transactionList1.add(new Transaction("vui ghê", "1", "Tiền lương", 3000000.0, "d","MS01", true, new Timestamp(Calendar.getInstance().get(Calendar.MILLISECOND) - 60*60*24*1000)));
-        transactionList1.add(new Transaction("vui bla", "4", "Tiền ăn", 650000.0, "e","MS01", false, new Timestamp(Calendar.getInstance().get(Calendar.MILLISECOND))));
-        ArrayList<Transaction> transactionList2 = new ArrayList<>();
-        transactionList2.add(new Transaction("vui à", "3", "Tiền uống", 100000.0, "c","MS01", false, new Timestamp(Calendar.getInstance().get(Calendar.MILLISECOND))));
-        transactionList2.add(new Transaction("vui ghê", "1", "Tiền lương", 3000000.0, "d","MS01", true, new Timestamp(Calendar.getInstance().get(Calendar.MILLISECOND))));
-        ArrayList<Transaction> transactionList3 = new ArrayList<>();
-        transactionList3.add(new Transaction("vui à", "3", "Tiền uống", 100000.0, "c","MS01", false, new Timestamp(Calendar.getInstance().get(Calendar.MILLISECOND))));
+            @Override
+            public void onCallBackFail(String message) {
+                Log.d(TAG, "Fail: " + message);
+            }
+        }, fAuth.getCurrentUser().getUid());
+    }
 
-        moneySourceList.get(0).setTransactionsList(transactionList1);
-        moneySourceList.get(1).setTransactionsList(transactionList2);
-        moneySourceList.get(2).setTransactionsList(transactionList3);
+    private void getMoneySourceData(ArrayList<MoneySource> list) {
+        moneySourceList.clear();
+        moneySourceList.addAll(list);
+    }
 
-        selectedMoneySource = moneySourceList.get(0);
+    private void initView(View view) {
+        selectedMoneySource = new MoneySource();
+        if(moneySourceList.size() != 0)
+            selectedMoneySource = moneySourceList.get(0);
 
         // Moneysource Info Initiation
         final WaveLoadingView waveLoadingView = view.findViewById(R.id.waveLoadingView);
@@ -347,6 +367,7 @@ public class HomeFragment extends Fragment {
     }
 
     private String moneyToString(double amount) {
+        if(amount == 0) return "0";
         StringBuilder mString = new StringBuilder();
         long mAmount = (long)amount;
         double remainder = amount - mAmount;

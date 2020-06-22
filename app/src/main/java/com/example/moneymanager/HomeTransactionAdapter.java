@@ -63,6 +63,7 @@ public class HomeTransactionAdapter extends RecyclerView.Adapter<HomeTransaction
     }
 
     private String moneyToString(double amount) {
+        if(amount == 0) return "0";
         StringBuilder mString = new StringBuilder();
         long mAmount = (long) amount;
         double remainder = amount - mAmount;

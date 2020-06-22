@@ -10,7 +10,9 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/homeContainer"
+            android:visibility="invisible">
             <LinearLayout
                 android:id="@+id/datePickerRow"
                 android:layout_width="wrap_content"
@@ -227,5 +229,14 @@
                 </RelativeLayout>
             </androidx.core.widget.NestedScrollView>
         </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        />
 
 </FrameLayout>
