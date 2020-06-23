@@ -1,5 +1,6 @@
 package com.example.moneymanager;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -9,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
 import com.squareup.picasso.Picasso;
 
@@ -35,11 +38,15 @@ public class SettingsFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final int SETTING_RQCODE = 1;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    Button signOutButton;
+
+    TextView name;
+    ImageView avatar;
+
     FirebaseAuth fAuth;
 
     public SettingsFragment() {
@@ -87,11 +94,12 @@ public class SettingsFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
 
         UserInfo user = fAuth.getCurrentUser();
-        TextView name = getView().findViewById(R.id.email_settings);
-        ImageView avatar = getView().findViewById(R.id.userAvatar);
-        name.setText(user.getDisplayName());
-        avatar.setClipToOutline(true);
+        name = getView().findViewById(R.id.email_settings);
+        avatar = getView().findViewById(R.id.userAvatar);
 
+        name.setText(user.getDisplayName());
+
+        avatar.setClipToOutline(true);
         if(user.getPhotoUrl() != null) {
             String photoUrl = user.getPhotoUrl().toString();
             photoUrl = photoUrl + "?type=large";
@@ -103,7 +111,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(),EditUserInfoActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, SETTING_RQCODE);
             }
         });
 
@@ -144,6 +152,7 @@ public class SettingsFragment extends Fragment {
                         getActivity().finish();
                     }
                 });
+
                 DialogView.findViewById(R.id.cancelLogout).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -157,6 +166,25 @@ public class SettingsFragment extends Fragment {
                 alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode,  resultCode, data);
+        FirebaseUser user = fAuth.getCurrentUser();
+
+        if(requestCode == SETTING_RQCODE) {
+            if(resultCode == Activity.RESULT_OK) {
+                name.setText(user.getDisplayName());
+
+                avatar.setClipToOutline(true);
+                if(user.getPhotoUrl() != null) {
+                    String photoUrl = user.getPhotoUrl().toString();
+                    photoUrl = photoUrl + "?type=large";
+                    Picasso.get().load(photoUrl).into(avatar);
+                }
+            }
+        }
     }
 }
 

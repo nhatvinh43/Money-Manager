@@ -64,31 +64,26 @@ public class MainActivity extends AppCompatActivity {
         navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()){
-                    case R.id.navigation_home:
-                    {
+                switch (menuItem.getItemId()) {
+                    case R.id.navigation_home: {
                         fm.beginTransaction().hide(active).show(fragment1).commit();
                         active = fragment1;
                         return true;
                     }
-                    case R.id.navigation_statistics:
-                    {
+                    case R.id.navigation_statistics: {
                         fm.beginTransaction().hide(active).show(fragment2).commit();
                         active = fragment2;
                         return true;
                     }
-                    case R.id.navigation_add:
-                    {
+                    case R.id.navigation_add: {
                         return true;
                     }
-                    case R.id.navigation_utilities:
-                    {
+                    case R.id.navigation_utilities: {
                         fm.beginTransaction().hide(active).show(fragment3).commit();
                         active = fragment3;
                         return true;
                     }
-                    case R.id.navigation_settings:
-                    {
+                    case R.id.navigation_settings: {
                         fm.beginTransaction().hide(active).show(fragment4).commit();
                         active = fragment4;
                         return true;
