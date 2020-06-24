@@ -121,5 +121,68 @@ public class UltilitiesFragment extends Fragment {
 
             }
         });
+
+        //Currency converter
+        view.findViewById(R.id.convertCurrencyButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(v.getContext());
+                builder.setView(R.layout.dialog_currency_converter);
+                final AlertDialog convertPanel  = builder.create();
+                convertPanel.show();
+                convertPanel.getWindow().setLayout(1000,1200);
+                convertPanel.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                convertPanel.findViewById(R.id.convert_currencyConverter).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        convertPanel.findViewById(R.id.resultTitle_currencyConverter).setVisibility(View.VISIBLE);
+                        convertPanel.findViewById(R.id.result_currencyConverter).setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+        });
+
+        //Calculate tax
+        view.findViewById(R.id.calculateTaxButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(v.getContext());
+                builder.setView(R.layout.dialog_calculate_tax);
+                final AlertDialog calculateTaxPanel  = builder.create();
+                calculateTaxPanel.show();
+                calculateTaxPanel.getWindow().setLayout(1000,1200);
+                calculateTaxPanel.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                calculateTaxPanel.findViewById(R.id.calculate_calculateTax).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        calculateTaxPanel.findViewById(R.id.resultTitle_calculateTax).setVisibility(View.VISIBLE);
+                        calculateTaxPanel.findViewById(R.id.result_calculateTax).setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+        });
+
+        //Calculate profit
+        view.findViewById(R.id.calculateProfitButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(v.getContext());
+                builder.setView(R.layout.dialog_calculate_profit);
+                final AlertDialog calculateProfitPanel  = builder.create();
+                calculateProfitPanel.show();
+                calculateProfitPanel.getWindow().setLayout(1000,1200);
+                calculateProfitPanel.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                calculateProfitPanel.findViewById(R.id.calculate_calculateProfit).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        calculateProfitPanel.findViewById(R.id.resultTitle_calculateProfit).setVisibility(View.VISIBLE);
+                        calculateProfitPanel.findViewById(R.id.result_calculateProfit).setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+        });
     }
 }
