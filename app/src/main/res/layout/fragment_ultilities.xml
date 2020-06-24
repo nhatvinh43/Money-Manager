@@ -182,7 +182,7 @@
                 <RelativeLayout
                     android:clickable="true"
                     android:focusable="true"
-                    android:id="@+id/calculateProfit"
+                    android:id="@+id/calculateProfitButton"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:foreground="?attr/selectableItemBackground"

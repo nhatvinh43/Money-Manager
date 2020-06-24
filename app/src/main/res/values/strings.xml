@@ -124,6 +124,23 @@
     <string name="calculateTax">Thuế TN</string>
     <string name="calculateProfit">Lãi suất</string>
     <string name="manageMoneySourceFull">Quản lý nguồn tiền</string>
+    <string name="convertCurrency">Chuyển đổi ngoại tệ</string>
+    <string name="unit">Đơn vị</string>
+    <string name="convertTo">đổi sang</string>
+    <string name="enterMoney">Nhập số tiền</string>
+    <string name="convert">Đổi</string>
+    <string name="convertResult">Số tiền sau khi đổi là</string>
+    <string name="calculateTaxFull">Tính thuế thu nhập cá nhân</string>
+    <string name="totalSalary">Tổng tiền lương</string>
+    <string name="salaryForInsurance">Lương đóng bảo hiểm</string>
+    <string name="dependentPersons">Số người phụ thuộc</string>
+    <string name="calculate">Tính</string>
+    <string name="calculateTaxResult">Tổng thuế TNCN của bạn là</string>
+    <string name="calculateProfitFull">Tính lãi suất ngân hàng</string>
+    <string name="timePeriod">Kỳ hạn</string>
+    <string name="profitRatio">Lãi suất</string>
+    <string name="calculateProfitResult">Tiền lãi của bạn là</string>
+
 
     <!--Transaction Details-->
     <string name="dateTime">Ngày giờ</string>
