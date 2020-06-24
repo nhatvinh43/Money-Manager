@@ -99,6 +99,9 @@
     <string name="emailPH">Nguyenvanx@gmail.com</string>
     <string name="passwordMismatch">Mật khẩu không khớp!</string>
     <string name="infoMissing">Vui lòng nhập đầy đủ thông tin!</string>
+    <string name="oldPasswordTitle">Đổi mật khẩu</string>
+    <string name="oldPasswordConfirm">Vui lòng nhập lại mật khẩu cũ</string>
+    <string name="oldPassword">Mật khẩu cũ</string>
 
     <!--Categories-->
     <string name="food">Ăn uống</string>
