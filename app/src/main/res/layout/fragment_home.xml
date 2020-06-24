@@ -12,7 +12,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/homeContainer"
-            android:visibility="invisible">
+            android:visibility="gone">
             <LinearLayout
                 android:id="@+id/datePickerRow"
                 android:layout_width="wrap_content"
@@ -83,7 +83,7 @@
                     <RelativeLayout
                         android:layout_below="@id/moneySourceList"
                         android:id="@+id/statisticsRow"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="30dp"
                         >
@@ -95,6 +95,36 @@
                             android:textColor="@color/white"
                             android:textSize="18sp"
                             android:fontFamily="sans-serif-black"/>
+
+                        <LinearLayout
+                            android:id="@+id/noTransaction_home"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:orientation="vertical"
+                            android:layout_below="@id/statisticsTittle"
+                            android:layout_marginTop="40dp"
+                            android:visibility="gone">
+                            <ImageView
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/ic_surprised"
+                                android:tint="@color/hintText"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif-light"
+                                android:textSize="12sp"
+                                android:layout_marginTop="10dp"
+                                android:paddingHorizontal="50dp"
+                                android:textAlignment="center"
+                                android:layout_gravity="center"
+                                android:text="@string/noTransaction"
+                                android:textColor="@color/hintText"
+                                android:visibility="visible"/>
+                        </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -102,8 +132,8 @@
                             android:id="@+id/limitRow"
                             android:layout_below="@id/statisticsTittle"
                             android:layout_marginTop="15dp"
-                            android:weightSum="2">
-
+                            android:weightSum="2"
+                            android:visibility="visible">
 
                             <me.itangqi.waveloadingview.WaveLoadingView
                                     android:id="@+id/waveLoadingView"
@@ -216,6 +246,35 @@
                             android:textSize="18sp"
                             android:fontFamily="sans-serif-black"/>
 
+                        <LinearLayout
+                            android:id="@+id/noTodayTransaction_home"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:orientation="vertical"
+                            android:layout_below="@id/detailsTitle"
+                            android:layout_marginTop="40dp"
+                            android:visibility="gone">
+                            <ImageView
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/ic_surprised"
+                                android:tint="@color/hintText"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif-light"
+                                android:textSize="12sp"
+                                android:layout_marginTop="10dp"
+                                android:paddingHorizontal="50dp"
+                                android:textAlignment="center"
+                                android:layout_gravity="center"
+                                android:text="@string/noTransaction"
+                                android:textColor="@color/hintText"
+                                android:visibility="visible"/>
+                        </LinearLayout>
+
                         <androidx.recyclerview.widget.RecyclerView
                             android:background="@drawable/roundedcorners"
                             android:id="@+id/transactionList"
@@ -232,11 +291,39 @@
 
     <ProgressBar
         android:id="@+id/loading"
-        android:layout_centerInParent="true"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="visible"
         />
+
+    <LinearLayout
+        android:id="@+id/noMoneySource_home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp"
+        android:visibility="gone">
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_surprised"
+            android:tint="@color/hintText"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:textSize="15sp"
+            android:layout_marginTop="20dp"
+            android:paddingHorizontal="50dp"
+            android:textAlignment="center"
+            android:layout_gravity="center"
+            android:text="@string/noMoneySource"
+            android:textColor="@color/hintText"
+            android:visibility="visible"/>
+    </LinearLayout>
+
 
 </FrameLayout>

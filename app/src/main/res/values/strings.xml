@@ -68,6 +68,8 @@
     <string name="timePH">07:31</string>
     <string name="moneyPlusPH">+250,000</string>
     <string name="moneySubtractPH">- 25,000</string>
+    <string name="noMoneySource">Vui lòng thêm nguồn tiền trước!</string>
+    <string name="noTransaction">Chưa có ghi chép!</string>
 
     <!--Add transaction-->
     <string name="addTransaction">Thêm ghi chép</string>
@@ -137,6 +139,13 @@
     <!--Currency-->
     <string name="chooseUnit">Chọn đơn vị</string>
     <string name="searchUnit">Tìm kiếm đơn vị</string>
+
+    <!--Statistics-->
+    <string name="thisMonth">Tháng này</string>
+    <string name="monthPH">Tháng 11, 2020</string>
+    <string name="overview">Tổng quan</string>
+    <string name="chart">Biểu đồ</string>
+    <string name="noDataThisMonth">Không có dữ liệu cho tháng này!</string>
 
 
     <string name="facebook_app_id">886246855208820</string>
