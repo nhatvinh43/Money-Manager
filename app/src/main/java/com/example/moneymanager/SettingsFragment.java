@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -101,9 +102,10 @@ public class SettingsFragment extends Fragment {
 
         avatar.setClipToOutline(true);
         if(user.getPhotoUrl() != null) {
+            Log.d("------------------------------", user.getPhotoUrl().toString());
             String photoUrl = user.getPhotoUrl().toString();
-            photoUrl = photoUrl + "?type=large";
-            Picasso.get().load(photoUrl).into(avatar);
+//            photoUrl = photoUrl + "?type=large";
+            Glide.with(getContext()).load(photoUrl).into(avatar);
         }
 
         //Nút Sửa thông tin
@@ -180,8 +182,8 @@ public class SettingsFragment extends Fragment {
                 avatar.setClipToOutline(true);
                 if(user.getPhotoUrl() != null) {
                     String photoUrl = user.getPhotoUrl().toString();
-                    photoUrl = photoUrl + "?type=large";
-                    Picasso.get().load(photoUrl).into(avatar);
+//                    photoUrl = photoUrl + "?type=large";
+                    Glide.with(getContext()).load(photoUrl).into(avatar);
                 }
             }
         }

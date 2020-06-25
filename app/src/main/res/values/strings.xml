@@ -102,6 +102,7 @@
     <string name="oldPasswordTitle">Đổi mật khẩu</string>
     <string name="oldPasswordConfirm">Vui lòng nhập lại mật khẩu cũ</string>
     <string name="oldPassword">Mật khẩu cũ</string>
+    <string name="changeAvatar">Đổi ảnh đại diện</string>
 
     <!--Categories-->
     <string name="food">Ăn uống</string>

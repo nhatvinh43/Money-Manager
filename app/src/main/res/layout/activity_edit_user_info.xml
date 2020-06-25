@@ -32,17 +32,34 @@
         android:layout_below="@id/accountInfoTitle"
         android:id="@+id/userAvatar"
         android:layout_gravity="center_horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_marginTop="30dp"
-        android:layout_height="wrap_content"
+        android:layout_height="150dp"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/ic_avatar"/>
+        android:src="@drawable/ic_avatar"
+        android:background="@drawable/round_outline"/>
+
+    <Button
+        android:id="@+id/changeAvatar"
+        android:layout_below="@+id/userAvatar"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_width="150dp"
+        android:layout_height="45dp"
+        android:textAllCaps="false"
+        android:background="@drawable/greengradient"
+        android:fontFamily="sans-serif-light"
+        android:textSize="15sp"
+        android:foreground="?attr/selectableItemBackground"
+        android:textColor="@color/white"
+        android:layout_centerHorizontal="true"
+        android:text="@string/changeAvatar"/>
 
     <ScrollView
         android:id="@+id/editInfoContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/userAvatar"
+        android:layout_below="@id/changeAvatar"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="40dp"
         android:paddingHorizontal="20dp">
