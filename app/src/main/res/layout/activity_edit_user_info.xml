@@ -32,16 +32,34 @@
         android:layout_below="@id/accountInfoTitle"
         android:id="@+id/userAvatar"
         android:layout_gravity="center_horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_marginTop="30dp"
-        android:layout_height="wrap_content"
+        android:layout_height="150dp"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/ic_avatar"/>
+        android:src="@drawable/ic_avatar"
+        android:background="@drawable/round_outline"/>
+
+    <Button
+        android:id="@+id/changeAvatar"
+        android:layout_below="@+id/userAvatar"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_width="150dp"
+        android:layout_height="45dp"
+        android:textAllCaps="false"
+        android:background="@drawable/greengradient"
+        android:fontFamily="sans-serif-light"
+        android:textSize="15sp"
+        android:foreground="?attr/selectableItemBackground"
+        android:textColor="@color/white"
+        android:layout_centerHorizontal="true"
+        android:text="@string/changeAvatar"/>
 
     <ScrollView
+        android:id="@+id/editInfoContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/userAvatar"
+        android:layout_below="@id/changeAvatar"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="40dp"
         android:paddingHorizontal="20dp">
@@ -69,26 +87,27 @@
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:inputType="textPersonName"/>
+<!--            <TextView-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@string/password"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="18sp"-->
+<!--                android:fontFamily="sans-serif-medium"/>-->
+<!--            <EditText-->
+<!--                android:id="@+id/password_editUserInfo"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:background="@drawable/transaction_item"-->
+<!--                android:text="@string/namePH"-->
+<!--                android:textAlignment="center"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:enabled="false"-->
+<!--                android:inputType="textPassword"/>-->
             <TextView
-                android:layout_marginTop="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/password"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:fontFamily="sans-serif-medium"/>
-            <EditText
-                android:id="@+id/password_editUserInfo"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/transaction_item"
-                android:text="@string/namePH"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:enabled="false"
-                android:inputType="textPassword"/>
-            <TextView
+                android:id="@+id/newPasswordTV"
                 android:layout_marginTop="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -102,11 +121,12 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/transaction_item"
-                android:text="@string/namePH"
+                android:text=""
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:inputType="textPassword"/>
             <TextView
+                android:id="@+id/reNewPasswordTV"
                 android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -120,7 +140,7 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/transaction_item"
-                android:text="@string/namePH"
+                android:text=""
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:inputType="textPassword"/>
@@ -142,5 +162,14 @@
         </LinearLayout>
 
     </ScrollView>
+
+
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        />
 
 </RelativeLayout>
