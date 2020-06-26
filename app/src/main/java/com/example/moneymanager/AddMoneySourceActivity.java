@@ -11,6 +11,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -18,6 +21,9 @@ import java.util.ArrayList;
 
 public class AddMoneySourceActivity extends AppCompatActivity {
     //prepare data
+    private FirebaseAuth firebaseAuth;
+    private DataHelper dataHelper;
+    private String uId;
 
     //Thiếu Limit khi tạo nguồn tiền
     private ArrayList<Currency> currencies = new ArrayList<>();
@@ -31,8 +37,10 @@ public class AddMoneySourceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_money_source);
 
-        resMoneySource.setMoneySourceId("MS00"+UltilitiesFragment.dataSet.size());
-        resMoneySource.setUserId("U001");
+        firebaseAuth = FirebaseAuth.getInstance();
+        dataHelper = new DataHelper();
+
+        resMoneySource.setUserId(firebaseAuth.getCurrentUser().getUid());
         resMoneySource.setLimit(1000);
         //prepare data
         currencies.add(new Currency("Cur01", "VND"));
@@ -114,9 +122,18 @@ public class AddMoneySourceActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     resMoneySource.setMoneySourceName(moneySourceName.getText().toString());
-                    UltilitiesFragment.dataSet.add(resMoneySource);
-                    dialog.show();
-                    msg.setText("Thành Công");
+                    //UltilitiesFragment.dataSet.add(resMoneySource);
+                    Number tmpAmount, tmpLimit;
+                    tmpAmount = 0;
+                    try {
+                        tmpAmount = NumberFormat.getInstance().parse(moneySourceAmount.getText().toString());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    tmpLimit = 1000;
+                    dataHelper.createMoneySouce(firebaseAuth.getCurrentUser().getUid(), resMoneySource.getMoneySourceName(), resMoneySource.getAmount(),
+                            resMoneySource.getLimit(), resMoneySource.getCurrencyId(), resMoneySource.getCurrencyName());
+                    Toast.makeText(dialog.getContext(), "Thành công", Toast.LENGTH_LONG).show();
                     finish();
                 }
             }

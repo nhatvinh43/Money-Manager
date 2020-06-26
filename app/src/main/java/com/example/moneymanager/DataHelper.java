@@ -28,6 +28,8 @@ import org.w3c.dom.Document;
 
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -117,6 +119,9 @@ public class DataHelper {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isComplete()){
+
+                        }
                         if (task.isSuccessful()) {
                             ArrayList<MoneySource> moneySourceList = new ArrayList<>();
 
@@ -220,6 +225,81 @@ public class DataHelper {
                     });
             }
         });
+    }
+    //get List MoneySource
+    public ArrayList<MoneySource> getListMoneySouce(String uID){
+        final ArrayList<MoneySource> moneySources = new ArrayList<>();
+        db.collection("moneySources").whereEqualTo("userId", uID).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        //if !task.isComplete ....
+                        if (task.isSuccessful()){
+                            for (QueryDocumentSnapshot document : task.getResult()){
+                                MoneySource moneySource = new MoneySource();
+                                moneySource.setUserId(document.get("userId").toString());
+                                moneySource.setMoneySourceId(document.getId().toString());
+                                try {
+                                    moneySource.setLimit(NumberFormat.getInstance().parse(document.get("amount").toString()));
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                try {
+                                    moneySource.setLimit(NumberFormat.getInstance().parse(document.get("limit").toString()));
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                moneySource.setMoneySourceName(document.get("moneySourceName").toString());
+                                moneySource.setCurrencyId(document.get("currencyId").toString());
+                                moneySource.setCurrencyName(document.get("currencyName").toString());
+                                moneySources.add(moneySource);
+                            }
+                        }
+                        else {
+                            Log.d("GetListMoneySource", "Error getting documents: " + task.getException());
+                        }
+                    }
+                });
+        return moneySources;
+    }
+    public String createMoneySouce(String uId, String moneySourceName, Number amount, Number limit,
+                                   String currencyId, String currencyName){
+        String newMoneySourceId = db.collection("moneySources").document().getId();
+        Map<String, Object> moneySource = new HashMap<>();
+        moneySource.put("amount", amount);
+        moneySource.put("currencyId", currencyId);
+        moneySource.put("currencyName", currencyName);
+        moneySource.put("limit", limit);
+        moneySource.put("moneySourceName", moneySourceName);
+        moneySource.put("userId", uId);
+
+        db.collection("moneySources").document(newMoneySourceId).set(moneySource)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("CreateNewMoneySource", "DocumentSnapshot successfully written!");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("CreateNewMoneySource", "Error writing document", e);
+                    }
+        });
+        return newMoneySourceId;
+    }
+    public MoneySource getMoneySourceById(String MSId){
+        MoneySource moneySource = new MoneySource();
+        db.collection("moneySources").document(MSId).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()){
+                            ArrayList<MoneySource> moneySources = new ArrayList<>();
+
+                        }
+                    }
+                });
+        return  moneySource;
     }
 
     // Currency model
