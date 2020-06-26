@@ -15,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 
 /**
@@ -80,10 +82,18 @@ public class UltilitiesFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
-        dataSet.add(new MoneySource(10000, "Cur01", "VND", 1000,
-                "MS001", "TestMS01", "U001" ));
-        dataSet.add(new MoneySource(10000, "Cur01", "AUD", 1000,
-                "MS002", "TestMS02", "U001" ));
+//        dataSet.add(new MoneySource(10000, "Cur01", "VND", 1000,
+//                "MS001", "TestMS01", "U001" ));
+//        dataSet.add(new MoneySource(10000, "Cur01", "AUD", 1000,
+//                "MS002", "TestMS02", "U001" ));
+        DataHelper dataHelper = new DataHelper();
+//        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+//        String uId = firebaseAuth.getCurrentUser().getUid();
+        ArrayList<MoneySource> tmp = new ArrayList<>();
+//        tmp = dataHelper.getListMoneySouce(uId);
+//        for (int i = 0; i < tmp.size(); i++){
+//            dataSet.add(tmp.get(i));
+//        }
 
         view.findViewById(R.id.manageMoneySourcesButton).setOnClickListener(new View.OnClickListener() {
             @Override
