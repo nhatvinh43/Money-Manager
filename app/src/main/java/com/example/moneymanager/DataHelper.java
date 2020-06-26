@@ -125,8 +125,8 @@ public class DataHelper {
                                 ms.setUserId((String) document.getData().get("userId"));
                                 ms.setMoneySourceId(document.getId());
                                 ms.setMoneySourceName((String) document.getData().get("moneySourceName"));
-                                ms.setAmount((Double) document.getData().get("amount"));
-                                ms.setLimit((Double) document.getData().get("limit"));
+                                ms.setAmount(document.getDouble("amount"));
+                                ms.setLimit(document.getDouble("limit"));
                                 ms.setCurrencyId((String) document.getData().get("currencyId"));
                                 ms.setCurrencyName((String) document.getData().get("currencyName"));
                                 ms.setTransactionsList(getTransaction(document.getId()));

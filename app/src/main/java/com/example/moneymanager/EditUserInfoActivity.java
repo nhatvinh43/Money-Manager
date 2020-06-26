@@ -310,10 +310,10 @@ public class EditUserInfoActivity extends AppCompatActivity {
                                             new DataHelper().setUsersCollection(user.getUid(), user.getDisplayName(), user.getEmail(), user.getPhotoUrl() != null ? user.getPhotoUrl().toString() : "");
                                             Toast.makeText(EditUserInfoActivity.this, "Cập nhập thông tin thành công", Toast.LENGTH_SHORT).show();
 
-                                            alertDialog.dismiss();
-                                            setResult(Activity.RESULT_OK, new Intent());
-                                            finish();
                                         }
+                                        alertDialog.dismiss();
+                                        setResult(Activity.RESULT_OK, new Intent());
+                                        finish();
                                     }
                                 });
                     } else {
