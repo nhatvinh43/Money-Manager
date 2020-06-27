@@ -24,9 +24,8 @@ public class AddMoneySourceActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private DataHelper dataHelper;
     private String uId;
-
     //Thiếu Limit khi tạo nguồn tiền
-    private ArrayList<Currency> currencies = new ArrayList<>();
+    public static ArrayList<Currency> currencies = new ArrayList<>();
     private RecyclerView recyclerView;
     private AddMoneySourceCurrencyAdapter adapter;
     private EditText moneySourceName, moneySourceAmount, moneySourceCurrency;
@@ -42,6 +41,7 @@ public class AddMoneySourceActivity extends AppCompatActivity {
 
         resMoneySource.setUserId(firebaseAuth.getCurrentUser().getUid());
         resMoneySource.setLimit(1000);
+
         //prepare data
         currencies.add(new Currency("Cur01", "VND"));
         currencies.add(new Currency("Cur02", "$"));
@@ -131,7 +131,7 @@ public class AddMoneySourceActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     tmpLimit = 1000;
-                    dataHelper.createMoneySouce(firebaseAuth.getCurrentUser().getUid(), resMoneySource.getMoneySourceName(), resMoneySource.getAmount(),
+                    dataHelper.createMoneySource(firebaseAuth.getCurrentUser().getUid(), resMoneySource.getMoneySourceName(), resMoneySource.getAmount(),
                             resMoneySource.getLimit(), resMoneySource.getCurrencyId(), resMoneySource.getCurrencyName());
                     Toast.makeText(dialog.getContext(), "Thành công", Toast.LENGTH_LONG).show();
                     finish();

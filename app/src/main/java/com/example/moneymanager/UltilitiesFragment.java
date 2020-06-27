@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -47,10 +48,12 @@ public class UltilitiesFragment extends Fragment {
      * @return A new instance of fragment UltilitiesFragment.
      */
 
-    //use public vì khi có database, khi Activity này được mở hay tiếp tục thì sẽ cập nhật lại dữ liệu từ server
-    public static ArrayList<MoneySource> dataSet = new ArrayList<>();
+    public ArrayList<MoneySource> dataSet = new ArrayList<>();
     private RecyclerView recyclerView;
     private UltilitiesMoneySourceManageAdapter adapter;
+    DataHelper dataHelper = new DataHelper();
+    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    String uId = firebaseAuth.getCurrentUser().getUid();
 
     // TODO: Rename and change types and number of parameters
     public static UltilitiesFragment newInstance(String param1, String param2) {
@@ -64,7 +67,7 @@ public class UltilitiesFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
+        dataSet = dataHelper.getListMoneySource(uId);
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -81,20 +84,12 @@ public class UltilitiesFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
-//        dataSet.add(new MoneySource(10000, "Cur01", "VND", 1000,
-//                "MS001", "TestMS01", "U001" ));
-//        dataSet.add(new MoneySource(10000, "Cur01", "AUD", 1000,
-//                "MS002", "TestMS02", "U001" ));
-        DataHelper dataHelper = new DataHelper();
-//        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-//        String uId = firebaseAuth.getCurrentUser().getUid();
-        ArrayList<MoneySource> tmp = new ArrayList<>();
-//        tmp = dataHelper.getListMoneySouce(uId);
-//        for (int i = 0; i < tmp.size(); i++){
-//            dataSet.add(tmp.get(i));
-//        }
+    public void onStart() {
+        super.onStart();
+    }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
         view.findViewById(R.id.manageMoneySourcesButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -194,5 +189,15 @@ public class UltilitiesFragment extends Fragment {
                 });
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 }
