@@ -227,7 +227,7 @@ public class DataHelper {
         });
     }
     //get List MoneySource
-    public ArrayList<MoneySource> getListMoneySouce(String uID){
+    public ArrayList<MoneySource> getListMoneySource(String uID){
         final ArrayList<MoneySource> moneySources = new ArrayList<>();
         db.collection("moneySources").whereEqualTo("userId", uID).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -239,16 +239,8 @@ public class DataHelper {
                                 MoneySource moneySource = new MoneySource();
                                 moneySource.setUserId(document.get("userId").toString());
                                 moneySource.setMoneySourceId(document.getId().toString());
-                                try {
-                                    moneySource.setLimit(NumberFormat.getInstance().parse(document.get("amount").toString()));
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
-                                try {
-                                    moneySource.setLimit(NumberFormat.getInstance().parse(document.get("limit").toString()));
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
+                                moneySource.setAmount(document.getDouble("amount"));
+                                moneySource.setLimit(document.getDouble("limit"));
                                 moneySource.setMoneySourceName(document.get("moneySourceName").toString());
                                 moneySource.setCurrencyId(document.get("currencyId").toString());
                                 moneySource.setCurrencyName(document.get("currencyName").toString());
@@ -262,7 +254,7 @@ public class DataHelper {
                 });
         return moneySources;
     }
-    public String createMoneySouce(String uId, String moneySourceName, Number amount, Number limit,
+    public String createMoneySource(String uId, String moneySourceName, Number amount, Number limit,
                                    String currencyId, String currencyName){
         String newMoneySourceId = db.collection("moneySources").document().getId();
         Map<String, Object> moneySource = new HashMap<>();
@@ -287,21 +279,94 @@ public class DataHelper {
         });
         return newMoneySourceId;
     }
-    public MoneySource getMoneySourceById(String MSId){
-        MoneySource moneySource = new MoneySource();
+    public void getMoneySourceById(final SingleMoneySourceCallBack callBack, String MSId){
+        final MoneySource moneySource = new MoneySource();
         db.collection("moneySources").document(MSId).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()){
-                            ArrayList<MoneySource> moneySources = new ArrayList<>();
-
+                            moneySource.setUserId(task.getResult().get("userId").toString());
+                            moneySource.setLimit(task.getResult().getDouble("limit"));
+                            moneySource.setAmount(task.getResult().getDouble("amount"));
+                            moneySource.setMoneySourceName(task.getResult().get("moneySourceName").toString());
+                            moneySource.setMoneySourceId(task.getResult().getId());
+                            moneySource.setCurrencyName(task.getResult().get("currencyName").toString());
+                            moneySource.setCurrencyId(task.getResult().get("currencyId").toString());
+                            callBack.onCallBack(moneySource);
+                        }else {
+                            callBack.onCallBackFailed(task.getException().getMessage());
                         }
                     }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
                 });
-        return  moneySource;
+    }
+    public void deleteMoneySource(String MSId){
+        db.collection("moneySources").document(MSId).delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("DeleteMS",  "DocumentSnapshot successfully deleted!");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("DeleteMS", "Error deleting document", e);
+            }
+        });
+    }
+    public void updateMoneySource(String MSId, String moneySourceName, Number amount, Number limit,
+                                  String currencyId, String currencyName){
+        Map<String, Object> moneySource = new HashMap<>();
+        moneySource.put("amount", amount);
+        moneySource.put("currencyId", currencyId);
+        moneySource.put("currencyName", currencyName);
+        moneySource.put("limit", limit);
+        moneySource.put("moneySourceName", moneySourceName);
+        db.collection("moneySources").document(MSId).update(moneySource)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("UpdateMS", "Completely Update!");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("UpdateMS", "Error deleting document", e);
+            }
+        });
     }
 
+    public String createTransaction(String description, String expenditureId, String expenditureName,
+                                    Number transactionAmount, String moneySourceId,
+                                    boolean transactionIsIncome, Timestamp transactionTime){
+        String newTransactionId = db.collection("transactions").document().getId();
+        Map<String, Object> transaction = new HashMap<>();
+        transaction.put("moneySourceId", moneySourceId);
+        transaction.put("transactionAmount", transactionAmount);
+        transaction.put("transactionIsIncome", transactionIsIncome);
+        transaction.put("description", description);
+        transaction.put("expenditureId", expenditureId);
+        transaction.put("expenditureName", expenditureName);
+        transaction.put("transactionTime", transactionTime);
+        db.collection("transactions").document(newTransactionId).set(transaction)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("AddTran", "Successfully");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("CreateNewMoneySource", "Error writing document", e);
+            }
+        });
+        return newTransactionId;
+    }
     // Currency model
     // Expenditure model
 }

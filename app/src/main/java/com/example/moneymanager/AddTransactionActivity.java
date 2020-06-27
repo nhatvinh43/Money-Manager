@@ -23,6 +23,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import org.w3c.dom.Text;
 
 import java.sql.Timestamp;
@@ -43,21 +45,20 @@ public class AddTransactionActivity extends AppCompatActivity {
     private EditText amount;
     private EditText description;
     private RecyclerView recyclerView;
-    private ArrayList<MoneySource> dataSet;
+    private ArrayList<MoneySource> dataSet = new ArrayList<>();
     private AddTransactionChooseMoneySourceAdapter adapter;
     private Date date = new Date();
     private Timestamp timestamp;
     private LinearLayout food, bill, travel, health, party, spendingOther, bonus, profit, salary, gifted, incomingOther;
-
     private Transaction resTransaction = new Transaction();
-
+    private FirebaseAuth firebaseAuth;
+    private DataHelper dataHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_transaction);
-        //prepare data and model
-        resTransaction.setTransactionId("Tran001");
+
         //prepare data
         expenditures.add(new Expenditure("Exp01","Ăn uống", false));
         expenditures.add(new Expenditure("Exp02", "Sinh hoạt", false));
@@ -71,21 +72,34 @@ public class AddTransactionActivity extends AppCompatActivity {
         expenditures.add(new Expenditure("Exp10", "Được tặng", true));
         expenditures.add(new Expenditure("Exp11", "Thu khác", true));
 
-        //prepare model
 
+        firebaseAuth = FirebaseAuth.getInstance();
+        dataHelper = new DataHelper();
+        initView();
+        dataHelper.getMoneySource(new MoneySourceCallBack() {
+            @Override
+            public void onCallBack(ArrayList<MoneySource> list) {
+                dataSet.addAll(list);
+                initView();
+            }
+
+            @Override
+            public void onCallBackFail(String message) {
+
+            }
+        }, firebaseAuth.getCurrentUser().getUid());
+    }
+
+
+
+    public void initView(){
+
+        //prepare data and model
         moneySourceEditText = findViewById(R.id.moneySource_addTransaction);
         dateTimeEditText = findViewById(R.id.dateTime_addTransaction);
         typeOfExpenditure = findViewById(R.id.category_addTransaction);
         amount = findViewById(R.id.moneyAmount_addTransaction);
         description = findViewById(R.id.description_addTransaction);
-
-        dataSet = new ArrayList<>();
-        MoneySource m1 = new MoneySource(10000,"CUR1", "VND", 1000,
-                "MS1", "MS001", "U1");
-        dataSet.add(m1);
-        MoneySource m2 = new MoneySource(100000,"CUR1", "VND", 1000,
-                "MS2", "MS002", "U1");
-        dataSet.add(m2);
 
         //Nút back
         findViewById(R.id.backButton_addTransaction).setOnClickListener(new View.OnClickListener() {
@@ -94,8 +108,6 @@ public class AddTransactionActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-
         //Nút chọn nguồn tiền
         findViewById(R.id.chooseMoneySourceButton_addTransaction).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,7 +138,6 @@ public class AddTransactionActivity extends AppCompatActivity {
                 });
             }
         });
-
         //Nút chọn ngày
         findViewById(R.id.chooseDateTimeButton_addTransaction).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,20 +151,20 @@ public class AddTransactionActivity extends AppCompatActivity {
                 final int mMin = calendar.get(Calendar.MINUTE);
                 DatePickerDialog datePickerDialog = new DatePickerDialog(AddTransactionActivity.this,R.style.DatePickerDialog,
                         new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        calendar.set(Calendar.YEAR, year);
-                        calendar.set(Calendar.MONTH, month);
-                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        date.setYear(year-1900);
-                        date.setMonth(month);
-                        date.setDate(dayOfMonth);
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd:MM:yyyy HH:mm");
-                        dateTimeEditText.setText(sdf.format(date.getTime()));
-                        timestamp = new Timestamp(date.getTime());
-                        resTransaction.setTransactionTime(timestamp);
-                    }
-                }, mYear, mMonth, mDay);
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                calendar.set(Calendar.YEAR, year);
+                                calendar.set(Calendar.MONTH, month);
+                                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                                date.setYear(year-1900);
+                                date.setMonth(month);
+                                date.setDate(dayOfMonth);
+                                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                                dateTimeEditText.setText(sdf.format(date.getTime()));
+                                timestamp = new Timestamp(date.getTime());
+                                resTransaction.setTransactionTime(timestamp);
+                            }
+                        }, mYear, mMonth, mDay);
                 //show Time Picker Dialog
                 TimePickerDialog timePickerDialog = new TimePickerDialog(AddTransactionActivity.this, R.style.TimePickerDialog,
                         new TimePickerDialog.OnTimeSetListener() {
@@ -326,26 +337,20 @@ public class AddTransactionActivity extends AppCompatActivity {
                 });
                 dialog.hide();
                 //Trường hợp khuyết thông tin
-//                private EditText moneySourceEditText;
-//                private EditText dateTimeEditText;
-//                private EditText typeOfExpenditure;
-//                private EditText amount;
 
                 if (moneySourceEditText.getText().toString().length() == 0 || dateTimeEditText.getText().toString().length() == 0
-                || typeOfExpenditure.getText().toString().length() == 0 || amount.getText().toString().length() == 0) {
+                        || typeOfExpenditure.getText().toString().length() == 0 || amount.getText().toString().length() == 0) {
                     dialog.show();
                     msg.setText("Vui lòng điền dầy đủ thông tin!");
                 }
                 else {
                     //Trường hợp đầy đủ thông tin
-                    try {
-                        resTransaction.setTransactionAmount(NumberFormat.getInstance().parse(amount.getText().toString()));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                    resTransaction.setTransactionAmount(Double.valueOf(amount.getText().toString()));
                     resTransaction.setDescription(description.getText().toString());
-                    dialog.show();
-                    msg.setText("Tạo Thành Công" + resTransaction.getTransactionId() + " " + resTransaction.getTransactionAmount());
+                    dataHelper.createTransaction(resTransaction.getDescription(), resTransaction.getExpenditureId(),
+                            resTransaction.getExpenditureName(), resTransaction.getTransactionAmount(), resTransaction.getMoneySourceId(),
+                            resTransaction.getTransactionIsIncome(), resTransaction.getTransactionTime());
+                    Toast.makeText(AddTransactionActivity.this, "Thành công", Toast.LENGTH_LONG).show();
                     finish();
                 }
             }

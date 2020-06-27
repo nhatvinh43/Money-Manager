@@ -96,4 +96,9 @@ public class MainActivity extends AppCompatActivity {
         navView.getMenu().getItem(2).setEnabled(false);
         //End fragment controls
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 }
