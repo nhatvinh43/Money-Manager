@@ -150,6 +150,8 @@ public class HomeFragment extends Fragment {
         fAuth = FirebaseAuth.getInstance();
         fDataHelper = new DataHelper();
         moneySourceList = new ArrayList<>();
+        transactionList = new ArrayList<>();
+        selectedMoneySource = new MoneySource();
 
         fDataHelper.getMoneySource(new MoneySourceCallBack() {
             @Override
@@ -170,12 +172,12 @@ public class HomeFragment extends Fragment {
     private void getMoneySourceData(ArrayList<MoneySource> list) {
         moneySourceList.clear();
         moneySourceList.addAll(list);
+        Log.d("Test", "---------------" + moneySourceList.get(0).getTransactionsList().size());
+        selectedMoneySource = moneySourceList.get(0);
+        Log.d("Test", "---------------" + selectedMoneySource.getTransactionsList().size());
     }
 
     private void initView(View view) {
-        selectedMoneySource = new MoneySource();
-        if(moneySourceList.size() != 0)
-            selectedMoneySource = moneySourceList.get(0);
 
         // Moneysource Info Initiation
         final WaveLoadingView waveLoadingView = view.findViewById(R.id.waveLoadingView);
@@ -310,7 +312,6 @@ public class HomeFragment extends Fragment {
 
         // Transaction RecycleView Initiation
         transactionRecycleView = view.findViewById(R.id.transactionList);
-        transactionList = new ArrayList<>();
         transactionList.addAll(modifierTransactionListByDate());
 
         GridLayoutManager transactionLayoutManager = new GridLayoutManager(getContext(), 2);
@@ -323,7 +324,10 @@ public class HomeFragment extends Fragment {
         aController = AnimationUtils.loadLayoutAnimation(transactionRecycleView.getContext(), R.anim.layout_fall_down);
         transactionRecycleView.setLayoutAnimation(aController);
         transactionRecycleView.scheduleLayoutAnimation();
-        transactionAdapter.notifyDataSetChanged();
+//
+//        transactionList.clear();
+//        transactionList.addAll(modifierTransactionListByDate());
+//        transactionAdapter.notifyDataSetChanged();
     }
 
     private String getDayOfWeek(int value) {
@@ -356,12 +360,17 @@ public class HomeFragment extends Fragment {
 
     private ArrayList<Transaction> modifierTransactionListByDate() {
         ArrayList<Transaction> modifierTransactionList = new ArrayList<>();
+        Log.d("Test in", selectedMoneySource.getMoneySourceName() + "-------------------------------------" + selectedMoneySource.getTransactionsList().size());
         for(Transaction t : selectedMoneySource.getTransactionsList()) {
             Calendar c = Calendar.getInstance();
-            c.set(Calendar.MILLISECOND, (int)t.getTransactionTime().getTime());
+            Log.d("Test", "---------------");
+            c.setTimeInMillis(t.getTransactionTime().getTime());
             int transactionDay = c.get(Calendar.DAY_OF_MONTH);
             int transactionMonth = c.get(Calendar.MONTH);
             int transactionYeah = c.get(Calendar.YEAR);
+            Log.d("Test", Integer.toString(mDay) + " " + Integer.toString(c.get(Calendar.DAY_OF_MONTH)));
+            Log.d("Test", Integer.toString(mMonth) + " " + Integer.toString(c.get(Calendar.MONTH)));
+            Log.d("Test", Integer.toString(mYear) + " " + Integer.toString(c.get(Calendar.YEAR)));
 
             if(transactionDay == mDay && transactionMonth == mMonth && transactionYeah == mYear) modifierTransactionList.add(t);
         }
