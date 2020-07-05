@@ -5,12 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,7 +21,9 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -44,6 +49,8 @@ public class AddTransactionActivity extends AppCompatActivity {
     private EditText typeOfExpenditure;
     private EditText amount;
     private EditText description;
+    private ProgressBar loading;
+    private ScrollView container;
     private RecyclerView recyclerView;
     private ArrayList<MoneySource> dataSet = new ArrayList<>();
     private AddTransactionChooseMoneySourceAdapter adapter;
@@ -100,6 +107,8 @@ public class AddTransactionActivity extends AppCompatActivity {
         typeOfExpenditure = findViewById(R.id.category_addTransaction);
         amount = findViewById(R.id.moneyAmount_addTransaction);
         description = findViewById(R.id.description_addTransaction);
+        container = findViewById(R.id.container);
+        loading = findViewById(R.id.loading);
 
         //Nút back
         findViewById(R.id.backButton_addTransaction).setOnClickListener(new View.OnClickListener() {
@@ -345,13 +354,34 @@ public class AddTransactionActivity extends AppCompatActivity {
                 }
                 else {
                     //Trường hợp đầy đủ thông tin
+                    container.setVisibility(View.INVISIBLE);
+                    loading.setVisibility(View.VISIBLE);
+
                     resTransaction.setTransactionAmount(Double.valueOf(amount.getText().toString()));
                     resTransaction.setDescription(description.getText().toString());
-                    dataHelper.createTransaction(resTransaction.getDescription(), resTransaction.getExpenditureId(),
+                    dataHelper.createTransaction(new TransactionCallBack() {
+                                                     @Override
+                                                     public void onCallBack(ArrayList<Transaction> list) {
+                                                         dialog.dismiss();
+
+                                                         Intent data = new Intent();
+                                                         data.putExtra("transaction", resTransaction);
+                                                         setResult(Activity.RESULT_OK, data);
+                                                         Toast.makeText(AddTransactionActivity.this, "Thêm giao dịch thành công", Toast.LENGTH_LONG).show();
+                                                         Log.d("Test add trans 1", "--------------------");
+                                                         finish();
+                                                     }
+
+                                                     @Override
+                                                     public void onCallBackFail(String message) {
+                                                         container.setVisibility(View.VISIBLE);
+                                                         loading.setVisibility(View.GONE);
+                                                         Toast.makeText(AddTransactionActivity.this, "Thêm giao dịch thất bại", Toast.LENGTH_LONG).show();
+                                                     }
+                                                 },
+                            resTransaction.getDescription(), resTransaction.getExpenditureId(),
                             resTransaction.getExpenditureName(), resTransaction.getTransactionAmount(), resTransaction.getMoneySourceId(),
                             resTransaction.getTransactionIsIncome(), resTransaction.getTransactionTime());
-                    Toast.makeText(AddTransactionActivity.this, "Thành công", Toast.LENGTH_LONG).show();
-                    finish();
                 }
             }
         });

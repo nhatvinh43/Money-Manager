@@ -33,15 +33,20 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import static android.content.ContentValues.TAG;
 
 public class DataHelper {
     FirebaseFirestore db;
+    FirebaseAuth fAuth;
+    FirebaseStorage storage;
 
     public DataHelper() {
         db = FirebaseFirestore.getInstance();
+        fAuth = FirebaseAuth.getInstance();
+        storage = FirebaseStorage.getInstance();
     }
 
     // User model (lấy ID tự gen từ Authentication)
@@ -123,8 +128,8 @@ public class DataHelper {
 
                         }
                         if (task.isSuccessful()) {
-                            ArrayList<MoneySource> moneySourceList = new ArrayList<>();
-
+                            final ArrayList<MoneySource> moneySourceList = new ArrayList<>();
+                            int count = 0;
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 final MoneySource ms = new MoneySource();
                                 ms.setUserId((String) document.getData().get("userId"));
@@ -134,12 +139,42 @@ public class DataHelper {
                                 ms.setLimit(document.getDouble("limit"));
                                 ms.setCurrencyId((String) document.getData().get("currencyId"));
                                 ms.setCurrencyName((String) document.getData().get("currencyName"));
-                                ms.setTransactionsList(getTransaction(document.getId()));
 
-                                moneySourceList.add(ms);
+                                if(count == task.getResult().size() - 1) {
+                                    getTransaction(new TransactionCallBack() {
+                                        @Override
+                                        public void onCallBack(ArrayList<Transaction> list) {
+                                            ms.setTransactionsList(list);
+                                            moneySourceList.add(ms);
+                                            callBack.onCallBack(moneySourceList);
+                                        }
+
+                                        @Override
+                                        public void onCallBackFail(String message) {
+
+                                        }
+                                    }, document.getId());
+                                    Log.d("Test", "---------------");
+                                }
+                                else {
+                                    getTransaction(new TransactionCallBack() {
+                                        @Override
+                                        public void onCallBack(ArrayList<Transaction> list) {
+                                            ms.setTransactionsList(list);
+                                            moneySourceList.add(ms);
+                                        }
+
+                                        @Override
+                                        public void onCallBackFail(String message) {
+
+                                        }
+                                    }, document.getId());
+                                    Log.d("Test", "---------------");
+                                }
+
+                                count++;
                             }
 
-                            callBack.onCallBack(moneySourceList);
                         } else {
                             callBack.onCallBackFail(task.getException().getMessage());
                         }
@@ -174,14 +209,14 @@ public class DataHelper {
                 });
     }
 
-    public ArrayList<Transaction> getTransaction(String msID) {
-        final ArrayList<Transaction> transactionList = new ArrayList<>();
+    public void getTransaction(final TransactionCallBack transCallBack, String msID) {
 
         db.collection("transactions").whereEqualTo("moneySourceId", msID).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            ArrayList<Transaction> transactionList = new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Transaction ts = new Transaction();
                                 ts.setMoneySourceId((String) document.getData().get("moneySourceId"));
@@ -191,17 +226,17 @@ public class DataHelper {
                                 ts.setDescription((String) document.getData().get("Description"));
                                 ts.setExpenditureId((String) document.getData().get("expenditureId"));
                                 ts.setExpenditureName((String) document.getData().get("expenditureName"));
-                                ts.setTransactionTime(new Timestamp(((Date) document.getDate("transactionTime")).getTime()));
+                                ts.setTransactionTime(new Timestamp((document.getDate("transactionTime")).getTime()));
 
                                 transactionList.add(ts);
                             }
+
+                            transCallBack.onCallBack(transactionList);
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
                 });
-
-        return transactionList;
     }
 
     // Avatar model
@@ -341,7 +376,7 @@ public class DataHelper {
         });
     }
 
-    public String createTransaction(String description, String expenditureId, String expenditureName,
+    public String createTransaction(final TransactionCallBack transCallBack, String description, String expenditureId, String expenditureName,
                                     Number transactionAmount, String moneySourceId,
                                     boolean transactionIsIncome, Timestamp transactionTime){
         String newTransactionId = db.collection("transactions").document().getId();
@@ -357,13 +392,15 @@ public class DataHelper {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        transCallBack.onCallBack(new ArrayList<Transaction>());
                         Log.d("AddTran", "Successfully");
                     }
                 }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w("CreateNewMoneySource", "Error writing document", e);
-            }
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        transCallBack.onCallBackFail(e.getMessage());
+                        Log.w("CreateNewMoneySource", "Error writing document", e);
+                    }
         });
         return newTransactionId;
     }

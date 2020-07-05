@@ -1,10 +1,13 @@
 package com.example.moneymanager;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.sql.Timestamp;
 import java.util.Date;
 
-public class Transaction {
+public class Transaction implements Parcelable {
     private String description;
     private String expenditureId;
     private String expenditureName;
@@ -36,6 +39,46 @@ public class Transaction {
         this.transactionIsIncome = transactionIsIncome;
         this.transactionTime = transactionTime;
     }
+
+    protected Transaction(Parcel in) {
+        description = in.readString();
+        expenditureId = in.readString();
+        expenditureName = in.readString();
+        transactionAmount = in.readDouble();
+        transactionId = in.readString();
+        moneySourceId = in.readString();
+        transactionIsIncome = in.readByte() != 0;
+        transactionTime = new Timestamp(in.readLong());
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(description);
+        dest.writeString(expenditureId);
+        dest.writeString(expenditureName);
+        dest.writeDouble(transactionAmount.doubleValue());
+        dest.writeString(transactionId);
+        dest.writeString(moneySourceId);
+        dest.writeByte((byte) (transactionIsIncome ? 1 : 0));
+        dest.writeLong(transactionTime.getTime());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Transaction> CREATOR = new Creator<Transaction>() {
+        @Override
+        public Transaction createFromParcel(Parcel in) {
+            return new Transaction(in);
+        }
+
+        @Override
+        public Transaction[] newArray(int size) {
+            return new Transaction[size];
+        }
+    };
 
     public String getDescription() {
         return description;

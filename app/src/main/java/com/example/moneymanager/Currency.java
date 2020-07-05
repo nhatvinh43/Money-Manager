@@ -5,18 +5,18 @@ package com.example.moneymanager;
 public class Currency {
     //Currency sẽ cố định/
     private String currencyId;
-    private String getCurrencyName;
+    private String currencyName;
     private String nation;
 
-    public Currency(String currencyId, String getCurrencyName, String nation) {
+    public Currency(String currencyId, String currencyName, String nation) {
         this.currencyId = currencyId;
-        this.getCurrencyName = getCurrencyName;
+        this.currencyName = currencyName;
         this.nation = nation;
     }
 
-    public Currency(String currencyId, String getCurrencyName) {
+    public Currency(String currencyId, String currencyName) {
         this.currencyId = currencyId;
-        this.getCurrencyName = getCurrencyName;
+        this.currencyName = currencyName;
     }
 
     public String getCurrencyId() {
@@ -28,11 +28,11 @@ public class Currency {
     }
 
     public String getCurrencyName() {
-        return getCurrencyName;
+        return currencyName;
     }
 
-    public void setCurrencyName(String getCurrencyName) {
-        this.getCurrencyName = getCurrencyName;
+    public void setCurrencyName(String currencyName) {
+        this.currencyName = currencyName;
     }
 
     public String getNation() {
