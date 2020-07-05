@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -45,8 +46,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -71,6 +74,7 @@ public class HomeFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    public static final int HOME_RQCODE = 2;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -398,6 +402,39 @@ public class HomeFragment extends Fragment {
         if (remainder > 0)
             decimal = String.valueOf(remainder).substring(String.valueOf(remainder).indexOf("."));
 
+//        startActivityForResult(new Intent(getContext(),AddTransactionActivity.class), HOME_RQCODE);
         return mString.toString() + decimal;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Log.d("Test home 0", "--------------------");
+        if(requestCode == HOME_RQCODE) {
+            if(resultCode == Activity.RESULT_OK) {
+                Transaction resTransaction = (Transaction) data.getParcelableExtra("transaction");
+                String msId = resTransaction.getMoneySourceId();
+
+                for(MoneySource ms : moneySourceList) {
+                    if(ms.getMoneySourceId().compareTo(msId) == 0) {
+                        Log.d("Test home 2", "--------------------");
+                        ms.getTransactionsList().add(resTransaction);
+
+                        if(selectedMoneySource.getMoneySourceId().compareTo(msId) == 0) {
+                            Log.d("Test home 3", "--------------------");
+                            selectedMoneySource = ms;
+
+                            transactionList.clear();
+                            transactionList.addAll(modifierTransactionListByDate());
+                            transactionAdapter.notifyDataSetChanged();
+                            transactionRecycleView.scheduleLayoutAnimation();
+                        }
+
+                        break;
+                    }
+                }
+            }
+        }
     }
 }

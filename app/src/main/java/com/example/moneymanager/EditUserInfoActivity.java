@@ -103,7 +103,7 @@ public class EditUserInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(Build.VERSION.SDK_INT >= 22) {
-                    checkRequwstPermission();
+                    checkRequestPermission();
                 }
                 else {
                     openGallery();
@@ -328,7 +328,7 @@ public class EditUserInfoActivity extends AppCompatActivity {
         //Nhớ gọi dialog và set message như ở login và signup activity
     }
 
-    private void checkRequwstPermission() {
+    private void checkRequestPermission() {
           if(ContextCompat.checkSelfPermission(EditUserInfoActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
               if(ActivityCompat.shouldShowRequestPermissionRationale(EditUserInfoActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
                   Toast.makeText(EditUserInfoActivity.this, "Hãy cho phép mở bộ sưu tập của bạn", Toast.LENGTH_SHORT).show();

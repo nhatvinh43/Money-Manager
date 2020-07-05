@@ -40,9 +40,13 @@ import static android.content.ContentValues.TAG;
 
 public class DataHelper {
     FirebaseFirestore db;
+    FirebaseAuth fAuth;
+    FirebaseStorage storage;
 
     public DataHelper() {
         db = FirebaseFirestore.getInstance();
+        fAuth = FirebaseAuth.getInstance();
+        storage = FirebaseStorage.getInstance();
     }
 
     // User model (lấy ID tự gen từ Authentication)
@@ -372,7 +376,7 @@ public class DataHelper {
         });
     }
 
-    public String createTransaction(String description, String expenditureId, String expenditureName,
+    public String createTransaction(final TransactionCallBack transCallBack, String description, String expenditureId, String expenditureName,
                                     Number transactionAmount, String moneySourceId,
                                     boolean transactionIsIncome, Timestamp transactionTime){
         String newTransactionId = db.collection("transactions").document().getId();
@@ -388,13 +392,15 @@ public class DataHelper {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        transCallBack.onCallBack(new ArrayList<Transaction>());
                         Log.d("AddTran", "Successfully");
                     }
                 }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w("CreateNewMoneySource", "Error writing document", e);
-            }
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        transCallBack.onCallBackFail(e.getMessage());
+                        Log.w("CreateNewMoneySource", "Error writing document", e);
+                    }
         });
         return newTransactionId;
     }

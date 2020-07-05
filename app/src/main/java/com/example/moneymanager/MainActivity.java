@@ -16,6 +16,7 @@ import com.google.firebase.auth.UserInfo;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -48,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
         addTransaction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(),AddTransactionActivity.class);
-                startActivity(intent);
+                Intent intent = new Intent(v.getContext(), AddTransactionActivity.class);
+                startActivityForResult(intent, HomeFragment.HOME_RQCODE);
             }
         });
 
@@ -95,6 +96,11 @@ public class MainActivity extends AppCompatActivity {
 
         navView.getMenu().getItem(2).setEnabled(false);
         //End fragment controls
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        fragment1.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
