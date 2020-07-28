@@ -21,7 +21,7 @@ public class MoneySource {
         this.moneySourceId = "";
         this.moneySourceName = "";
         this.userId = "";
-        this.transactionsList = new ArrayList<>();
+        this.transactionsList = null;
     }
 
     public MoneySource(Number amount, String currencyId, String currencyName,
@@ -33,7 +33,7 @@ public class MoneySource {
         this.moneySourceId = moneySourceId;
         this.moneySourceName = moneySourceName;
         this.userId = userId;
-        this.transactionsList = new ArrayList<>();
+        this.transactionsList = null;
     }
 
     public Number getAmount() {
