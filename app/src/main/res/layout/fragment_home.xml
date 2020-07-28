@@ -12,53 +12,75 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/homeContainer"
-            android:visibility="gone">
-            <LinearLayout
-                android:id="@+id/datePickerRow"
-                android:layout_width="wrap_content"
+            android:visibility="visible"
+            android:paddingTop="50dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="40dp"
-                android:layout_marginStart="20dp">
-                <TextView
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:id="@+id/weekDay_home"
+                android:paddingHorizontal="20dp"
+                android:id="@+id/titleRow">
+                <LinearLayout
+                    android:layout_centerVertical="true"
+                    android:id="@+id/datePickerRow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-black"
-                    android:textSize="22sp"
-                    android:text="@string/today"
-                    android:textColor="@color/white"/>
-                <TextView
-                    android:id="@+id/date_home"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
-                    android:textSize="22sp"
-                    android:text="@string/todaySample"
-                    android:textColor="@color/white"
-                    android:layout_marginStart="7dp"/>
-                <TextView
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:id="@+id/dateArrow_home"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="7dp"
-                    android:text="@string/downArrow"
-                    android:textSize="22sp"
-                    android:textColor="@color/white"/>
-            </LinearLayout>
+                    android:orientation="horizontal">
+                    <TextView
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:id="@+id/weekDay_home"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-black"
+                        android:textSize="22sp"
+                        android:text="@string/today"
+                        android:textColor="@color/white"/>
+                    <TextView
+                        android:id="@+id/date_home"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-light"
+                        android:textSize="22sp"
+                        android:text="@string/todaySample"
+                        android:textColor="@color/white"
+                        android:layout_marginStart="7dp"/>
+                    <TextView
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:id="@+id/dateArrow_home"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="7dp"
+                        android:text="@string/downArrow"
+                        android:textSize="22sp"
+                        android:textColor="@color/white"/>
+
+
+                </LinearLayout>
+
+
+                <Spinner
+                    android:layout_gravity="end"
+                    android:id="@+id/viewBy_home"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:spinnerMode="dropdown"
+                    android:popupBackground="@drawable/transaction_item"
+                    android:background="@drawable/authbtns"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"/>
+
+            </RelativeLayout>
 
 
             <androidx.core.widget.NestedScrollView
-                android:layout_below="@id/datePickerRow"
+                android:layout_below="@id/titleRow"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:scrollbars="none"
@@ -237,14 +259,22 @@
                         android:layout_height="match_parent"
                         android:layout_below="@id/statisticsRow"
                         android:layout_marginTop="30dp">
-                        <TextView
-                            android:id="@+id/detailsTitle"
-                            android:layout_width="wrap_content"
+                        <RelativeLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/details"
-                            android:textColor="@color/white"
-                            android:textSize="18sp"
-                            android:fontFamily="sans-serif-black"/>
+                            android:id="@+id/detailsTitle">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/details"
+                                android:textColor="@color/white"
+                                android:textSize="18sp"
+                                android:layout_centerVertical="true"
+                                android:fontFamily="sans-serif-black"/>
+
+
+                        </RelativeLayout>
+
 
                         <LinearLayout
                             android:id="@+id/noTodayTransaction_home"
@@ -275,14 +305,59 @@
                                 android:visibility="visible"/>
                         </LinearLayout>
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:background="@drawable/roundedcorners"
-                            android:id="@+id/transactionList"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:orientation="vertical"
                             android:layout_marginTop="15dp"
                             android:layout_marginBottom="80dp"
-                            android:layout_below="@id/detailsTitle"/>
+                            android:layout_below="@id/detailsTitle">
+
+                            <EditText
+                                android:id="@+id/search_home"
+                                android:layout_width="match_parent"
+                                android:layout_height="45dp"
+                                android:background="@drawable/transaction_item"
+                                android:hint="@string/searchTransaction"
+                                android:textAlignment="center"
+                                android:fontFamily="sans-serif-light"
+                                android:textSize="15sp"/>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="15dp">
+                                <Spinner
+                                    android:id="@+id/sort_home"
+                                    android:layout_width="100dp"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_height="35dp"
+                                    android:spinnerMode="dropdown"
+                                    android:popupBackground="@drawable/transaction_item"
+                                    android:background="@drawable/transaction_item"
+                                    android:layout_toEndOf="@id/filter_home"
+                                    android:layout_centerVertical="true"/>
+
+                                <Spinner
+                                    android:layout_centerVertical="true"
+                                    android:layout_alignParentStart="true"
+                                    android:id="@+id/filter_home"
+                                    android:layout_width="100dp"
+                                    android:layout_height="35dp"
+                                    android:spinnerMode="dropdown"
+
+                                    android:popupBackground="@drawable/transaction_item"
+                                    android:background="@drawable/transaction_item"/>
+                            </RelativeLayout>
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:layout_marginTop="15dp"
+                                android:background="@drawable/roundedcorners"
+                                android:id="@+id/transactionList"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                />
+                        </LinearLayout>
 
                     </RelativeLayout>
                 </RelativeLayout>
