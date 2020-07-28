@@ -11,12 +11,19 @@
         <item name="android:windowDisablePreview">true</item>
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:textColorHint">@android:color/white</item>
     </style>
 
     <style name="BottomNavigationView" parent="@style/TextAppearance.AppCompat.Caption">
         <item name="android:textSize">10sp</item>
         <item name="fontFamily">sans-serif-light</item>
         <item name="android:textColor">@color/hintText</item>
+    </style>
+
+    <style name="spinnerTheme" parent="Base.Widget.AppCompat.Spinner">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:paddingHorizontal">5dp</item>
+        <item name="android:textAlignment">center</item>
     </style>
 
     <style name="BottomNavigationView.Active" parent="@style/TextAppearance.AppCompat.Caption">

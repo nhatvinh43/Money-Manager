@@ -39,10 +39,13 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LayoutAnimationController;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -183,6 +186,7 @@ public class HomeFragment extends Fragment {
 
     private void initView(View view) {
 
+
         // Moneysource Info Initiation
         final WaveLoadingView waveLoadingView = view.findViewById(R.id.waveLoadingView);
         todayIncome = view.findViewById(R.id.todayIncome_home);
@@ -286,9 +290,9 @@ public class HomeFragment extends Fragment {
                 CardView cv = viewHolder.itemView.findViewById(R.id.cardContainer);
 
                 if(newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    cv.animate().setDuration(400).scaleX(1).scaleY(1).setInterpolator(new DecelerateInterpolator()).start();
+                    cv.animate().setDuration(300).scaleX(1).scaleY(1).setInterpolator(new DecelerateInterpolator()).start();
                 } else {
-                    cv.animate().setDuration(400).scaleX(0.9f).scaleY(0.9f).setInterpolator(new AccelerateInterpolator()).start();
+                    cv.animate().setDuration(300).scaleX(0.9f).scaleY(0.9f).setInterpolator(new AccelerateInterpolator()).start();
                 }
 
                 if(newState!=RecyclerView.SCROLL_STATE_SETTLING)
@@ -328,6 +332,65 @@ public class HomeFragment extends Fragment {
         aController = AnimationUtils.loadLayoutAnimation(transactionRecycleView.getContext(), R.anim.layout_fall_down);
         transactionRecycleView.setLayoutAnimation(aController);
         transactionRecycleView.scheduleLayoutAnimation();
+        transactionAdapter.notifyDataSetChanged();
+
+        //"View by" menu initiation
+        Spinner viewByMenu = view.findViewById(R.id.viewBy_home);
+        String[] viewByMenuItems = new String[]{"Ngày", "Tuần", "Tháng", "Quý", "Năm", "Chọn"};
+
+        ArrayAdapter<String> viewByAdapter = new ArrayAdapter<String>(view.getContext(), R.layout.spinner_menu, viewByMenuItems);
+        viewByMenu.setAdapter(viewByAdapter);
+
+        //NOTE: file layout của dialog chọn khoảng thời gian là dialog_choose_time.xml
+        viewByMenu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+        //Filter menu initiation
+        Spinner filterMenu = view.findViewById(R.id.filter_home);
+        String[] filterMenuItems = new String[]{"Tất cả", "Thu nhập", "Chi tiêu", "Định kỳ"};
+        ArrayAdapter<String> filterAdapter = new ArrayAdapter<String>(view.getContext(), R.layout.spinner_menu, filterMenuItems);
+        filterMenu.setAdapter(filterAdapter);
+        filterMenu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        //Sort menu initiation
+        Spinner sortMenu = view.findViewById(R.id.sort_home);
+        String[] sortMenuItems = new String[]{"Mới nhất", "Cũ nhất", "Lớn nhất", "Nhỏ nhất"};
+        ArrayAdapter<String> sortAdapter = new ArrayAdapter<String>(view.getContext(),  R.layout.spinner_menu, sortMenuItems);
+        sortMenu.setAdapter(sortAdapter);
+        sortMenu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+
 //
 //        transactionList.clear();
 //        transactionList.addAll(modifierTransactionListByDate());

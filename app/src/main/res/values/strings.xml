@@ -70,6 +70,10 @@
     <string name="moneySubtractPH">- 25,000</string>
     <string name="noMoneySource">Vui lòng thêm nguồn tiền trước!</string>
     <string name="noTransaction">Chưa có ghi chép!</string>
+    <string name="searchTransaction">Tìm kiếm giao dịch</string>
+    <string name="chooseTimeView">Chọn khoảng thời gian</string>
+    <string name="startTime">Thời điểm bắt đầu</string>
+    <string name="endTime">Thời điểm kết thúc</string>
 
     <!--Add transaction-->
     <string name="addTransaction">Thêm ghi chép</string>
