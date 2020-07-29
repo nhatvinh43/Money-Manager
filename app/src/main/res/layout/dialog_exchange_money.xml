@@ -3,7 +3,7 @@
     android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/transaction_item"
     android:paddingHorizontal="30dp"
     android:animateLayoutChanges="true"
-    android:paddingVertical="20dp">
+    android:paddingVertical="30dp">
 
     <TextView
         android:id="@+id/title_exchange_money"
@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:orientation="horizontal"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:weightSum="4">
         <EditText
             android:hint="@string/source"
@@ -78,7 +78,7 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:orientation="horizontal"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:weightSum="4">
         <EditText
             android:hint="@string/destination"

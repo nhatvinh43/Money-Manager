@@ -254,7 +254,7 @@
                    android:layout_width="300dp"
                    android:layout_height="wrap_content"
                    android:fontFamily="sans-serif"
-                   android:textSize="22sp"
+                   android:textSize="18sp"
                    android:text="@string/emailPH"
                    android:textAlignment="center"
                    android:textColor="@color/white"/>
@@ -266,7 +266,7 @@
                    android:layout_height="40dp"
                    android:textAllCaps="false"
                    android:paddingHorizontal="15dp"
-                   android:background="@drawable/redgradient"
+                   android:background="@drawable/authbtns"
                    android:fontFamily="sans-serif-light"
                    android:textSize="15sp"
                    android:foreground="?attr/selectableItemBackground"

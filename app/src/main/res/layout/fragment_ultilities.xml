@@ -171,7 +171,7 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:foreground="?attr/selectableItemBackground"
-                    android:background="@drawable/redgradient">
+                    android:background="@drawable/authbtns">
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -206,7 +206,7 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:foreground="?attr/selectableItemBackground"
-                    android:background="@drawable/redgradient">
+                    android:background="@drawable/authbtns">
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -241,7 +241,7 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:foreground="?attr/selectableItemBackground"
-                    android:background="@drawable/redgradient">
+                    android:background="@drawable/authbtns">
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -277,7 +277,7 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:foreground="?attr/selectableItemBackground"
-                    android:background="@drawable/redgradient">
+                    android:background="@drawable/authbtns">
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
