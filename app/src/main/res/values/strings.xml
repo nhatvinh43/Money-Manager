@@ -96,6 +96,10 @@
     <string name="logout">Đăng xuất</string>
     <string name="logoutConfirm">Bạn có chắc muốn đăng xuất?</string>
     <string name="cancel">Hủy</string>
+    <string name="formatDate">Dạng ngày tháng</string>
+    <string name="reminder">Nhắc nhở</string>
+    <string name="color">Màu chủ đề</string>
+    <string name="help">Câu hỏi thường gặp</string>
 
     <!--Edit user info-->
     <string name="accountInfo">Thông tin tài khoản</string>
