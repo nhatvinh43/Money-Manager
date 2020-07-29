@@ -10,83 +10,7 @@
        android:layout_height="match_parent"
        android:background="@color/black">
 
-       <LinearLayout
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:orientation="horizontal"
-           android:weightSum="2"
-           android:id="@+id/toolRow"
-           android:layout_below="@id/accountPane"
-           android:layout_marginTop="30dp"
-           android:layout_marginHorizontal="50dp"
-           >
-           <RelativeLayout
-               android:clickable="true"
-               android:focusable="true"
-               android:id="@+id/backupButton"
-               android:layout_width="0dp"
-               android:layout_height="wrap_content"
-               android:paddingVertical="20dp"
-               android:layout_weight="1"
-               android:foreground="?attr/selectableItemBackground"
-               android:layout_marginEnd="7.5dp"
-               android:background="@drawable/greengradient" >
-               <LinearLayout
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:orientation="horizontal"
-                   android:layout_centerInParent="true">
-                   <ImageView
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:src="@drawable/ic_upload"
-                       android:tint="@color/white"/>
 
-                   <TextView
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:layout_gravity="center_vertical"
-                       android:layout_marginStart="10dp"
-                       android:fontFamily="sans-serif"
-                       android:text="@string/backup"
-                       android:textColor="@color/white"
-                       android:textSize="15sp" />
-               </LinearLayout>
-           </RelativeLayout>
-
-           <RelativeLayout
-               android:clickable="true"
-               android:focusable="true"
-               android:id="@+id/restoreButton"
-               android:layout_width="0dp"
-               android:layout_height="wrap_content"
-               android:paddingVertical="20dp"
-               android:layout_weight="1"
-               android:layout_marginStart="7.5dp"
-               android:foreground="?attr/selectableItemBackground"
-               android:background="@drawable/bluegradient">
-               <LinearLayout
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:orientation="horizontal"
-                   android:layout_centerInParent="true">
-                   <ImageView
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:src="@drawable/ic_download"
-                       android:tint="@color/white"/>
-                   <TextView
-                       android:layout_marginStart="10dp"
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:fontFamily="sans-serif"
-                       android:textSize="15sp"
-                       android:layout_gravity="center_vertical"
-                       android:textColor="@color/white"
-                       android:text="@string/restore"/>
-               </LinearLayout>
-           </RelativeLayout>
-       </LinearLayout>
 
        <TextView
            android:id="@+id/accountTitle"
@@ -94,20 +18,22 @@
            android:layout_height="wrap_content"
            android:fontFamily="sans-serif-black"
            android:textSize="22sp"
-           android:text="@string/account"
+           android:text="@string/settings"
            android:textColor="@color/white"
-           android:layout_marginTop="40dp"
+           android:layout_marginTop="50dp"
            android:layout_marginStart="20dp"/>
        <LinearLayout
+           android:paddingHorizontal="40dp"
            android:id="@+id/dataRow"
-           android:layout_below="@id/toolRow"
-           android:layout_marginTop="50dp"
+           android:layout_below="@id/accountPane"
+           android:layout_marginTop="30dp"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:orientation="vertical">
 
+
            <RelativeLayout
-               android:id="@+id/editInfoButton"
+               android:id="@+id/formatDateButton"
                android:layout_gravity="center_horizontal"
                android:layout_width="match_parent"
                android:layout_height="70dp"
@@ -116,23 +42,22 @@
                android:foreground="?attr/selectableItemBackground">
                <ImageView
                    android:layout_centerVertical="true"
-                   android:id="@+id/editIcon"
+                   android:id="@+id/formatDateIcon"
                    android:layout_width="20dp"
                    android:layout_height="20dp"
-                   android:src="@drawable/ic_user"
+                   android:src="@drawable/ic_calendar"
                    android:tint="@color/overlay"
-                   android:layout_gravity="center_vertical"
-                   android:layout_marginStart="30dp"/>
+                   android:layout_gravity="center_vertical"/>
                <TextView
                    android:layout_centerVertical="true"
-                   android:id="@+id/editText"
-                   android:layout_toEndOf="@id/editIcon"
+                   android:id="@+id/formatDateText"
+                   android:layout_toEndOf="@id/formatDateIcon"
                    android:layout_width="wrap_content"
                    android:layout_marginStart="30dp"
                    android:layout_height="wrap_content"
                    android:fontFamily="sans-serif"
                    android:textSize="15sp"
-                   android:text="@string/changeInfo"
+                   android:text="@string/formatDate"
                    android:textColor="@color/white"/>
 
                <ImageView
@@ -141,10 +66,129 @@
                    android:layout_height="20dp"
                    android:tint="@color/overlay"
                    android:src="@drawable/ic_right"
-                   android:layout_alignParentEnd="true"
-                   android:layout_marginEnd="30dp"/>
+                   android:layout_alignParentEnd="true"/>
 
            </RelativeLayout>
+
+
+           <RelativeLayout
+               android:id="@+id/reminderButton"
+               android:layout_gravity="center_horizontal"
+               android:layout_width="match_parent"
+               android:layout_height="70dp"
+               android:clickable="true"
+               android:focusable="true"
+               android:foreground="?attr/selectableItemBackground">
+               <ImageView
+                   android:layout_centerVertical="true"
+                   android:id="@+id/reminderIcon"
+                   android:layout_width="20dp"
+                   android:layout_height="20dp"
+                   android:src="@drawable/ic_clock"
+                   android:tint="@color/overlay"
+                   android:layout_gravity="center_vertical"/>
+               <TextView
+                   android:layout_centerVertical="true"
+                   android:id="@+id/reminderText"
+                   android:layout_toEndOf="@id/reminderIcon"
+                   android:layout_width="wrap_content"
+                   android:layout_marginStart="30dp"
+                   android:layout_height="wrap_content"
+                   android:fontFamily="sans-serif"
+                   android:textSize="15sp"
+                   android:text="@string/reminder"
+                   android:textColor="@color/white"/>
+
+               <ImageView
+                   android:layout_centerVertical="true"
+                   android:layout_width="20dp"
+                   android:layout_height="20dp"
+                   android:tint="@color/overlay"
+                   android:src="@drawable/ic_right"
+                   android:layout_alignParentEnd="true"/>
+
+           </RelativeLayout>
+
+
+           <RelativeLayout
+               android:id="@+id/colorButton"
+               android:layout_gravity="center_horizontal"
+               android:layout_width="match_parent"
+               android:layout_height="70dp"
+               android:clickable="true"
+               android:focusable="true"
+               android:foreground="?attr/selectableItemBackground">
+               <ImageView
+                   android:layout_centerVertical="true"
+                   android:id="@+id/colorIcon"
+                   android:layout_width="20dp"
+                   android:layout_height="20dp"
+                   android:src="@drawable/ic_brush"
+                   android:tint="@color/overlay"
+                   android:layout_gravity="center_vertical"/>
+               <TextView
+                   android:layout_centerVertical="true"
+                   android:id="@+id/colorText"
+                   android:layout_toEndOf="@id/colorIcon"
+                   android:layout_width="wrap_content"
+                   android:layout_marginStart="30dp"
+                   android:layout_height="wrap_content"
+                   android:fontFamily="sans-serif"
+                   android:textSize="15sp"
+                   android:text="@string/color"
+                   android:textColor="@color/white"/>
+
+               <ImageView
+                   android:layout_centerVertical="true"
+                   android:layout_width="20dp"
+                   android:layout_height="20dp"
+                   android:tint="@color/overlay"
+                   android:src="@drawable/ic_right"
+                   android:layout_alignParentEnd="true"/>
+
+           </RelativeLayout>
+
+
+
+           <RelativeLayout
+               android:id="@+id/helpButton"
+               android:layout_gravity="center_horizontal"
+               android:layout_width="match_parent"
+               android:layout_height="70dp"
+               android:clickable="true"
+               android:focusable="true"
+               android:layout_marginTop="30dp"
+               android:foreground="?attr/selectableItemBackground">
+               <ImageView
+                   android:layout_centerVertical="true"
+                   android:id="@+id/helpIcon"
+                   android:layout_width="20dp"
+                   android:layout_height="20dp"
+                   android:src="@drawable/ic_question"
+                   android:tint="@color/overlay"
+                   android:layout_gravity="center_vertical"/>
+               <TextView
+                   android:layout_centerVertical="true"
+                   android:id="@+id/helpText"
+                   android:layout_toEndOf="@id/helpIcon"
+                   android:layout_width="wrap_content"
+                   android:layout_marginStart="30dp"
+                   android:layout_height="wrap_content"
+                   android:fontFamily="sans-serif"
+                   android:textSize="15sp"
+                   android:text="@string/help"
+                   android:textColor="@color/white"/>
+
+               <ImageView
+                   android:layout_centerVertical="true"
+                   android:layout_width="20dp"
+                   android:layout_height="20dp"
+                   android:tint="@color/overlay"
+                   android:src="@drawable/ic_right"
+                   android:layout_alignParentEnd="true"/>
+
+           </RelativeLayout>
+
 
            <RelativeLayout
                android:clickable="true"
@@ -158,7 +202,6 @@
                    android:id="@+id/logoutIcon"
                    android:layout_alignParentStart="true"
                    android:layout_centerVertical="true"
-                   android:layout_marginStart="30dp"
                    android:layout_width="20dp"
                    android:layout_height="20dp"
                    android:src="@drawable/ic_logout"
@@ -181,8 +224,7 @@
                    android:layout_height="20dp"
                    android:tint="@color/redAccent"
                    android:src="@drawable/ic_right"
-                   android:layout_alignParentEnd="true"
-                   android:layout_marginEnd="30dp"/>
+                   android:layout_alignParentEnd="true"/>
 
            </RelativeLayout>
        </LinearLayout>
@@ -212,10 +254,24 @@
                    android:layout_width="300dp"
                    android:layout_height="wrap_content"
                    android:fontFamily="sans-serif"
-                   android:textSize="22sp"
+                   android:textSize="18sp"
                    android:text="@string/emailPH"
                    android:textAlignment="center"
                    android:textColor="@color/white"/>
+               <Button
+                   android:layout_marginTop="20dp"
+                   android:layout_gravity="center_horizontal"
+                   android:id="@+id/editInfoButton"
+                   android:layout_width="wrap_content"
+                   android:layout_height="40dp"
+                   android:textAllCaps="false"
+                   android:paddingHorizontal="15dp"
+                   android:background="@drawable/authbtns"
+                   android:fontFamily="sans-serif-light"
+                   android:textSize="15sp"
+                   android:foreground="?attr/selectableItemBackground"
+                   android:textColor="@color/white"
+                   android:text="@string/changeInfo"/>
 
            </LinearLayout>
        </RelativeLayout>

@@ -168,6 +168,49 @@ public class SettingsFragment extends Fragment {
                 alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             }
         });
+
+        //Nút định dạng ngày tháng
+        view.findViewById(R.id.formatDateButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(v.getContext());
+                builder.setView(R.layout.dialog_format_date);
+                final AlertDialog exchangeMoneyPanel  = builder.create();
+                exchangeMoneyPanel.show();
+                exchangeMoneyPanel.getWindow().setLayout(1000,1200);
+                exchangeMoneyPanel.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+            }
+        });
+
+        //Nút đặt nhắc nhở
+        view.findViewById(R.id.reminderButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(v.getContext());
+                builder.setView(R.layout.dialog_reminder);
+                final AlertDialog exchangeMoneyPanel  = builder.create();
+                exchangeMoneyPanel.show();
+                exchangeMoneyPanel.getWindow().setLayout(1000,1200);
+                exchangeMoneyPanel.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+            }
+        });
+
+        //Nút đổi màu sắc
+        view.findViewById(R.id.colorButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(v.getContext());
+                builder.setView(R.layout.dialog_color);
+                final AlertDialog exchangeMoneyPanel  = builder.create();
+                exchangeMoneyPanel.show();
+                exchangeMoneyPanel.getWindow().setLayout(1000,1200);
+                exchangeMoneyPanel.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+            }
+        });
+
     }
 
     @Override

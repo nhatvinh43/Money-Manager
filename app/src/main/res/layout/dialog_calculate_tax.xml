@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/transaction_item"
     android:paddingHorizontal="30dp"
-    android:paddingVertical="20dp"
+    android:paddingVertical="30dp"
     android:animateLayoutChanges="true">
 
     <TextView
@@ -27,7 +27,7 @@
         android:textSize="15sp"
         android:fontFamily="sans-serif-light"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="45dp"
         android:background="@drawable/innershape"
         android:textAlignment="center"
         android:textColor="@color/white"
@@ -35,7 +35,7 @@
         android:inputType="number"/>
 
     <EditText
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
@@ -45,7 +45,7 @@
         android:textSize="15sp"
         android:fontFamily="sans-serif-light"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="45dp"
         android:background="@drawable/innershape"
         android:textAlignment="center"
         android:textColor="@color/white"
@@ -53,7 +53,7 @@
         android:inputType="number"/>
 
     <EditText
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
@@ -63,7 +63,7 @@
         android:textSize="15sp"
         android:fontFamily="sans-serif-light"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="45dp"
         android:background="@drawable/innershape"
         android:textAlignment="center"
         android:textColor="@color/white"
@@ -76,7 +76,7 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/calculate_calculateTax"
         android:layout_width="70dp"
-        android:layout_height="45dp"
+        android:layout_height="40dp"
         android:textAllCaps="false"
         android:background="@drawable/authbtns"
         android:fontFamily="sans-serif-light"

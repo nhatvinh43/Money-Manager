@@ -96,6 +96,11 @@
     <string name="logout">Đăng xuất</string>
     <string name="logoutConfirm">Bạn có chắc muốn đăng xuất?</string>
     <string name="cancel">Hủy</string>
+    <string name="formatDate">Dạng ngày tháng</string>
+    <string name="reminder">Nhắc nhở</string>
+    <string name="color">Màu chủ đề</string>
+    <string name="help">Câu hỏi thường gặp</string>
+
 
     <!--Edit user info-->
     <string name="accountInfo">Thông tin tài khoản</string>
@@ -109,6 +114,12 @@
     <string name="oldPasswordConfirm">Vui lòng nhập lại mật khẩu cũ</string>
     <string name="oldPassword">Mật khẩu cũ</string>
     <string name="changeAvatar">Đổi ảnh đại diện</string>
+    <string name="ddmmyyyy">dd/mm/yyyy</string>
+    <string name="mmddyyyy">mm/dd/yyyy</string>
+    <string name="yyyyddmm">yyyy/dd/mm</string>
+    <string name="yyyymmdd">yyyy/mm/dd</string>
+    <string name="chooseReminderTime">Chọn thời gian nhắc nhở</string>
+    <string name="chooseColor">Chọn màu chủ đề</string>
 
     <!--Categories-->
     <string name="food">Ăn uống</string>
@@ -171,7 +182,16 @@
     <string name="overview">Tổng quan</string>
     <string name="chart">Biểu đồ</string>
     <string name="noDataThisMonth">Không có dữ liệu cho tháng này!</string>
-
+    <string name="unitOfCurrency">Đơn vị tiền tệ</string>
+    <string name="specialTransaction">G.dịch định kỳ</string>
+    <string name="change">Thay đổi</string>
+    <string name="manage">Quản lý</string>
+    <string name="exchangeMoney">Ch.tiền</string>
+    <string name="exchangeMoneyTitle">Chuyển tiền</string>
+    <string name="source">Nguồn tiền gốc</string>
+    <string name="destination">Nguồn tiền đích</string>
+    <string name="exchange">Chuyển</string>
+    <string name="moneyToExchange">Số tiền cần chuyển</string>
 
     <string name="facebook_app_id">886246855208820</string>
     <string name="fb_login_protocol_scheme">fb886246855208820</string>

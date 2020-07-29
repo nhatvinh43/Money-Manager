@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/transaction_item"
+    android:paddingHorizontal="30dp"
+    android:paddingVertical="30dp"
+    android:animateLayoutChanges="true">
+
+    <TextView
+        android:id="@+id/title_format_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/formatDate"
+        android:textColor="@color/white"
+        android:fontFamily="sans-serif-medium"
+        android:textAlignment="center"
+        android:layout_centerHorizontal="true"
+        android:textSize="22sp"/>
+
+    <Button
+        android:layout_marginTop="30dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:id="@+id/ddmmyyyy_format_date"
+        android:text="@string/ddmmyyyy"
+        android:textAllCaps="false"
+        android:textSize="15sp"
+        android:fontFamily="sans-serif-light"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/innershape"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:layout_below="@id/title_format_date"/>
+
+    <Button
+        android:layout_marginTop="15dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:id="@+id/mmddyyyy_format_date"
+        android:text="@string/mmddyyyy"
+        android:textAllCaps="false"
+        android:textSize="15sp"
+        android:fontFamily="sans-serif-light"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/innershape"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:layout_below="@id/ddmmyyyy_format_date"/>
+
+    <Button
+        android:layout_marginTop="15dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:id="@+id/yyyyddmm_format_date"
+        android:text="@string/yyyyddmm"
+        android:textAllCaps="false"
+        android:textSize="15sp"
+        android:fontFamily="sans-serif-light"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/innershape"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:layout_below="@id/mmddyyyy_format_date"/>
+
+    <Button
+        android:layout_marginTop="15dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:id="@+id/yyyymmdd_format_date"
+        android:text="@string/yyyymmdd"
+        android:textAllCaps="false"
+        android:textSize="15sp"
+        android:fontFamily="sans-serif-light"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/innershape"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:layout_below="@id/yyyyddmm_format_date"/>
+
+
+</RelativeLayout>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/transaction_item"
+    android:paddingHorizontal="30dp"
+    android:animateLayoutChanges="true"
+    android:paddingVertical="30dp">
+
+    <TextView
+        android:id="@+id/title_reminder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/chooseReminderTime"
+        android:textColor="@color/white"
+        android:fontFamily="sans-serif-medium"
+        android:textAlignment="center"
+        android:layout_centerHorizontal="true"
+        android:textSize="22sp"/>
+
+
+    <LinearLayout
+        android:layout_below="@+id/title_reminder"
+        android:id="@+id/firstRow_reminder"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="30dp"
+        android:weightSum="4">
+        <EditText
+            android:textSize="15sp"
+            android:id="@+id/time_reminder"
+            android:enabled="false"
+            android:fontFamily="sans-serif-light"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="match_parent"
+            android:background="@drawable/innershape"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:inputType="datetime"/>
+        <Button
+            android:id="@+id/chooseTime_reminder"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="45dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/innershape"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:textSize="15sp"
+            android:fontFamily="sans-serif-light"
+            android:foreground="?attr/selectableItemBackground"
+            android:text="@string/choose"/>
+
+    </LinearLayout>
+
+    
+
+
+
+    <Button
+        android:layout_marginTop="30dp"
+        android:layout_below="@id/firstRow_reminder"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/confirm_reminder"
+        android:layout_width="90dp"
+        android:layout_height="40dp"
+        android:textAllCaps="false"
+        android:background="@drawable/authbtns"
+        android:fontFamily="sans-serif-light"
+        android:textSize="15sp"
+        android:foreground="?attr/selectableItemBackground"
+        android:textColor="@color/white"
+        android:text="@string/confirm"/>
+
+
+</RelativeLayout>
