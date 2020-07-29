@@ -127,6 +127,20 @@ public class UltilitiesFragment extends Fragment {
             }
         });
 
+        //Change main unit of currency
+        view.findViewById(R.id.changeCurrentUnit_statistics).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(v.getContext());
+                builder.setView(R.layout.dialog_choose_main_currency);
+                final AlertDialog exchangeMoneyPanel  = builder.create();
+                exchangeMoneyPanel.show();
+                exchangeMoneyPanel.getWindow().setLayout(1000,1200);
+                exchangeMoneyPanel.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+            }
+        });
+
         //Currency converter
         view.findViewById(R.id.convertCurrencyButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,6 +203,29 @@ public class UltilitiesFragment extends Fragment {
                 });
             }
         });
+
+        //Exchange money
+        view.findViewById(R.id.exchangeMoneyButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(v.getContext());
+                builder.setView(R.layout.dialog_exchange_money);
+                final AlertDialog exchangeMoneyPanel  = builder.create();
+                exchangeMoneyPanel.show();
+                exchangeMoneyPanel.getWindow().setLayout(1000,1200);
+                exchangeMoneyPanel.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                exchangeMoneyPanel.findViewById(R.id.confirm_exchange_money).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
+            }
+        });
+
+
+
     }
 
     @Override

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/transaction_item"
+    android:paddingHorizontal="30dp"
+    android:animateLayoutChanges="true"
+    android:paddingVertical="20dp">
+
+    <TextView
+        android:id="@+id/title_exchange_money"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/exchangeMoneyTitle"
+        android:textColor="@color/white"
+        android:fontFamily="sans-serif-medium"
+        android:textAlignment="center"
+        android:layout_centerHorizontal="true"
+        android:textSize="22sp"/>
+
+
+    <EditText
+        android:hint="@string/moneyToExchange"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/innershape"
+        android:layout_below="@+id/title_exchange_money"
+        android:inputType="number"
+        android:textColorHint="@color/hintText"
+        android:textSize="15sp"
+        android:fontFamily="sans-serif-light"
+        android:textAlignment="center"
+        android:id="@+id/amount_exchange_money"/>
+
+
+    <LinearLayout
+        android:layout_below="@+id/amount_exchange_money"
+        android:id="@+id/firstRow_exchange_money"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:weightSum="4">
+        <EditText
+            android:hint="@string/source"
+            android:textColorHint="@color/hintText"
+            android:textSize="15sp"
+            android:id="@+id/source_exchange_money"
+            android:enabled="false"
+            android:fontFamily="sans-serif-light"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="match_parent"
+            android:background="@drawable/innershape"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:inputType="datetime"/>
+        <Button
+            android:id="@+id/chooseSource_exchange_money"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="45dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/innershape"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:textSize="15sp"
+            android:fontFamily="sans-serif-light"
+            android:foreground="?attr/selectableItemBackground"
+            android:text="@string/choose"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_below="@+id/firstRow_exchange_money"
+        android:id="@+id/secondRow_exchange_money"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:weightSum="4">
+        <EditText
+            android:hint="@string/destination"
+            android:textColorHint="@color/hintText"
+            android:textSize="15sp"
+            android:id="@+id/destination_exchange_money"
+            android:enabled="false"
+            android:fontFamily="sans-serif-light"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="match_parent"
+            android:background="@drawable/innershape"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:inputType="datetime"/>
+        <Button
+            android:id="@+id/chooseDestination_exchange_money"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="45dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/innershape"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:textSize="15sp"
+            android:fontFamily="sans-serif-light"
+            android:foreground="?attr/selectableItemBackground"
+            android:text="@string/choose"/>
+
+    </LinearLayout>
+
+    <Button
+        android:layout_marginTop="30dp"
+        android:layout_below="@id/secondRow_exchange_money"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/confirm_exchange_money"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        android:textAllCaps="false"
+        android:background="@drawable/authbtns"
+        android:fontFamily="sans-serif-light"
+        android:textSize="15sp"
+        android:foreground="?attr/selectableItemBackground"
+        android:textColor="@color/white"
+        android:text="@string/exchange"/>
+
+
+</RelativeLayout>
