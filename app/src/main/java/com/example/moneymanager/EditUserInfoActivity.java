@@ -318,6 +318,7 @@ public class EditUserInfoActivity extends AppCompatActivity {
                                 });
                     } else {
                         alertDialog.dismiss();
+                        setResult(Activity.RESULT_OK, new Intent());
                         finish();
                     }
                 }

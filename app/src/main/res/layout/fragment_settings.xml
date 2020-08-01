@@ -249,7 +249,7 @@
                    android:src="@drawable/ic_avatar"
                    android:background="@drawable/round_outline"/>
                <TextView
-                   android:id="@+id/email_settings"
+                   android:id="@+id/name_settings"
                    android:layout_marginTop="20dp"
                    android:layout_width="300dp"
                    android:layout_height="wrap_content"
