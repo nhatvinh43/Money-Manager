@@ -52,6 +52,8 @@ public class AddTransactionActivity extends AppCompatActivity {
     private ProgressBar loading;
     private ScrollView container;
     private RecyclerView recyclerView;
+
+
     private ArrayList<MoneySource> dataSet = new ArrayList<>();
     private AddTransactionChooseMoneySourceAdapter adapter;
     private Date date = new Date();
@@ -65,6 +67,9 @@ public class AddTransactionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_transaction);
+
+        container = findViewById(R.id.container);
+        loading = findViewById(R.id.loading);
 
         //prepare data
         expenditures.add(new Expenditure("Exp01","Ăn uống", false));
@@ -82,12 +87,16 @@ public class AddTransactionActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         dataHelper = new DataHelper();
-        initView();
+        loading.setVisibility(View.VISIBLE);
+        container.setVisibility(View.INVISIBLE);
+
         dataHelper.getMoneySource(new MoneySourceCallBack() {
             @Override
             public void onCallBack(ArrayList<MoneySource> list) {
                 dataSet.addAll(list);
                 initView();
+                loading.setVisibility(View.GONE);
+                container.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -107,8 +116,6 @@ public class AddTransactionActivity extends AppCompatActivity {
         typeOfExpenditure = findViewById(R.id.category_addTransaction);
         amount = findViewById(R.id.moneyAmount_addTransaction);
         description = findViewById(R.id.description_addTransaction);
-        container = findViewById(R.id.container);
-        loading = findViewById(R.id.loading);
 
         //Nút back
         findViewById(R.id.backButton_addTransaction).setOnClickListener(new View.OnClickListener() {

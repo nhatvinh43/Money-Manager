@@ -464,8 +464,6 @@ public class HomeFragment extends Fragment {
         String decimal =  "";
         if (remainder > 0)
             decimal = String.valueOf(remainder).substring(String.valueOf(remainder).indexOf("."));
-
-//        startActivityForResult(new Intent(getContext(),AddTransactionActivity.class), HOME_RQCODE);
         return mString.toString() + decimal;
     }
 
@@ -473,19 +471,33 @@ public class HomeFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Log.d("Test home 0", "--------------------");
         if(requestCode == HOME_RQCODE) {
             if(resultCode == Activity.RESULT_OK) {
+                DataHelper dataHelper = new DataHelper();
                 Transaction resTransaction = (Transaction) data.getParcelableExtra("transaction");
                 String msId = resTransaction.getMoneySourceId();
 
                 for(MoneySource ms : moneySourceList) {
                     if(ms.getMoneySourceId().compareTo(msId) == 0) {
-                        Log.d("Test home 2", "--------------------");
-                        ms.getTransactionsList().add(resTransaction);
+                        int index = 0;
+                        for(index = 0; index < ms.getTransactionsList().size(); index++) {
+                            Transaction trans = ms.getTransactionsList().get(index);
+                            if(resTransaction.getTransactionTime().compareTo(trans.getTransactionTime()) >= 0) break;
+                        }
 
+                        ms.getTransactionsList().add(index, resTransaction);
+
+                        // Cập nhập lại số tiền khi thêm transaction mới
+                        if(resTransaction.getTransactionIsIncome()) {
+                            ms.setAmount((Double) ms.getAmount() + (Double) resTransaction.getTransactionAmount());
+                        } else {
+                            ms.setAmount((Double) ms.getAmount() - (Double) resTransaction.getTransactionAmount());
+                        }
+                        dataHelper.updateMoneySource(ms);
+                        moneySourceAdapter.notifyDataSetChanged();
+
+                        // Cập nhập lại view của list transaction
                         if(selectedMoneySource.getMoneySourceId().compareTo(msId) == 0) {
-                            Log.d("Test home 3", "--------------------");
                             selectedMoneySource = ms;
 
                             transactionList.clear();

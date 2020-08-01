@@ -37,6 +37,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 import static android.content.ContentValues.TAG;
+import static com.google.firebase.firestore.Query.Direction.ASCENDING;
+import static com.google.firebase.firestore.Query.Direction.DESCENDING;
 
 public class DataHelper {
     FirebaseFirestore db;
@@ -182,6 +184,30 @@ public class DataHelper {
                 });
     }
 
+    public void updateMoneySource(MoneySource ms) {
+        Map<String, Object> moneySource = new HashMap<>();
+        moneySource.put("userId", ms.getUserId());
+        moneySource.put("moneySourceName", ms.getMoneySourceName());
+        moneySource.put("amount", ms.getAmount());
+        moneySource.put("limit", ms.getLimit());
+        moneySource.put("currencyId", ms.getCurrencyId());
+        moneySource.put("currencyName", ms.getCurrencyName());
+
+        db.collection("moneySources").document(ms.getMoneySourceId()).set(moneySource)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("-------- Update moneysource --------", "Success");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("-------- Update moneysource --------", "Fail");
+                    }
+                });
+    }
+
     // Transaction model
     public void setTransaction(String msID, double amount, boolean isIncome, String description, String expenditureId, String expenditureName, Timestamp transTime) {
         String tsId =  db.collection("transaction").document().getId();
@@ -209,9 +235,10 @@ public class DataHelper {
                 });
     }
 
+
     public void getTransaction(final TransactionCallBack transCallBack, String msID) {
 
-        db.collection("transactions").whereEqualTo("moneySourceId", msID).get()
+        db.collection("transactions").orderBy("transactionTime", DESCENDING).whereEqualTo("moneySourceId", msID).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
