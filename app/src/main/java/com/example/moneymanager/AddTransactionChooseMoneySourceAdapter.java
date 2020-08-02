@@ -67,11 +67,34 @@ public class AddTransactionChooseMoneySourceAdapter extends
     public void onBindViewHolder(@NonNull SmallMoneySourceViewHolder holder, int position) {
         final MoneySource moneySource = this.dataSet.get(position);
         holder.moneySourceName.setText(moneySource.getMoneySourceName().toString());
-        holder.moneySourceAmount.setText(moneySource.getAmount().toString() + moneySource.getCurrencyName().toString());
+        holder.moneySourceAmount.setText(moneyToString((Double)moneySource.getAmount()) + moneySource.getCurrencyName().toString());
     }
 
     @Override
     public int getItemCount() {
         return this.dataSet.size();
+    }
+
+    private String moneyToString(double amount) {
+        if(amount == 0) return "0";
+        StringBuilder mString = new StringBuilder();
+        long mAmount = (long)amount;
+        double remainder = amount - mAmount;
+        int count = 0;
+        while(mAmount > 0) {
+            mString.insert(0, Long.toString(Math.floorMod(mAmount, 10)));
+            mAmount /= 10;
+            count++;
+
+            if(count == 3 && mAmount != 0) {
+                mString.insert(0, ",");
+                count = 0;
+            }
+        }
+
+        String decimal =  "";
+        if (remainder > 0)
+            decimal = String.valueOf(remainder).substring(String.valueOf(remainder).indexOf("."));
+        return mString.toString() + decimal;
     }
 }

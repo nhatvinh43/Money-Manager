@@ -388,13 +388,6 @@ public class HomeFragment extends Fragment {
 
             }
         });
-
-
-
-//
-//        transactionList.clear();
-//        transactionList.addAll(modifierTransactionListByDate());
-//        transactionAdapter.notifyDataSetChanged();
     }
 
     private String getDayOfWeek(int value) {
@@ -512,4 +505,5 @@ public class HomeFragment extends Fragment {
             }
         }
     }
+
 }
