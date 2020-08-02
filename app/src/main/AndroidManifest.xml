@@ -3,7 +3,7 @@
     package="com.example.moneymanager">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -12,7 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MoneySourceDetailsActivity"></activity>
+        <activity android:name=".AddPeriodicTransaction"></activity>
+        <activity android:name=".ManagePeriodicTransactions" />
+        <activity android:name=".MoneySourceDetailsActivity" />
         <activity android:name=".TransactionDetailsActivity" />
         <activity android:name=".AddMoneySourceActivity" />
         <activity android:name=".EditUserInfoActivity" />
@@ -23,7 +25,7 @@
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".PasswordRecoveryActivity" />
         <activity android:name=".SplashActivity">
             <intent-filter>

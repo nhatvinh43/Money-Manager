@@ -26,6 +26,7 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="time">Thời gian</string>
 
     <!--> Navigation bar <-->
     <string name="home">Trang chính</string>
@@ -195,5 +196,9 @@
 
     <string name="facebook_app_id">886246855208820</string>
     <string name="fb_login_protocol_scheme">fb886246855208820</string>
+
+    <!--Manage periodic transaction-->
+    <string name="periodicTransaction">Giao dịch định kỳ</string>
+    <string name="addPeriodicTransaction">Thêm giao dịch định kỳ</string>
 
 </resources>

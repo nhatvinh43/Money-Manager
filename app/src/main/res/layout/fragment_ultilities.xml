@@ -13,11 +13,11 @@
             android:id="@+id/utilitiesTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-black"
-            android:textSize="22sp"
+            android:fontFamily="sans-serif-light"
+            android:textSize="30sp"
             android:text="@string/utilities"
             android:textColor="@color/white"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="70dp"
             android:layout_marginStart="20dp"/>
 
         <RelativeLayout
@@ -302,12 +302,16 @@
         </LinearLayout>
 
         <TextView
+            android:visibility="invisible"
             android:id="@+id/notificationTitle"
             android:layout_below="@id/subUtilitiesRow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-black"
-            android:textSize="22sp"
+            android:fontFamily="sans-serif"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            android:textSize="18sp"
+            android:layout_centerHorizontal="true"
             android:text="@string/notification"
             android:textColor="@color/white"
             android:layout_marginTop="30dp"
