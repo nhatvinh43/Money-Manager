@@ -16,14 +16,14 @@
            android:id="@+id/accountTitle"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:fontFamily="sans-serif-black"
-           android:textSize="22sp"
+           android:fontFamily="sans-serif-light"
+           android:textSize="30sp"
            android:text="@string/settings"
            android:textColor="@color/white"
-           android:layout_marginTop="50dp"
+           android:layout_marginTop="70dp"
            android:layout_marginStart="20dp"/>
        <LinearLayout
-           android:paddingHorizontal="40dp"
+           android:paddingHorizontal="30dp"
            android:id="@+id/dataRow"
            android:layout_below="@id/accountPane"
            android:layout_marginTop="30dp"
