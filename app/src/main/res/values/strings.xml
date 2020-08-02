@@ -27,6 +27,7 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="time">Thời gian</string>
+    <string name="edit">Sửa</string>
 
     <!--> Navigation bar <-->
     <string name="home">Trang chính</string>

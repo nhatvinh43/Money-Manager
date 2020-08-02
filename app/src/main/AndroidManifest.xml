@@ -15,7 +15,9 @@
         <activity android:name=".AddPeriodicTransaction"></activity>
         <activity android:name=".ManagePeriodicTransactions" />
         <activity android:name=".MoneySourceDetailsActivity" />
-        <activity android:name=".TransactionDetailsActivity" />
+        <activity android:name=".TransactionDetailsActivity" android:windowSoftInputMode="adjustPan">
+
+        </activity>
         <activity android:name=".AddMoneySourceActivity" />
         <activity android:name=".EditUserInfoActivity" />
         <activity
