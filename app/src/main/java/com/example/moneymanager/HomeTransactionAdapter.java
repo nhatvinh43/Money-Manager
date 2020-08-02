@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class HomeTransactionAdapter extends RecyclerView.Adapter<HomeTransactionAdapter.ViewHolder> {
+    private static ClickListener clickListener;
     ArrayList<Transaction> mainModel;
     Context context;
 
@@ -46,7 +47,7 @@ public class HomeTransactionAdapter extends RecyclerView.Adapter<HomeTransaction
         return mainModel.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView transactionName;
         TextView transactionTime;
         TextView transactionAmount;
@@ -55,11 +56,25 @@ public class HomeTransactionAdapter extends RecyclerView.Adapter<HomeTransaction
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            itemView.setOnClickListener(this);
             transactionName = itemView.findViewById(R.id.transactionName_item);
             transactionTime = itemView.findViewById(R.id.transactionTime_item);
             transactionAmount = itemView.findViewById(R.id.transactionAmount_item);
             transactionMoneySource = itemView.findViewById(R.id.transactionMoneySource_item);
         }
+
+        @Override
+        public void onClick(View view) {
+            clickListener.onItemClick(getAdapterPosition(), view);
+        }
+    }
+
+    public void setOnItemClickListener(ClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
+
+    public interface ClickListener {
+        void onItemClick(int position, View v);
     }
 
     private String moneyToString(double amount) {

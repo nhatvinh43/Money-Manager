@@ -184,6 +184,28 @@ public class DataHelper {
                 });
     }
 
+    public void getMoneySourceById(final SingleMoneySourceCallBack callBack, String MSId){
+        final MoneySource moneySource = new MoneySource();
+        db.collection("moneySources").document(MSId).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()){
+                            moneySource.setUserId(task.getResult().get("userId").toString());
+                            moneySource.setLimit(task.getResult().getDouble("limit"));
+                            moneySource.setAmount(task.getResult().getDouble("amount"));
+                            moneySource.setMoneySourceName(task.getResult().get("moneySourceName").toString());
+                            moneySource.setMoneySourceId(task.getResult().getId());
+                            moneySource.setCurrencyName(task.getResult().get("currencyName").toString());
+                            moneySource.setCurrencyId(task.getResult().get("currencyId").toString());
+                            callBack.onCallBack(moneySource);
+                        }else {
+                            callBack.onCallBackFailed(task.getException().getMessage());
+                        }
+                    }
+                });
+    }
+
     public void updateMoneySource(MoneySource ms) {
         Map<String, Object> moneySource = new HashMap<>();
         moneySource.put("userId", ms.getUserId());
@@ -248,7 +270,7 @@ public class DataHelper {
                                 Transaction ts = new Transaction();
                                 ts.setMoneySourceId((String) document.getData().get("moneySourceId"));
                                 ts.setTransactionId(document.getId());
-                                ts.setTransactionAmount((double) document.getData().get("transactionAmount"));
+                                ts.setTransactionAmount(document.getDouble("transactionAmount"));
                                 ts.setTransactionIsIncome((boolean) document.getData().get("transactionIsIncome"));
                                 ts.setDescription((String) document.getData().get("Description"));
                                 ts.setExpenditureId((String) document.getData().get("expenditureId"));
@@ -261,6 +283,30 @@ public class DataHelper {
                             transCallBack.onCallBack(transactionList);
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+    public void getTransactionById(final SingleTransactionCallBack singleTransCallBack, String transID) {
+        db.collection("transactions").document(transID).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()) {
+                            Transaction ts = new Transaction();
+                            DocumentSnapshot document = task.getResult();
+                            ts.setMoneySourceId((String) document.getData().get("moneySourceId"));
+                            ts.setTransactionId(document.getId());
+                            ts.setTransactionAmount(document.getDouble("transactionAmount"));
+                            ts.setTransactionIsIncome((boolean) document.getData().get("transactionIsIncome"));
+                            ts.setDescription((String) document.getData().get("Description"));
+                            ts.setExpenditureId((String) document.getData().get("expenditureId"));
+                            ts.setExpenditureName((String) document.getData().get("expenditureName"));
+                            ts.setTransactionTime(new Timestamp((document.getDate("transactionTime")).getTime()));
+                            singleTransCallBack.onCallBack(ts);
+                        } else {
+                            singleTransCallBack.onCallBackFailed(task.getException().getMessage());
                         }
                     }
                 });
@@ -288,6 +334,7 @@ public class DataHelper {
             }
         });
     }
+
     //get List MoneySource
     public ArrayList<MoneySource> getListMoneySource(String uID){
         final ArrayList<MoneySource> moneySources = new ArrayList<>();
@@ -341,32 +388,7 @@ public class DataHelper {
         });
         return newMoneySourceId;
     }
-    public void getMoneySourceById(final SingleMoneySourceCallBack callBack, String MSId){
-        final MoneySource moneySource = new MoneySource();
-        db.collection("moneySources").document(MSId).get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()){
-                            moneySource.setUserId(task.getResult().get("userId").toString());
-                            moneySource.setLimit(task.getResult().getDouble("limit"));
-                            moneySource.setAmount(task.getResult().getDouble("amount"));
-                            moneySource.setMoneySourceName(task.getResult().get("moneySourceName").toString());
-                            moneySource.setMoneySourceId(task.getResult().getId());
-                            moneySource.setCurrencyName(task.getResult().get("currencyName").toString());
-                            moneySource.setCurrencyId(task.getResult().get("currencyId").toString());
-                            callBack.onCallBack(moneySource);
-                        }else {
-                            callBack.onCallBackFailed(task.getException().getMessage());
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
 
-                    }
-                });
-    }
     public void deleteMoneySource(String MSId){
         db.collection("moneySources").document(MSId).delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

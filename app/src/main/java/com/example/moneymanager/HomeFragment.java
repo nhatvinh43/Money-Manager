@@ -78,6 +78,7 @@ public class HomeFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     public static final int HOME_RQCODE = 2;
+    public static final int HOME_TRANSACTION_RQCODE = 3;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -334,6 +335,17 @@ public class HomeFragment extends Fragment {
         transactionRecycleView.scheduleLayoutAnimation();
         transactionAdapter.notifyDataSetChanged();
 
+        transactionAdapter.setOnItemClickListener(new HomeTransactionAdapter.ClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
+                Transaction trans = transactionList.get(position);
+                Log.d("----------------------- Id ",position + "    " + trans.getTransactionId());
+                Intent transactionDetailIntent = new Intent(getContext(), TransactionDetailsActivity.class);
+                transactionDetailIntent.putExtra("TransactionId", trans.getTransactionId());
+                startActivityForResult(transactionDetailIntent, HOME_TRANSACTION_RQCODE);
+            }
+        });
+
         //"View by" menu initiation
         Spinner viewByMenu = view.findViewById(R.id.viewBy_home);
         String[] viewByMenuItems = new String[]{"Ngày", "Tuần", "Tháng", "Quý", "Năm", "Chọn"};
@@ -464,7 +476,7 @@ public class HomeFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == HOME_RQCODE) {
+        if(requestCode == HOME_RQCODE) { // Xử lý khi thêm transaction mới
             if(resultCode == Activity.RESULT_OK) {
                 DataHelper dataHelper = new DataHelper();
                 Transaction resTransaction = (Transaction) data.getParcelableExtra("transaction");
@@ -502,6 +514,10 @@ public class HomeFragment extends Fragment {
                         break;
                     }
                 }
+            }
+        } else if (requestCode == HOME_TRANSACTION_RQCODE) { // Xử lý khi cập nhập transaction
+            if(resultCode == Activity.RESULT_OK) {
+
             }
         }
     }
