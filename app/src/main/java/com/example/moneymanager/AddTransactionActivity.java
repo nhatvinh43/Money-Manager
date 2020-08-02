@@ -106,8 +106,6 @@ public class AddTransactionActivity extends AppCompatActivity {
         }, firebaseAuth.getCurrentUser().getUid());
     }
 
-
-
     public void initView(){
 
         //prepare data and model
@@ -124,6 +122,7 @@ public class AddTransactionActivity extends AppCompatActivity {
                 finish();
             }
         });
+
         //Nút chọn nguồn tiền
         findViewById(R.id.chooseMoneySourceButton_addTransaction).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,6 +153,7 @@ public class AddTransactionActivity extends AppCompatActivity {
                 });
             }
         });
+
         //Nút chọn ngày
         findViewById(R.id.chooseDateTimeButton_addTransaction).setOnClickListener(new View.OnClickListener() {
             @Override
