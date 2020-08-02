@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".TransactionDetailsActivity"
+    android:animateLayoutChanges="true"
     android:background="@color/black">
 
     <ImageButton
@@ -64,12 +65,14 @@
                 android:layout_marginHorizontal="100dp">
 
                 <EditText
+                    android:enabled="false"
+                    android:id="@+id/amount_transactionDetails"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="@string/moneySubtractPH"
                     android:textColor="@color/white"
                     android:textAlignment="center"
-                    android:background="none"
+                    android:background="@android:color/transparent"
                     android:textSize="18sp"
                     android:fontFamily="sans-serif-medium"/>
 
@@ -124,7 +127,7 @@
                     android:enabled="false"
                     android:fontFamily="sans-serif-light"
                     android:layout_width="0dp"
-                    android:layout_weight="3"
+                    android:layout_weight="4"
                     android:layout_height="match_parent"
                     android:background="@drawable/transaction_item"
                     android:textAlignment="center"
@@ -137,6 +140,7 @@
                     android:layout_weight="1"
                     android:layout_height="45dp"
                     android:layout_marginStart="20dp"
+                    android:visibility="gone"
                     android:background="@drawable/transaction_item"
                     android:textAlignment="center"
                     android:textColor="@color/white"
@@ -158,6 +162,7 @@
                 android:textSize="18sp"
                 android:fontFamily="sans-serif-medium"/>
             <EditText
+                android:enabled="false"
                 android:id="@+id/description_transactionDetails"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -180,24 +185,25 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/save_transactionDetails"
-                    android:layout_width="100dp"
+                    android:id="@+id/editAndSave_transactionDetails"
+                    android:layout_width="wrap_content"
                     android:layout_height="45dp"
                     android:textAllCaps="false"
+                    android:paddingHorizontal="10dp"
                     android:background="@drawable/authbtns"
                     android:fontFamily="sans-serif-light"
                     android:textSize="15sp"
                     android:foreground="?attr/selectableItemBackground"
                     android:textColor="@color/white"
-                    android:text="@string/save"/>
+                    android:text="@string/edit"/>
 
                 <Button
                     android:id="@+id/delete_transactionDetails"
-                    android:layout_width="100dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="45dp"
                     android:layout_marginStart="15dp"
                     android:textAllCaps="false"
-                    android:background="none"
+                    android:background="@android:color/transparent"
                     android:fontFamily="sans-serif-light"
                     android:textSize="15sp"
                     android:foreground="?attr/selectableItemBackground"
