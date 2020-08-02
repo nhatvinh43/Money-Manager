@@ -231,30 +231,36 @@ public class DataHelper {
     }
 
     // Transaction model
-    public void setTransaction(String msID, double amount, boolean isIncome, String description, String expenditureId, String expenditureName, Timestamp transTime) {
-        String tsId =  db.collection("transaction").document().getId();
+    public String setTransaction(final TransactionCallBack transCallBack, String description, String expenditureId, String expenditureName, Number transactionAmount, String moneySourceId,
+                                    boolean transactionIsIncome, Timestamp transactionTime){
+        String newTransactionId = db.collection("transactions").document().getId();
         Map<String, Object> transaction = new HashMap<>();
-        transaction.put("moneySourceId", msID);
-        transaction.put("transactionAmount", amount);
-        transaction.put("transactionIsIncome", isIncome);
+        transaction.put("moneySourceId", moneySourceId);
+        transaction.put("transactionAmount", transactionAmount);
+        transaction.put("transactionIsIncome", transactionIsIncome);
         transaction.put("description", description);
         transaction.put("expenditureId", expenditureId);
         transaction.put("expenditureName", expenditureName);
-        transaction.put("transactionTime", transTime);
+        transaction.put("transactionTime", transactionTime);
 
-        db.collection("transactions").document(tsId).set(transaction)
+        final Transaction trans = new Transaction(description, expenditureId, expenditureName, transactionAmount, newTransactionId, moneySourceId, transactionIsIncome, transactionTime);
+        db.collection("transactions").document(newTransactionId).set(transaction)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                        ArrayList<Transaction> arrayList = new ArrayList<>();
+                        arrayList.add(trans);
+                        transCallBack.onCallBack(arrayList);
+                        Log.d("AddTran", "Successfully");
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error writing document", e);
-                    }
-                });
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                transCallBack.onCallBackFail(e.getMessage());
+                Log.w("CreateNewMoneySource", "Error writing document", e);
+            }
+        });
+        return newTransactionId;
     }
 
 

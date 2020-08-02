@@ -66,7 +66,8 @@
     <string name="moneyPHSmall">25,000</string>
     <string name="currencyPH">VNĐ</string>
     <string name="details">Chi tiết</string>
-    <string name="moneySourceNamePH">Tiền ăn uống</string>
+    <string name="moneySourceNamePH">Ví chung</string>
+    <string name="datePH">02/07/2020</string>
     <string name="timePH">07:31</string>
     <string name="moneyPlusPH">+250,000</string>
     <string name="moneySubtractPH">- 25,000</string>

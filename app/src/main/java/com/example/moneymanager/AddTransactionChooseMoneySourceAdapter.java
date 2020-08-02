@@ -67,7 +67,7 @@ public class AddTransactionChooseMoneySourceAdapter extends
     public void onBindViewHolder(@NonNull SmallMoneySourceViewHolder holder, int position) {
         final MoneySource moneySource = this.dataSet.get(position);
         holder.moneySourceName.setText(moneySource.getMoneySourceName().toString());
-        holder.moneySourceAmount.setText(moneyToString((Double)moneySource.getAmount()) + moneySource.getCurrencyName().toString());
+        holder.moneySourceAmount.setText(moneyToString((Double)moneySource.getAmount()) + " " + moneySource.getCurrencyName().toString());
     }
 
     @Override

@@ -480,6 +480,7 @@ public class HomeFragment extends Fragment {
             if(resultCode == Activity.RESULT_OK) {
                 DataHelper dataHelper = new DataHelper();
                 Transaction resTransaction = (Transaction) data.getParcelableExtra("transaction");
+                Log.d("----------------------- result ", resTransaction.getTransactionId() + "testttttt");
                 String msId = resTransaction.getMoneySourceId();
 
                 for(MoneySource ms : moneySourceList) {
@@ -517,7 +518,9 @@ public class HomeFragment extends Fragment {
             }
         } else if (requestCode == HOME_TRANSACTION_RQCODE) { // Xử lý khi cập nhập transaction
             if(resultCode == Activity.RESULT_OK) {
-
+                Log.d("-------------Test result from trans detail ", "OKE");
+            } else if(resultCode == Activity.RESULT_CANCELED) {
+                Log.d("-------------Test result from trans detail ", "CANCEL");
             }
         }
     }

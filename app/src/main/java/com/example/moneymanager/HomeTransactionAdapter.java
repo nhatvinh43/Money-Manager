@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -34,12 +35,17 @@ public class HomeTransactionAdapter extends RecyclerView.Adapter<HomeTransaction
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         SimpleDateFormat sfd = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat sfd1 = new SimpleDateFormat("dd/MM/yyyy");
+        ExpenditureList expList = new ExpenditureList();
+        String iconString = expList.getIcon(mainModel.get(position).getExpenditureId());
+        int id = context.getResources().getIdentifier("com.example.moneymanager:drawable/" + iconString, null, null);
 
         holder.transactionName.setText(mainModel.get(position).getExpenditureName());
         holder.transactionTime.setText(sfd.format(new Date(mainModel.get(position).getTransactionTime().getTime())));
         holder.transactionAmount.setText((mainModel.get(position).getTransactionIsIncome() == true ? "+" : "-") + moneyToString((double)mainModel.get(position).getTransactionAmount()));
         holder.transactionAmount.setTextColor(mainModel.get(position).getTransactionIsIncome() == true ? Color.GREEN : Color.RED);
-        holder.transactionMoneySource.setText("Thêm sau");
+        holder.transactionMoneySource.setText(sfd1.format(new Date(mainModel.get(position).getTransactionTime().getTime())));
+        holder.transactionIcon.setImageResource(id);
     }
 
     @Override
@@ -52,6 +58,7 @@ public class HomeTransactionAdapter extends RecyclerView.Adapter<HomeTransaction
         TextView transactionTime;
         TextView transactionAmount;
         TextView transactionMoneySource;
+        ImageView transactionIcon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -61,6 +68,7 @@ public class HomeTransactionAdapter extends RecyclerView.Adapter<HomeTransaction
             transactionTime = itemView.findViewById(R.id.transactionTime_item);
             transactionAmount = itemView.findViewById(R.id.transactionAmount_item);
             transactionMoneySource = itemView.findViewById(R.id.transactionMoneySource_item);
+            transactionIcon = itemView.findViewById(R.id.transactionIcon_item);
         }
 
         @Override
