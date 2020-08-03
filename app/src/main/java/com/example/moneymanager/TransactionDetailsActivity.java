@@ -97,6 +97,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         int id = getResources().getIdentifier("com.example.moneymanager:drawable/" + iconString, null, null);
 
         dateTime.setText(sfd.format(new Date(transaction.getTransactionTime().getTime())));
+//        Log.d("---------------- Transaction Description ", transaction.getDescription());
         description.setText(transaction.getDescription());
         amount.setText(converter.moneyToString((double)transaction.getTransactionAmount()));
         moneySourceName.setText(ms.getMoneySourceName());

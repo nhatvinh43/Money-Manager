@@ -505,10 +505,29 @@ public class HomeFragment extends Fragment {
                             if(trans.getTransactionId().equals(resTransaction.getTransactionId())) {
                                 if(!trans.getTransactionTime().equals(resTransaction.getTransactionTime())
                                     || !trans.getTransactionAmount().equals(resTransaction.getTransactionAmount())
-                                    || !trans.getExpenditureId().equals(resTransaction.getExpenditureId())
-                                    || !trans.getDescription().equals(resTransaction.getDescription())) {
+                                    || !trans.getExpenditureId().equals(resTransaction.getExpenditureId())) {
                                     isChange = true;
+                                }
 
+                                // Kiểm tra tính mô tả giao dịch
+                                if(!isChange) {
+                                    String transDes = trans.getDescription();
+                                    String resTransDes = resTransaction.getDescription();
+
+                                    if (transDes != null) {
+                                        if (resTransDes != null) {
+                                            if (!transDes.equals(resTransDes)) isChange = true;
+                                        } else {
+                                            isChange = true;
+                                        }
+                                    } else {
+                                        if (resTransDes != null) {
+                                            isChange = true;
+                                        }
+                                    }
+                                }
+
+                                if(isChange) {
                                     // Cộng hoặc trừ lại số tiền trước đó
                                     if(trans.getTransactionIsIncome()) {
                                         ms.setAmount((double)ms.getAmount() - (double) trans.getTransactionAmount());
@@ -518,6 +537,7 @@ public class HomeFragment extends Fragment {
 
                                     ms.getTransactionsList().remove(trans);
                                 }
+
                                 break;
                             }
                         }
