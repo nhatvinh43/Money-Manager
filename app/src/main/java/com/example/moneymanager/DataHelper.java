@@ -278,7 +278,7 @@ public class DataHelper {
                                 ts.setTransactionId(document.getId());
                                 ts.setTransactionAmount(document.getDouble("transactionAmount"));
                                 ts.setTransactionIsIncome((boolean) document.getData().get("transactionIsIncome"));
-                                ts.setDescription((String) document.getData().get("Description"));
+                                ts.setDescription((String) document.getData().get("description"));
                                 ts.setExpenditureId((String) document.getData().get("expenditureId"));
                                 ts.setExpenditureName((String) document.getData().get("expenditureName"));
                                 ts.setTransactionTime(new Timestamp((document.getDate("transactionTime")).getTime()));
@@ -306,7 +306,7 @@ public class DataHelper {
                             ts.setTransactionId(document.getId());
                             ts.setTransactionAmount(document.getDouble("transactionAmount"));
                             ts.setTransactionIsIncome((boolean) document.getData().get("transactionIsIncome"));
-                            ts.setDescription((String) document.getData().get("Description"));
+                            ts.setDescription((String) document.getData().get("description"));
                             ts.setExpenditureId((String) document.getData().get("expenditureId"));
                             ts.setExpenditureName((String) document.getData().get("expenditureName"));
                             ts.setTransactionTime(new Timestamp((document.getDate("transactionTime")).getTime()));
