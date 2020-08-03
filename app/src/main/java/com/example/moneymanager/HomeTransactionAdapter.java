@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ public class HomeTransactionAdapter extends RecyclerView.Adapter<HomeTransaction
     private static ClickListener clickListener;
     ArrayList<Transaction> mainModel;
     Context context;
+    MoneyToStringConverter converter = new MoneyToStringConverter();
 
     public HomeTransactionAdapter(ArrayList<Transaction> mainModel, Context context) {
         this.mainModel = mainModel;
@@ -34,12 +36,17 @@ public class HomeTransactionAdapter extends RecyclerView.Adapter<HomeTransaction
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         SimpleDateFormat sfd = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat sfd1 = new SimpleDateFormat("dd/MM/yyyy");
+        ExpenditureList expList = new ExpenditureList();
+        String iconString = expList.getIcon(mainModel.get(position).getExpenditureId());
+        int id = context.getResources().getIdentifier("com.example.moneymanager:drawable/" + iconString, null, null);
 
         holder.transactionName.setText(mainModel.get(position).getExpenditureName());
         holder.transactionTime.setText(sfd.format(new Date(mainModel.get(position).getTransactionTime().getTime())));
-        holder.transactionAmount.setText((mainModel.get(position).getTransactionIsIncome() == true ? "+" : "-") + moneyToString((double)mainModel.get(position).getTransactionAmount()));
+        holder.transactionAmount.setText((mainModel.get(position).getTransactionIsIncome() == true ? "+" : "-") + converter.moneyToString((double)mainModel.get(position).getTransactionAmount()));
         holder.transactionAmount.setTextColor(mainModel.get(position).getTransactionIsIncome() == true ? Color.GREEN : Color.RED);
-        holder.transactionMoneySource.setText("Thêm sau");
+        holder.transactionMoneySource.setText(sfd1.format(new Date(mainModel.get(position).getTransactionTime().getTime())));
+        holder.transactionIcon.setImageResource(id);
     }
 
     @Override
@@ -52,6 +59,7 @@ public class HomeTransactionAdapter extends RecyclerView.Adapter<HomeTransaction
         TextView transactionTime;
         TextView transactionAmount;
         TextView transactionMoneySource;
+        ImageView transactionIcon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -61,6 +69,7 @@ public class HomeTransactionAdapter extends RecyclerView.Adapter<HomeTransaction
             transactionTime = itemView.findViewById(R.id.transactionTime_item);
             transactionAmount = itemView.findViewById(R.id.transactionAmount_item);
             transactionMoneySource = itemView.findViewById(R.id.transactionMoneySource_item);
+            transactionIcon = itemView.findViewById(R.id.transactionIcon_item);
         }
 
         @Override
@@ -75,29 +84,5 @@ public class HomeTransactionAdapter extends RecyclerView.Adapter<HomeTransaction
 
     public interface ClickListener {
         void onItemClick(int position, View v);
-    }
-
-    private String moneyToString(double amount) {
-        if(amount == 0) return "0";
-        StringBuilder mString = new StringBuilder();
-        long mAmount = (long) amount;
-        double remainder = amount - mAmount;
-        int count = 0;
-        while (mAmount > 0) {
-            mString.insert(0, Long.toString(Math.floorMod(mAmount, 10)));
-            mAmount /= 10;
-            count++;
-
-            if (count == 3 && mAmount != 0) {
-                mString.insert(0, ",");
-                count = 0;
-            }
-        }
-
-        String decimal = "";
-        if (remainder > 0)
-            decimal = String.valueOf(remainder).substring(String.valueOf(remainder).indexOf("."));
-
-        return mString.toString() + decimal;
     }
 }

@@ -191,6 +191,10 @@ public class AddTransactionActivity extends AppCompatActivity {
                                 date.setHours(hourOfDay);
                                 date.setMinutes(minute);
                                 date.setSeconds(00);
+                                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                                dateTimeEditText.setText(sdf.format(date.getTime()));
+                                timestamp = new Timestamp(date.getTime());
+                                resTransaction.setTransactionTime(timestamp);
 
                             }
                         }, mHour, mMin, false);
@@ -366,13 +370,13 @@ public class AddTransactionActivity extends AppCompatActivity {
 
                     resTransaction.setTransactionAmount(Double.valueOf(amount.getText().toString()));
                     resTransaction.setDescription(description.getText().toString());
-                    dataHelper.createTransaction(new TransactionCallBack() {
+                    dataHelper.setTransaction(new TransactionCallBack() {
                                                      @Override
                                                      public void onCallBack(ArrayList<Transaction> list) {
                                                          dialog.dismiss();
 
                                                          Intent data = new Intent();
-                                                         data.putExtra("transaction", resTransaction);
+                                                         data.putExtra("transaction", list.get(0));
                                                          setResult(Activity.RESULT_OK, data);
                                                          Toast.makeText(AddTransactionActivity.this, "Thêm giao dịch thành công", Toast.LENGTH_LONG).show();
                                                          Log.d("Test add trans 1", "--------------------");

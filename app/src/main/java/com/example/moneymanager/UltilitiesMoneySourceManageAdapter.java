@@ -19,6 +19,7 @@ public class UltilitiesMoneySourceManageAdapter extends
     private Context context;
     private LayoutInflater inflater;
     private OnItemClickListener mListener;
+    private MoneyToStringConverter converter = new MoneyToStringConverter();
 
     public interface OnItemClickListener{
         void onItemClick (int position);
@@ -59,7 +60,7 @@ public class UltilitiesMoneySourceManageAdapter extends
     public void onBindViewHolder(@NonNull SmallMoneySourceViewHolder holder, int position) {
         final MoneySource moneySource = this.dataSet.get(position);
         holder.moneySourceName.setText(moneySource.getMoneySourceName());
-        holder.moneySourceAmount.setText(moneySource.getAmount().toString() + " " + moneySource.getCurrencyName());
+        holder.moneySourceAmount.setText(converter.moneyToString((double)moneySource.getAmount()) + " " + moneySource.getCurrencyName());
     }
 
     @NonNull

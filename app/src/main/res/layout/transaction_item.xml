@@ -39,6 +39,16 @@
             android:layout_marginTop="5dp"
             android:fontFamily="sans-serif-light"/>
         <TextView
+            android:id="@+id/transactionMoneySource_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/white"
+            android:text="@string/datePH"
+            android:layout_marginTop="5dp"
+            android:fontFamily="sans-serif-light"/>
+        <TextView
             android:id="@+id/transactionAmount_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -48,16 +58,7 @@
             android:text="@string/moneyPlusPH"
             android:layout_marginTop="5dp"
             android:fontFamily="sans-serif"/>
-        <TextView
-            android:id="@+id/transactionMoneySource_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:layout_gravity="center_horizontal"
-            android:textColor="@color/white"
-            android:text="@string/moneySourceNamePH"
-            android:layout_marginTop="5dp"
-            android:fontFamily="sans-serif-light"/>
+
 
     </LinearLayout>
 </RelativeLayout>
