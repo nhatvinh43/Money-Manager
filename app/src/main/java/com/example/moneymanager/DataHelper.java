@@ -318,6 +318,47 @@ public class DataHelper {
                 });
     }
 
+    public void updateTransaction(Transaction trans) {
+        Map<String, Object> transaction = new HashMap<>();
+        transaction.put("moneySourceId", trans.getMoneySourceId());
+        transaction.put("transactionAmount", trans.getTransactionAmount());
+        transaction.put("transactionIsIncome", trans.getTransactionIsIncome());
+        transaction.put("description", trans.getDescription());
+        transaction.put("expenditureId", trans.getExpenditureId());
+        transaction.put("expenditureName", trans.getExpenditureName());
+        transaction.put("transactionTime", trans.getTransactionTime());
+
+        db.collection("transactions").document(trans.getTransactionId()).set(transaction)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("-------- Update transaction --------", "Success");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("-------- Update transacion --------", "Fail");
+                    }
+                });
+    }
+
+    public void deleteTransaction(Transaction trans) {
+        db.collection("transactions").document(trans.getTransactionId()).delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("-------- Delete transaction --------", "Success");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("-------- Delete transacion --------", "Fail");
+                    }
+                });
+    }
+
     // Avatar model
     public void uploadAvatar(final UserAvatarCallBack userAvatarCallBack, Uri pickedImgUri) {
         StorageReference mStorage = FirebaseStorage.getInstance().getReference().child("userAvatar");

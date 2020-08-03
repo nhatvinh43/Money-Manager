@@ -180,20 +180,18 @@ public class HomeFragment extends Fragment {
     private void getMoneySourceData(ArrayList<MoneySource> list) {
         moneySourceList.clear();
         moneySourceList.addAll(list);
-        Log.d("Test", "---------------" + moneySourceList.get(0).getTransactionsList().size());
         selectedMoneySource = moneySourceList.get(0);
-        Log.d("Test", "---------------" + selectedMoneySource.getTransactionsList().size());
     }
 
     private void initView(View view) {
-
+        final MoneyToStringConverter converter = new MoneyToStringConverter();
 
         // Moneysource Info Initiation
         final WaveLoadingView waveLoadingView = view.findViewById(R.id.waveLoadingView);
         todayIncome = view.findViewById(R.id.todayIncome_home);
         todaySpending = view.findViewById(R.id.todaySpending_home);
 
-        waveLoadingView.setCenterTitle(moneyToString((double)selectedMoneySource.getLimit()));
+        waveLoadingView.setCenterTitle(converter.moneyToString((double)selectedMoneySource.getLimit()));
         todayIncome.setText("Thêm sau");
         todaySpending.setText("Thêm sau");
 
@@ -299,7 +297,7 @@ public class HomeFragment extends Fragment {
                 if(newState!=RecyclerView.SCROLL_STATE_SETTLING)
                 {
                     selectedMoneySource = moneySourceList.get(pos);
-                    waveLoadingView.setCenterTitle(moneyToString((double)selectedMoneySource.getLimit()));
+                    waveLoadingView.setCenterTitle(converter.moneyToString((double)selectedMoneySource.getLimit()));
                     todayIncome.setText("Thêm sau");
                     todaySpending.setText("Thêm sau");
 
@@ -449,29 +447,6 @@ public class HomeFragment extends Fragment {
         return modifierTransactionList;
     }
 
-    private String moneyToString(double amount) {
-        if(amount == 0) return "0";
-        StringBuilder mString = new StringBuilder();
-        long mAmount = (long)amount;
-        double remainder = amount - mAmount;
-        int count = 0;
-        while(mAmount > 0) {
-            mString.insert(0, Long.toString(Math.floorMod(mAmount, 10)));
-            mAmount /= 10;
-            count++;
-
-            if(count == 3 && mAmount != 0) {
-                mString.insert(0, ",");
-                count = 0;
-            }
-        }
-
-        String decimal =  "";
-        if (remainder > 0)
-            decimal = String.valueOf(remainder).substring(String.valueOf(remainder).indexOf("."));
-        return mString.toString() + decimal;
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -480,7 +455,6 @@ public class HomeFragment extends Fragment {
             if(resultCode == Activity.RESULT_OK) {
                 DataHelper dataHelper = new DataHelper();
                 Transaction resTransaction = (Transaction) data.getParcelableExtra("transaction");
-                Log.d("----------------------- result ", resTransaction.getTransactionId() + "testttttt");
                 String msId = resTransaction.getMoneySourceId();
 
                 for(MoneySource ms : moneySourceList) {
@@ -519,7 +493,108 @@ public class HomeFragment extends Fragment {
         } else if (requestCode == HOME_TRANSACTION_RQCODE) { // Xử lý khi cập nhập transaction
             if(resultCode == Activity.RESULT_OK) {
                 Log.d("-------------Test result from trans detail ", "OKE");
-            } else if(resultCode == Activity.RESULT_CANCELED) {
+                DataHelper dataHelper = new DataHelper();
+                Transaction resTransaction = (Transaction) data.getParcelableExtra("transaction");
+                String msId = resTransaction.getMoneySourceId();
+
+                for(MoneySource ms : moneySourceList) {
+                    if(ms.getMoneySourceId().compareTo(msId) == 0) {
+                        // Kiểm tra xem thông tin giao dịch có thay đổi hay không
+                        boolean isChange = false;
+                        for(Transaction trans : ms.getTransactionsList()) {
+                            if(trans.getTransactionId().equals(resTransaction.getTransactionId())) {
+                                if(!trans.getTransactionTime().equals(resTransaction.getTransactionTime())
+                                    || !trans.getTransactionAmount().equals(resTransaction.getTransactionAmount())
+                                    || !trans.getExpenditureId().equals(resTransaction.getExpenditureId())
+                                    || !trans.getDescription().equals(resTransaction.getDescription())) {
+                                    isChange = true;
+
+                                    // Cộng hoặc trừ lại số tiền trước đó
+                                    if(trans.getTransactionIsIncome()) {
+                                        ms.setAmount((double)ms.getAmount() - (double) trans.getTransactionAmount());
+                                    } else {
+                                        ms.setAmount((double)ms.getAmount() + (double) trans.getTransactionAmount());
+                                    }
+
+                                    ms.getTransactionsList().remove(trans);
+                                }
+                                break;
+                            }
+                        }
+
+                        if(isChange) {
+                            dataHelper.updateTransaction(resTransaction);
+
+                            int index = 0;
+                            for (index = 0; index < ms.getTransactionsList().size(); index++) {
+                                Transaction trans = ms.getTransactionsList().get(index);
+                                if (resTransaction.getTransactionTime().compareTo(trans.getTransactionTime()) >= 0)
+                                    break;
+                            }
+
+                            ms.getTransactionsList().add(index, resTransaction);
+
+                            // Cập nhập lại số tiền khi thêm transaction mới
+                            if (resTransaction.getTransactionIsIncome()) {
+                                ms.setAmount((double) ms.getAmount() + (double) resTransaction.getTransactionAmount());
+                            } else {
+                                ms.setAmount((double) ms.getAmount() - (double) resTransaction.getTransactionAmount());
+                            }
+                            dataHelper.updateMoneySource(ms);
+                            moneySourceAdapter.notifyDataSetChanged();
+
+                            // Cập nhập lại view của list transaction
+                            if (selectedMoneySource.getMoneySourceId().compareTo(msId) == 0) {
+                                selectedMoneySource = ms;
+
+                                transactionList.clear();
+                                transactionList.addAll(modifierTransactionListByDate());
+                                transactionAdapter.notifyDataSetChanged();
+                                transactionRecycleView.scheduleLayoutAnimation();
+                            }
+                        }
+
+                        break;
+                    }
+                }
+            } else if(resultCode == Activity.RESULT_FIRST_USER) {
+                Log.d("-------------Test result from trans detail ", "DELETE");
+                DataHelper dataHelper = new DataHelper();
+                Transaction resTransaction = (Transaction) data.getParcelableExtra("transaction");
+                String msId = resTransaction.getMoneySourceId();
+
+                for(MoneySource ms : moneySourceList) {
+                    if (ms.getMoneySourceId().compareTo(msId) == 0) {
+                        for(Transaction trans : ms.getTransactionsList()) {
+                            if(trans.getTransactionId().equals(resTransaction.getTransactionId())) {
+                                // Cộng hoặc trừ lại số tiền trước đó
+                                if(trans.getTransactionIsIncome()) {
+                                    ms.setAmount((double)ms.getAmount() - (double) trans.getTransactionAmount());
+                                } else {
+                                    ms.setAmount((double)ms.getAmount() + (double) trans.getTransactionAmount());
+                                }
+                                dataHelper.updateMoneySource(ms);
+                                moneySourceAdapter.notifyDataSetChanged();
+
+                                dataHelper.deleteTransaction(trans);
+                                ms.getTransactionsList().remove(trans);
+
+                                // Cập nhập lại view của list transaction
+                                if (selectedMoneySource.getMoneySourceId().compareTo(msId) == 0) {
+                                    selectedMoneySource = ms;
+
+                                    transactionList.clear();
+                                    transactionList.addAll(modifierTransactionListByDate());
+                                    transactionAdapter.notifyDataSetChanged();
+                                    transactionRecycleView.scheduleLayoutAnimation();
+                                }
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+            } else if (resultCode == Activity.RESULT_CANCELED) {
                 Log.d("-------------Test result from trans detail ", "CANCEL");
             }
         }

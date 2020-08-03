@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -90,13 +91,14 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         final ImageView icon = findViewById(R.id.transactionIcon_transactionDetails);
 
         SimpleDateFormat sfd = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+        final MoneyToStringConverter converter = new MoneyToStringConverter();
         final ExpenditureList expList = new ExpenditureList();
         String iconString = expList.getIcon(transaction.getExpenditureId());
         int id = getResources().getIdentifier("com.example.moneymanager:drawable/" + iconString, null, null);
 
         dateTime.setText(sfd.format(new Date(transaction.getTransactionTime().getTime())));
         description.setText(transaction.getDescription());
-        amount.setText(moneyToString((double)transaction.getTransactionAmount()));
+        amount.setText(converter.moneyToString((double)transaction.getTransactionAmount()));
         moneySourceName.setText(ms.getMoneySourceName());
         expenditureName.setText(transaction.getExpenditureName());
         icon.setImageResource(id);
@@ -114,6 +116,41 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     setResult(Activity.RESULT_CANCELED);
                     finish();
                 }
+            }
+        });
+
+        // Nút xóa
+        findViewById(R.id.delete_transactionDetails).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Tạo dialog
+                LayoutInflater factory = LayoutInflater.from(TransactionDetailsActivity.this);
+                View DialogView = factory.inflate(R.layout.dialog_two_buttons, null);
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(view.getContext());
+                dialogBuilder.setView(DialogView);
+                final AlertDialog alertDialog = dialogBuilder.create();
+
+                ((TextView) DialogView.findViewById(R.id.message_two_button_dialog)).setText("Bạn có chắc muốn xóa giao dịch này ?");
+                DialogView.findViewById(R.id.confirm_two_button_dialog).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent data = new Intent();
+                        data.putExtra("transaction", transaction);
+                        setResult(Activity.RESULT_FIRST_USER, data);
+                        finish();
+                    }
+                });
+
+                DialogView.findViewById(R.id.cancel_two_button_dialog).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        alertDialog.dismiss();
+                    }
+                });
+
+                alertDialog.show();
+                alertDialog.getWindow().setLayout(850,450);
+                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             }
         });
 
@@ -417,8 +454,10 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     }
                     else {
                         //Trường hợp đầy đủ thông tin
+                        dialog.dismiss();
                         isChange = true;
-                        transaction.setTransactionAmount(Double.valueOf(amount.getText().toString()));
+                        transaction.setTransactionAmount(converter.stringToMoney(amount.getText().toString()));
+                        amount.setText(converter.moneyToString((double)transaction.getTransactionAmount()));
                         transaction.setDescription(description.getText().toString());
 
                         icon.setOnClickListener(null);
@@ -434,29 +473,5 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
             }
         });
-    }
-
-    private String moneyToString(double amount) {
-        if(amount == 0) return "0";
-        StringBuilder mString = new StringBuilder();
-        long mAmount = (long) amount;
-        double remainder = amount - mAmount;
-        int count = 0;
-        while (mAmount > 0) {
-            mString.insert(0, Long.toString(Math.floorMod(mAmount, 10)));
-            mAmount /= 10;
-            count++;
-
-            if (count == 3 && mAmount != 0) {
-                mString.insert(0, ",");
-                count = 0;
-            }
-        }
-
-        String decimal = "";
-        if (remainder > 0)
-            decimal = String.valueOf(remainder).substring(String.valueOf(remainder).indexOf("."));
-
-        return mString.toString() + decimal;
     }
 }

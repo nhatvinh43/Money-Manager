@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class HomeMoneySourceAdapter extends RecyclerView.Adapter<HomeMoneySourceAdapter.ViewHolder> {
     ArrayList<MoneySource> mainModel;
     Context context;
+    MoneyToStringConverter converter = new MoneyToStringConverter();
 
     public HomeMoneySourceAdapter(ArrayList<MoneySource> mainModel, Context context) {
         this.mainModel = mainModel;
@@ -30,7 +31,7 @@ public class HomeMoneySourceAdapter extends RecyclerView.Adapter<HomeMoneySource
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.moneySourceName.setText(mainModel.get(position).getMoneySourceName());
-        holder.moneySourceTotal.setText(moneyToString((double)mainModel.get(position).getAmount()));
+        holder.moneySourceTotal.setText(converter.moneyToString((double)mainModel.get(position).getAmount()));
         holder.moneySourceCurrency.setText(mainModel.get(position).getCurrencyName());
     }
 
@@ -50,29 +51,5 @@ public class HomeMoneySourceAdapter extends RecyclerView.Adapter<HomeMoneySource
             moneySourceTotal = itemView.findViewById(R.id.moneySourceTotal);
             moneySourceCurrency = itemView.findViewById(R.id.moneySourceCurrency);
         }
-    }
-
-    private String moneyToString(double amount) {
-        if(amount == 0) return "0";
-        StringBuilder mString = new StringBuilder();
-        long mAmount = (long) amount;
-        double remainder = amount - mAmount;
-        int count = 0;
-        while (mAmount > 0) {
-            mString.insert(0, Long.toString(Math.floorMod(mAmount, 10)));
-            mAmount /= 10;
-            count++;
-
-            if (count == 3 && mAmount != 0) {
-                mString.insert(0, ",");
-                count = 0;
-            }
-        }
-
-        String decimal = "";
-        if (remainder > 0)
-            decimal = String.valueOf(remainder).substring(String.valueOf(remainder).indexOf("."));
-
-        return mString.toString() + decimal;
     }
 }
