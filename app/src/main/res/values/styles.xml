@@ -67,4 +67,20 @@
         <item name="android:datePickerMode">calendar</item>
         <item name="android:minDate">01/01/2000</item>
     </style>
+
+    <style name="MonthPickerDialogStyle" >
+        <item name="monthBgColor">@color/colorPrimaryDark</item>
+        <item name="monthBgSelectedColor">@color/colorAccent</item>
+        <item name="monthFontColorSelected">@color/white</item>
+        <item name="monthFontColorNormal">@color/white</item>
+        <item name="monthFontColorDisabled">@color/overlay</item>
+
+        <item name="headerBgColor">@color/colorPrimaryDark</item>
+        <item name="headerFontColorSelected">#fff</item>
+        <item name="headerFontColorNormal">#85FFFFFF</item>
+        <item name="headerTitleColor">#fff</item>
+
+        <item name="dialogActionButtonColor">@color/colorAccent</item>
+    </style>
+
 </resources>

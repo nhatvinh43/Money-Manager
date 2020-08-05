@@ -1,17 +1,19 @@
 package com.example.moneymanager;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.core.math.MathUtils;
@@ -53,6 +55,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.whiteelephant.monthpicker.MonthPickerDialog;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -79,6 +82,7 @@ public class HomeFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     public static final int HOME_RQCODE = 2;
     public static final int HOME_TRANSACTION_RQCODE = 3;
+    ViewMode viewMode = ViewMode.DAY;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -183,8 +187,17 @@ public class HomeFragment extends Fragment {
         selectedMoneySource = moneySourceList.get(0);
     }
 
+    enum ViewMode {
+        DAY,
+        WEEK,
+        MONTH,
+        QUARTER,
+        YEAR,
+        MANUAL
+    }
     private void initView(View view) {
         final MoneyToStringConverter converter = new MoneyToStringConverter();
+
 
         // Moneysource Info Initiation
         final WaveLoadingView waveLoadingView = view.findViewById(R.id.waveLoadingView);
@@ -210,37 +223,179 @@ public class HomeFragment extends Fragment {
         dateHome.setText(sdf.format(mcurrentDate.getTime()));
         dayOfWeek.setText("Hôm nay");
 
+
+        //"View by" menu initiation
+        Spinner viewByMenu = view.findViewById(R.id.viewBy_home);
+        String[] viewByMenuItems = new String[]{"Ngày", "Tuần", "Tháng", "Quý", "Năm", "Chọn"};
+
+        ArrayAdapter<String> viewByAdapter = new ArrayAdapter<String>(view.getContext(), R.layout.spinner_menu, viewByMenuItems);
+        viewByMenu.setAdapter(viewByAdapter);
+        //NOTE: file layout của dialog chọn khoảng thời gian là dialog_choose_time.xml
+        viewByMenu.setSelection(0);
+        viewByMenu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String selectedItem = parent.getItemAtPosition(position).toString();
+                switch (selectedItem)
+                {
+                    case "Ngày":
+                    {
+                        viewMode = ViewMode.DAY;
+                        break;
+                    }
+                    case "Tuần":
+                    {
+                        viewMode = ViewMode.WEEK;
+                        break;
+                    }
+                    case "Tháng":
+                    {
+                        viewMode = ViewMode.MONTH;
+                        break;
+                    }
+                    case "Quý":
+                    {
+                        viewMode = ViewMode.QUARTER;
+                        break;
+                    }
+                    case "Năm":
+                    {
+                        viewMode = ViewMode.YEAR;
+                        break;
+                    }
+                    case "Chọn":
+                    {
+                        viewMode = ViewMode.MANUAL;
+
+                        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getContext());
+                        builder.setView(R.layout.dialog_choose_time);
+                        final AlertDialog chooseTimeDialog  = builder.create();
+                        chooseTimeDialog.show();
+                        chooseTimeDialog.getWindow().setLayout(1000,1200);
+                        chooseTimeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+
+
         View.OnClickListener dateSelector = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                        Calendar myCalendar = Calendar.getInstance();
-                        myCalendar.set(Calendar.YEAR, i);
-                        myCalendar.set(Calendar.MONTH, i1);
-                        myCalendar.set(Calendar.DAY_OF_MONTH, i2);
-                        dateHome.setText(sdf.format(myCalendar.getTime()));
 
-                        if (DateUtils.isToday(myCalendar.getTimeInMillis())) {
-                            dayOfWeek.setText("Hôm nay");
-                        } else {
-                            dayOfWeek.setText(getDayOfWeek(myCalendar.get(Calendar.DAY_OF_WEEK)));
-                        }
+                switch(viewMode)
+                {
+                    case DAY:
+                    {
+                        DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                                Calendar myCalendar = Calendar.getInstance();
+                                myCalendar.set(Calendar.YEAR, i);
+                                myCalendar.set(Calendar.MONTH, i1);
+                                myCalendar.set(Calendar.DAY_OF_MONTH, i2);
+                                dateHome.setText(sdf.format(myCalendar.getTime()));
 
-                        mYear = myCalendar.get(Calendar.YEAR);
-                        mMonth = myCalendar.get(Calendar.MONTH);
-                        mDay = myCalendar.get(Calendar.DAY_OF_MONTH);
+                                if (DateUtils.isToday(myCalendar.getTimeInMillis())) {
+                                    dayOfWeek.setText("Hôm nay");
+                                } else {
+                                    dayOfWeek.setText(getDayOfWeek(myCalendar.get(Calendar.DAY_OF_WEEK)));
+                                }
 
-                        transactionList.clear();
-                        transactionList.addAll(modifierTransactionListByDate());
-                        transactionAdapter.notifyDataSetChanged();
-                        transactionRecycleView.scheduleLayoutAnimation();
+                                mYear = myCalendar.get(Calendar.YEAR);
+                                mMonth = myCalendar.get(Calendar.MONTH);
+                                mDay = myCalendar.get(Calendar.DAY_OF_MONTH);
+
+                                transactionList.clear();
+                                transactionList.addAll(modifierTransactionListByDate());
+                                transactionAdapter.notifyDataSetChanged();
+                                transactionRecycleView.scheduleLayoutAnimation();
+                            }
+                        };
+                        new DatePickerDialog(getContext(), R.style.DatePickerDialog, date, mYear, mMonth, mDay).show();
+                        break;
                     }
-                };
-                new DatePickerDialog(getContext(), R.style.DatePickerDialog, date, mYear, mMonth, mDay).show();
+                    case WEEK:
+                    {
+
+                        break;
+                    }
+                    case MONTH:
+                    {
+                        Calendar today = Calendar.getInstance();
+                        MonthPickerDialog.Builder builder = new MonthPickerDialog.Builder(getContext(),
+                                new MonthPickerDialog.OnDateSetListener() {
+                                    @Override
+                                    public void onDateSet(int selectedMonth, int selectedYear)
+                                    {
+                                        //Code code code
+                                    }
+                                }, today.get(Calendar.YEAR), today.get(Calendar.MONTH));
+                        builder.setActivatedMonth(Calendar.JULY)
+                                .setMinYear(2010)
+                                .setActivatedYear(2020)
+                                .setMaxYear(2099)
+                                .setMinMonth(Calendar.JANUARY)
+                                .setTitle("Chọn tháng")
+                                .setMonthRange(Calendar.JANUARY, Calendar.DECEMBER)
+                                .setOnMonthChangedListener(new MonthPickerDialog.OnMonthChangedListener() {
+                                    @Override
+                                    public void onMonthChanged(int selectedMonth) {} }).setOnYearChangedListener(new MonthPickerDialog.OnYearChangedListener() {
+                            @Override
+                            public void onYearChanged(int selectedYear) {}}).build().show();
+                        break;
+                    }
+                    case QUARTER:
+                    {
+                        break;
+                    }
+                    case YEAR:
+                    {
+                        Calendar today = Calendar.getInstance();
+                        MonthPickerDialog.Builder builder = new MonthPickerDialog.Builder(getContext(),
+                                new MonthPickerDialog.OnDateSetListener() {
+                                    @Override
+                                    public void onDateSet(int selectedMonth, int selectedYear)
+                                    {
+                                        //Bỏ qua month
+                                    }
+                                }, today.get(Calendar.YEAR), today.get(Calendar.MONTH));
+                        builder.setActivatedMonth(Calendar.JULY)
+                                .setMinYear(2010)
+                                .setActivatedYear(2020)
+                                .setMaxYear(2099)
+                                .setMinMonth(Calendar.JANUARY)
+                                .setTitle("Chọn năm")
+                                .showYearOnly()
+                                .setOnMonthChangedListener(new MonthPickerDialog.OnMonthChangedListener() {
+                                    @Override
+                                    public void onMonthChanged(int selectedMonth) {} }).setOnYearChangedListener(new MonthPickerDialog.OnYearChangedListener() {
+                            @Override
+                            public void onYearChanged(int selectedYear) {}}).build().show();
+                        break;
+                    }
+                    case MANUAL:
+                    {
+
+                        break;
+                    }
+                }
+
+
             }
         };
+
+
         dateArrow.setOnClickListener(dateSelector);
         dayOfWeek.setOnClickListener(dateSelector);
         dateHome.setOnClickListener(dateSelector);
@@ -344,25 +499,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        //"View by" menu initiation
-        Spinner viewByMenu = view.findViewById(R.id.viewBy_home);
-        String[] viewByMenuItems = new String[]{"Ngày", "Tuần", "Tháng", "Quý", "Năm", "Chọn"};
 
-        ArrayAdapter<String> viewByAdapter = new ArrayAdapter<String>(view.getContext(), R.layout.spinner_menu, viewByMenuItems);
-        viewByMenu.setAdapter(viewByAdapter);
-
-        //NOTE: file layout của dialog chọn khoảng thời gian là dialog_choose_time.xml
-        viewByMenu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
 
         //Filter menu initiation
