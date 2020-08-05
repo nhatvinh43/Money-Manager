@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -134,6 +135,8 @@ public class AddMoneySourceActivity extends AppCompatActivity {
                     dataHelper.createMoneySource(firebaseAuth.getCurrentUser().getUid(), resMoneySource.getMoneySourceName(), resMoneySource.getAmount(),
                             resMoneySource.getLimit(), resMoneySource.getCurrencyId(), resMoneySource.getCurrencyName());
                     Toast.makeText(dialog.getContext(), "Thành công", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent();
+                    setResult(1, intent);
                     finish();
                 }
             }

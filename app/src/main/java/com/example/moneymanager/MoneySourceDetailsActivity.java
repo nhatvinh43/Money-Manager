@@ -161,6 +161,8 @@ public class MoneySourceDetailsActivity extends AppCompatActivity {
                     //Làm Việc Với DataBase
                     dataHelper.updateMoneySource(MSId, resMoneySource.getMoneySourceName(),
                             resMoneySource.getAmount(), resMoneySource.getLimit(), resMoneySource.getCurrencyId(),resMoneySource.getCurrencyName());
+                    Intent intent = new Intent();
+                    setResult(1, intent);
                     finish();
                 }
             }
