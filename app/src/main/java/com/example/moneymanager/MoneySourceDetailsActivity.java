@@ -81,11 +81,12 @@ public class MoneySourceDetailsActivity extends AppCompatActivity {
         eAmount = findViewById(R.id.moneySourceAmount_moneySourceDetails);
         eCur = findViewById(R.id.moneySourceUnit_moneySourceDetails);
 
+        MoneyToStringConverter converter = new MoneyToStringConverter();
 
         name.setText(MS.getMoneySourceName());
         eName.setText(MS.getMoneySourceName());
 
-        amount.setText(MS.getAmount().toString());
+        amount.setText(converter.moneyToString(Double.valueOf((Double) MS.getAmount())));
         eAmount.setText(MS.getAmount().toString());
 
         cur.setText(MS.getCurrencyName());
