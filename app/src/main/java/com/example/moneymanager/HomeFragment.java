@@ -379,6 +379,7 @@ public class HomeFragment extends Fragment {
                         chooseTimeDialog.findViewById(R.id.confirm_choose_time).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                dayOfWeek.setText("Mốc thời gian");
                                 dateHome.setText(sdf.format(fromCal.getTime()) + " - " + sdf.format(toCal.getTime()));
 
                                 transactionList.clear();
@@ -737,22 +738,22 @@ public class HomeFragment extends Fragment {
 
         // Search initiation
         search = view.findViewById(R.id.search_home);
-//        search.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable editable) {
-//                filter(editable.toString());
-//            }
-//        });
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                filter(editable.toString());
+            }
+        });
 
 
         //Filter menu initiation
@@ -904,7 +905,7 @@ public class HomeFragment extends Fragment {
         ArrayList<Transaction> filterList = new ArrayList<>();
 
         if(text.isEmpty()) {
-            filterList.addAll(transactionList);
+            return;
         } else {
             MoneyToStringConverter converter = new MoneyToStringConverter();
             SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
