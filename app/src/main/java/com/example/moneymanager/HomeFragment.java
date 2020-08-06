@@ -379,6 +379,7 @@ public class HomeFragment extends Fragment {
                         chooseTimeDialog.findViewById(R.id.confirm_choose_time).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                dayOfWeek.setText("Mốc thời gian");
                                 dateHome.setText(sdf.format(fromCal.getTime()) + " - " + sdf.format(toCal.getTime()));
 
                                 transactionList.clear();
@@ -904,7 +905,7 @@ public class HomeFragment extends Fragment {
         ArrayList<Transaction> filterList = new ArrayList<>();
 
         if(text.isEmpty()) {
-            filterList.addAll(transactionList);
+            return;
         } else {
             MoneyToStringConverter converter = new MoneyToStringConverter();
             SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
@@ -999,6 +1000,7 @@ public class HomeFragment extends Fragment {
 
         if(requestCode == HOME_RQCODE) { // Xử lý khi thêm transaction mới
             if(resultCode == Activity.RESULT_OK) {
+                Log.d("-------------Test result from add trans ", "OKE");
                 DataHelper dataHelper = new DataHelper();
                 Transaction resTransaction = (Transaction) data.getParcelableExtra("transaction");
                 String msId = resTransaction.getMoneySourceId();
@@ -1023,7 +1025,9 @@ public class HomeFragment extends Fragment {
                         moneySourceAdapter.notifyDataSetChanged();
 
                         // Cập nhập lại view của list transaction
-                        if(selectedMoneySource.getMoneySourceId().compareTo(msId) == 0) {
+                        Log.d("-------------Test result from add trans ", selectedMoneySource.getMoneySourceId() + " compared with " + msId);
+                        if(selectedMoneySource.getMoneySourceId().equals(msId)) {
+                            Log.d("-------------Test result from add trans ", "Equals");
                             selectedMoneySource = ms;
 
                             transactionList.clear();

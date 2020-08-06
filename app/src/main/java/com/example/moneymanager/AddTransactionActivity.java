@@ -126,7 +126,7 @@ public class AddTransactionActivity extends AppCompatActivity {
         loading.setVisibility(View.VISIBLE);
         container.setVisibility(View.INVISIBLE);
 
-        dataHelper.getMoneySource(new MoneySourceCallBack() {
+        dataHelper.getMoneySourceWithoutTransactionList(new MoneySourceCallBack() {
             @Override
             public void onCallBack(ArrayList<MoneySource> list) {
                 dataSet.addAll(list);
