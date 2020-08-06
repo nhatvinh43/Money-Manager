@@ -12,7 +12,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/homeContainer"
+        android:id="@+id/statisticsContainer"
         android:visibility="invisible"
         android:paddingTop="50dp">
 
@@ -94,7 +94,7 @@
                 android:layout_height="wrap_content">
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/moneySourceList"
+                    android:id="@+id/moneySourceList_statistics"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:background="@drawable/roundedcorners"
@@ -103,7 +103,7 @@
 
 
                 <RelativeLayout
-                    android:layout_below="@id/moneySourceList"
+                    android:layout_below="@id/moneySourceList_statistics"
                     android:id="@+id/statisticsRow"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -117,7 +117,11 @@
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:fontFamily="sans-serif-medium"/>
-
+                    <com.anychart.AnyChartView
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:layout_below="@+id/statisticsTittle"
+                        android:id="@+id/overallChart"/>
                     <LinearLayout
                         android:id="@+id/noTransaction_statistics"
                         android:layout_width="wrap_content"
@@ -217,7 +221,7 @@
     </RelativeLayout>
 
     <ProgressBar
-        android:id="@+id/loading"
+        android:id="@+id/loading_statistics"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
