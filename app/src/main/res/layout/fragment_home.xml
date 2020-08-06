@@ -174,7 +174,7 @@
                                     app:wlv_titleTopSize="18sp"
                                     app:wlv_titleCenterSize="22sp"
                                     app:wlv_waveAmplitude="30"
-                                    app:wlv_waveColor="@color/colorAccent"/>
+                                    app:wlv_waveColor="?colorAccent"/>
 
 
                             <LinearLayout

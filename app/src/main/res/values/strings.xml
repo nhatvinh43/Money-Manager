@@ -116,7 +116,7 @@
     <string name="oldPasswordTitle">Đổi mật khẩu</string>
     <string name="oldPasswordConfirm">Vui lòng nhập lại mật khẩu cũ</string>
     <string name="oldPassword">Mật khẩu cũ</string>
-    <string name="changeAvatar">Đổi ảnh đại diện</string>
+    <string name="changeAvatar">Đổi ảnh</string>
     <string name="ddmmyyyy">dd/mm/yyyy</string>
     <string name="mmddyyyy">mm/dd/yyyy</string>
     <string name="yyyyddmm">yyyy/dd/mm</string>

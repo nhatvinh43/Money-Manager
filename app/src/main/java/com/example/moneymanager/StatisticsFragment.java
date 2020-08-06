@@ -107,7 +107,7 @@ public class StatisticsFragment extends Fragment {
         dateHome = view.findViewById(R.id.date_statistics);
         dateArrow = view.findViewById(R.id.dateArrow_statistics);
 
-        SharedPreferences prefs = ((MainActivity)getActivity()).getSharedPreferences("DatesPreferences", MODE_PRIVATE);
+        SharedPreferences prefs = ((MainActivity)getActivity()).getSharedPreferences("MyPreferences", MODE_PRIVATE);
         String myFormat = prefs.getString("currentDate", "dd/MM/yyyy");
 
         final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.FRANCE);

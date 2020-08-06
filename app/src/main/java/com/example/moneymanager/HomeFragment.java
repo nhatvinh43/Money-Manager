@@ -34,6 +34,7 @@ import android.text.PrecomputedText;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +54,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -162,6 +164,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
@@ -218,7 +221,7 @@ public class HomeFragment extends Fragment {
         dateHome = view.findViewById(R.id.date_home);
         dateArrow = view.findViewById(R.id.dateArrow_home);
 
-        SharedPreferences prefs = ((MainActivity)getActivity()).getSharedPreferences("DatesPreferences", MODE_PRIVATE);
+        SharedPreferences prefs = ((MainActivity)getActivity()).getSharedPreferences("MyPreferences", MODE_PRIVATE);
         String myFormat = prefs.getString("currentDate", "dd/MM/yyyy");
 
         final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.CHINA);

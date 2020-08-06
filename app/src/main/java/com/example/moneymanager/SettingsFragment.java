@@ -199,64 +199,28 @@ public class SettingsFragment extends Fragment {
                 ddmmyyyy.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        SharedPreferences.Editor editor = ((MainActivity)getActivity()).getSharedPreferences("DatesPreferences", MODE_PRIVATE).edit();
-                        editor.putString("currentDate", "dd/MM/yyyy");
-                        editor.apply();
-                        formatDatePanel.hide();
-
-                        settingsProgressBar.setVisibility(View.VISIBLE);
-
-                        Intent intent = ((MainActivity)getActivity()).getIntent();
-                        ((MainActivity)getActivity()).finish();
-                        startActivity(intent);
+                        changeDateFormat("dd/MM/yyyy", settingsProgressBar);
                     }
                 });
 
                 mmddyyyy.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        SharedPreferences.Editor editor = ((MainActivity)getActivity()).getSharedPreferences("DatesPreferences", MODE_PRIVATE).edit();
-                        editor.putString("currentDate", "MM/dd/yyyy");
-                        editor.apply();
-                        formatDatePanel.hide();
-
-                        settingsProgressBar.setVisibility(View.VISIBLE);
-
-                        Intent intent = ((MainActivity)getActivity()).getIntent();
-                        ((MainActivity)getActivity()).finish();
-                        startActivity(intent);
+                        changeDateFormat("MM/dd/yyyy", settingsProgressBar);
                     }
                 });
 
                 yyyyddmm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        SharedPreferences.Editor editor = ((MainActivity)getActivity()).getSharedPreferences("DatesPreferences", MODE_PRIVATE).edit();
-                        editor.putString("currentDate", "yyyy/dd/MM");
-                        editor.apply();
-                        formatDatePanel.hide();
-
-                        settingsProgressBar.setVisibility(View.VISIBLE);
-
-                        Intent intent = ((MainActivity)getActivity()).getIntent();
-                        ((MainActivity)getActivity()).finish();
-                        startActivity(intent);
+                        changeDateFormat("yyyy/dd/MM", settingsProgressBar);
                     }
                 });
 
                 yyyymmdd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        SharedPreferences.Editor editor = ((MainActivity)getActivity()).getSharedPreferences("DatesPreferences", MODE_PRIVATE).edit();
-                        editor.putString("currentDate", "yyyy/MM/dd");
-                        editor.apply();
-                        formatDatePanel.hide();
-
-                        settingsProgressBar.setVisibility(View.VISIBLE);
-
-                        Intent intent = ((MainActivity)getActivity()).getIntent();
-                        ((MainActivity)getActivity()).finish();
-                        startActivity(intent);
+                        changeDateFormat("yyyy/MM/dd", settingsProgressBar);
                     }
                 });
 
@@ -274,7 +238,6 @@ public class SettingsFragment extends Fragment {
                 reminderPanel.getWindow().setLayout(1000,1200);
                 reminderPanel.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-              
             }
         });
 
@@ -284,14 +247,79 @@ public class SettingsFragment extends Fragment {
             public void onClick(View v) {
                 androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(v.getContext());
                 builder.setView(R.layout.dialog_color);
-                final AlertDialog exchangeMoneyPanel  = builder.create();
-                exchangeMoneyPanel.show();
-                exchangeMoneyPanel.getWindow().setLayout(1000,1200);
-                exchangeMoneyPanel.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                final AlertDialog colorChangePanel  = builder.create();
+                colorChangePanel.show();
+                colorChangePanel.getWindow().setLayout(1000,1200);
+                colorChangePanel.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                
+                View yellow = colorChangePanel.findViewById(R.id.yellow_color);
+                View blue = colorChangePanel.findViewById(R.id.blue_color);
+                View red = colorChangePanel.findViewById(R.id.red_color);
+                View green = colorChangePanel.findViewById(R.id.green_color);
+                View purple = colorChangePanel.findViewById(R.id.purple_color);
+
+                yellow.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        changeColor("yellow", settingsProgressBar);
+                    }
+                });
+
+                blue.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        changeColor("blue", settingsProgressBar);
+                    }
+                });
+
+                red.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        changeColor("red", settingsProgressBar);
+                    }
+                });
+
+                green.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        changeColor("green", settingsProgressBar);
+                    }
+                });
+
+                purple.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        changeColor("purple", settingsProgressBar);
+                    }
+                });
 
             }
         });
 
+    }
+
+    void changeDateFormat(String format, ProgressBar progressBar)
+    {
+        SharedPreferences.Editor editor = ((MainActivity)getActivity()).getSharedPreferences("MyPreferences", MODE_PRIVATE).edit();
+        editor.putString("currentDate", format);
+        editor.apply();
+
+        progressBar.setVisibility(View.VISIBLE);
+
+        Intent intent = ((MainActivity)getActivity()).getIntent().addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        ((MainActivity)getActivity()).finish();
+        startActivity(intent);
+    }
+
+    void changeColor(String color, ProgressBar progressBar)
+    {
+        SharedPreferences.Editor editor = ((MainActivity)getActivity()).getSharedPreferences("MyPreferences", MODE_PRIVATE).edit();
+        editor.putString("currentColor", color);
+        editor.apply();
+
+        Intent intent = ((MainActivity)getActivity()).getIntent();
+        ((MainActivity)getActivity()).finish();
+        startActivity(intent);
     }
 
     @Override
