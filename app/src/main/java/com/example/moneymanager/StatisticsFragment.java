@@ -210,6 +210,7 @@ public class StatisticsFragment extends Fragment {
 
                         transactions.clear();
                         transactions.addAll(modifierTransactionListByViewMode());
+                        
                         setupDateChart();
                         break;
                     }
