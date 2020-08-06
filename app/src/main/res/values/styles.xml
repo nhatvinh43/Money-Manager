@@ -29,7 +29,7 @@
     <style name="BottomNavigationView.Active" parent="@style/TextAppearance.AppCompat.Caption">
         <item name="android:textSize">11sp</item>
         <item name="fontFamily">sans-serif-light</item>
-        <item name="android:textColor">@color/colorAccentText</item>
+        <item name="android:textColor">?colorAccent</item>
     </style>
 
     <style name="DatePickerDialog" parent="Theme.AppCompat.Light.Dialog">
@@ -81,6 +81,26 @@
         <item name="headerTitleColor">#fff</item>
 
         <item name="dialogActionButtonColor">@color/colorAccent</item>
+    </style>
+
+    <style name="AppThemeBlue" parent="AppTheme">
+        <!-- Customize your theme here. -->
+        <item name="colorAccent">@color/blueAccent</item>
+    </style>
+
+    <style name="AppThemeRed" parent="AppTheme">
+        <!-- Customize your theme here. -->
+        <item name="colorAccent">@color/redAccent</item>
+    </style>
+
+    <style name="AppThemeGreen" parent="AppTheme">
+        <!-- Customize your theme here. -->
+        <item name="colorAccent">@color/greenAccent</item>
+    </style>
+
+    <style name="AppThemePurple" parent="AppTheme">
+        <!-- Customize your theme here. -->
+        <item name="colorAccent">@color/purpleAccent</item>
     </style>
 
 </resources>

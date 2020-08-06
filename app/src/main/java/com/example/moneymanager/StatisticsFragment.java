@@ -1,6 +1,7 @@
 package com.example.moneymanager;
 
 import android.app.DatePickerDialog;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -25,6 +26,8 @@ import com.whiteelephant.monthpicker.MonthPickerDialog;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -104,7 +107,9 @@ public class StatisticsFragment extends Fragment {
         dateHome = view.findViewById(R.id.date_statistics);
         dateArrow = view.findViewById(R.id.dateArrow_statistics);
 
-        String myFormat = "dd/MM/yyyy";
+        SharedPreferences prefs = ((MainActivity)getActivity()).getSharedPreferences("MyPreferences", MODE_PRIVATE);
+        String myFormat = prefs.getString("currentDate", "dd/MM/yyyy");
+
         final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.FRANCE);
 
         final Calendar mcurrentDate = Calendar.getInstance();
