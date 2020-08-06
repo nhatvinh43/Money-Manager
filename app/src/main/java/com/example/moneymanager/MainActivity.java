@@ -1,6 +1,7 @@
 package com.example.moneymanager;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -97,6 +98,8 @@ public class MainActivity extends AppCompatActivity {
 
         navView.getMenu().getItem(2).setEnabled(false);
         //End fragment controls
+
+
     }
 
     @Override

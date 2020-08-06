@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/homeContainer"
-            android:visibility="visible"
+            android:visibility="invisible"
             android:paddingTop="50dp">
 
             <RelativeLayout

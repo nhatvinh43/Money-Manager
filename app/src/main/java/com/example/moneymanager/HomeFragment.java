@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
@@ -69,6 +70,7 @@ import javax.xml.transform.Result;
 import me.itangqi.waveloadingview.WaveLoadingView;
 
 import static android.content.ContentValues.TAG;
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -216,8 +218,10 @@ public class HomeFragment extends Fragment {
         dateHome = view.findViewById(R.id.date_home);
         dateArrow = view.findViewById(R.id.dateArrow_home);
 
-        String myFormat = "dd/MM/yyyy";
-        final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.FRANCE);
+        SharedPreferences prefs = ((MainActivity)getActivity()).getSharedPreferences("DatesPreferences", MODE_PRIVATE);
+        String myFormat = prefs.getString("currentDate", "dd/MM/yyyy");
+
+        final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.CHINA);
 
         final Calendar mcurrentDate = Calendar.getInstance();
         mYear = mcurrentDate.get(Calendar.YEAR);
