@@ -2,6 +2,7 @@ package com.example.moneymanager;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -10,12 +11,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +32,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
 import com.squareup.picasso.Picasso;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -169,16 +175,54 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        final RelativeLayout settingsPanel = view.findViewById(R.id.settingsPanel);
+        final ProgressBar settingsProgressBar = view.findViewById(R.id.settingsProgressBar);
+
         //Nút định dạng ngày tháng
         view.findViewById(R.id.formatDateButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(v.getContext());
                 builder.setView(R.layout.dialog_format_date);
-                final AlertDialog exchangeMoneyPanel  = builder.create();
-                exchangeMoneyPanel.show();
-                exchangeMoneyPanel.getWindow().setLayout(1000,1200);
-                exchangeMoneyPanel.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                final AlertDialog formatDatePanel  = builder.create();
+                formatDatePanel.show();
+                formatDatePanel.getWindow().setLayout(1000,1200);
+                formatDatePanel.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                Button ddmmyyyy = formatDatePanel.findViewById(R.id.ddmmyyyy_format_date);
+                Button mmddyyyy = formatDatePanel.findViewById(R.id.mmddyyyy_format_date);
+                Button yyyyddmm = formatDatePanel.findViewById(R.id.yyyyddmm_format_date);
+                Button yyyymmdd = formatDatePanel.findViewById(R.id.yyyymmdd_format_date);
+
+
+
+                ddmmyyyy.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        changeDateFormat("dd/MM/yyyy", settingsProgressBar);
+                    }
+                });
+
+                mmddyyyy.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        changeDateFormat("MM/dd/yyyy", settingsProgressBar);
+                    }
+                });
+
+                yyyyddmm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        changeDateFormat("yyyy/dd/MM", settingsProgressBar);
+                    }
+                });
+
+                yyyymmdd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        changeDateFormat("yyyy/MM/dd", settingsProgressBar);
+                    }
+                });
 
             }
         });
@@ -189,10 +233,10 @@ public class SettingsFragment extends Fragment {
             public void onClick(View v) {
                 androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(v.getContext());
                 builder.setView(R.layout.dialog_reminder);
-                final AlertDialog exchangeMoneyPanel  = builder.create();
-                exchangeMoneyPanel.show();
-                exchangeMoneyPanel.getWindow().setLayout(1000,1200);
-                exchangeMoneyPanel.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                final AlertDialog reminderPanel  = builder.create();
+                reminderPanel.show();
+                reminderPanel.getWindow().setLayout(1000,1200);
+                reminderPanel.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
             }
         });
@@ -203,14 +247,79 @@ public class SettingsFragment extends Fragment {
             public void onClick(View v) {
                 androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(v.getContext());
                 builder.setView(R.layout.dialog_color);
-                final AlertDialog exchangeMoneyPanel  = builder.create();
-                exchangeMoneyPanel.show();
-                exchangeMoneyPanel.getWindow().setLayout(1000,1200);
-                exchangeMoneyPanel.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                final AlertDialog colorChangePanel  = builder.create();
+                colorChangePanel.show();
+                colorChangePanel.getWindow().setLayout(1000,1200);
+                colorChangePanel.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                
+                View yellow = colorChangePanel.findViewById(R.id.yellow_color);
+                View blue = colorChangePanel.findViewById(R.id.blue_color);
+                View red = colorChangePanel.findViewById(R.id.red_color);
+                View green = colorChangePanel.findViewById(R.id.green_color);
+                View purple = colorChangePanel.findViewById(R.id.purple_color);
+
+                yellow.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        changeColor("yellow", settingsProgressBar);
+                    }
+                });
+
+                blue.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        changeColor("blue", settingsProgressBar);
+                    }
+                });
+
+                red.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        changeColor("red", settingsProgressBar);
+                    }
+                });
+
+                green.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        changeColor("green", settingsProgressBar);
+                    }
+                });
+
+                purple.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        changeColor("purple", settingsProgressBar);
+                    }
+                });
 
             }
         });
 
+    }
+
+    void changeDateFormat(String format, ProgressBar progressBar)
+    {
+        SharedPreferences.Editor editor = ((MainActivity)getActivity()).getSharedPreferences("MyPreferences", MODE_PRIVATE).edit();
+        editor.putString("currentDate", format);
+        editor.apply();
+
+        progressBar.setVisibility(View.VISIBLE);
+
+        Intent intent = ((MainActivity)getActivity()).getIntent().addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        ((MainActivity)getActivity()).finish();
+        startActivity(intent);
+    }
+
+    void changeColor(String color, ProgressBar progressBar)
+    {
+        SharedPreferences.Editor editor = ((MainActivity)getActivity()).getSharedPreferences("MyPreferences", MODE_PRIVATE).edit();
+        editor.putString("currentColor", color);
+        editor.apply();
+
+        Intent intent = ((MainActivity)getActivity()).getIntent();
+        ((MainActivity)getActivity()).finish();
+        startActivity(intent);
     }
 
     @Override

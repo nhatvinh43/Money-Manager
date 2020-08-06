@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
@@ -33,6 +34,7 @@ import android.text.PrecomputedText;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +55,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -72,6 +75,7 @@ import javax.xml.transform.Result;
 import me.itangqi.waveloadingview.WaveLoadingView;
 
 import static android.content.ContentValues.TAG;
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -168,6 +172,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
@@ -224,8 +229,10 @@ public class HomeFragment extends Fragment {
         dateHome = view.findViewById(R.id.date_home);
         dateArrow = view.findViewById(R.id.dateArrow_home);
 
-        String myFormat = "dd/MM/yyyy";
-        final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.FRANCE);
+        SharedPreferences prefs = ((MainActivity)getActivity()).getSharedPreferences("MyPreferences", MODE_PRIVATE);
+        String myFormat = prefs.getString("currentDate", "dd/MM/yyyy");
+
+        final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.CHINA);
 
         final Calendar mcurrentDate = Calendar.getInstance();
         mYear = mcurrentDate.get(Calendar.YEAR);

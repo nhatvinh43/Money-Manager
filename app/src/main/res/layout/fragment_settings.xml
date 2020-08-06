@@ -6,6 +6,7 @@
     tools:context=".SettingsFragment">
 
    <RelativeLayout
+       android:id="@+id/settingsPanel"
        android:layout_width="match_parent"
        android:layout_height="match_parent"
        android:background="@color/black">
@@ -62,8 +63,8 @@
 
                <ImageView
                    android:layout_centerVertical="true"
-                   android:layout_width="20dp"
-                   android:layout_height="20dp"
+                   android:layout_width="15dp"
+                   android:layout_height="15dp"
                    android:tint="@color/overlay"
                    android:src="@drawable/ic_right"
                    android:layout_alignParentEnd="true"/>
@@ -101,8 +102,8 @@
 
                <ImageView
                    android:layout_centerVertical="true"
-                   android:layout_width="20dp"
-                   android:layout_height="20dp"
+                   android:layout_width="15dp"
+                   android:layout_height="15dp"
                    android:tint="@color/overlay"
                    android:src="@drawable/ic_right"
                    android:layout_alignParentEnd="true"/>
@@ -140,8 +141,8 @@
 
                <ImageView
                    android:layout_centerVertical="true"
-                   android:layout_width="20dp"
-                   android:layout_height="20dp"
+                   android:layout_width="15dp"
+                   android:layout_height="15dp"
                    android:tint="@color/overlay"
                    android:src="@drawable/ic_right"
                    android:layout_alignParentEnd="true"/>
@@ -181,8 +182,8 @@
 
                <ImageView
                    android:layout_centerVertical="true"
-                   android:layout_width="20dp"
-                   android:layout_height="20dp"
+                   android:layout_width="15dp"
+                   android:layout_height="15dp"
                    android:tint="@color/overlay"
                    android:src="@drawable/ic_right"
                    android:layout_alignParentEnd="true"/>
@@ -220,8 +221,8 @@
 
                <ImageView
                    android:layout_centerVertical="true"
-                   android:layout_width="20dp"
-                   android:layout_height="20dp"
+                   android:layout_width="15dp"
+                   android:layout_height="15dp"
                    android:tint="@color/redAccent"
                    android:src="@drawable/ic_right"
                    android:layout_alignParentEnd="true"/>
@@ -278,6 +279,11 @@
    </RelativeLayout>
 
 
-
+<ProgressBar
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:id="@+id/settingsProgressBar"
+    android:visibility="invisible"/>
 
 </FrameLayout>

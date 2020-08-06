@@ -1,6 +1,7 @@
 package com.example.moneymanager;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -44,6 +45,42 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        String colorScheme = getSharedPreferences("MyPreferences", MODE_PRIVATE).getString("currentColor", "yellow");
+
+        switch (colorScheme)
+        {
+            case "yellow":
+            {
+                getTheme().applyStyle(R.style.AppTheme,true);
+                break;
+            }
+
+            case "blue":
+            {
+                getTheme().applyStyle(R.style.AppThemeBlue,true);
+                break;
+            }
+
+            case "red":
+            {
+                getTheme().applyStyle(R.style.AppThemeRed,true);
+                break;
+            }
+
+            case "green":
+            {
+                getTheme().applyStyle(R.style.AppThemeGreen,true);
+                break;
+            }
+
+            case "purple":
+            {
+                getTheme().applyStyle(R.style.AppThemePurple,true);
+                break;
+            }
+        }
+
         setContentView(R.layout.activity_main);
         final BottomNavigationView navView = findViewById(R.id.nav_view);
         FloatingActionButton addTransaction = findViewById(R.id.addTransactionButton);
@@ -97,6 +134,8 @@ public class MainActivity extends AppCompatActivity {
 
         navView.getMenu().getItem(2).setEnabled(false);
         //End fragment controls
+
+
     }
 
     @Override

@@ -63,7 +63,7 @@
                     android:layout_marginTop="15dp"
                     android:text="@string/change"
                     android:layout_gravity="center_horizontal"
-                    android:textColor="@color/colorAccent"/>
+                    android:textColor="?colorAccent"/>
 
             </LinearLayout>
 
@@ -102,7 +102,7 @@
                     android:layout_marginTop="15dp"
                     android:text="@string/manage"
                     android:layout_gravity="center_horizontal"
-                    android:textColor="@color/colorAccent"/>
+                    android:textColor="?colorAccent"/>
 
             </LinearLayout>
 
@@ -141,7 +141,7 @@
                     android:layout_marginTop="15dp"
                     android:text="@string/manage"
                     android:layout_gravity="center_horizontal"
-                    android:textColor="@color/colorAccent"/>
+                    android:textColor="?colorAccent"/>
 
             </LinearLayout>
 
