@@ -730,22 +730,22 @@ public class HomeFragment extends Fragment {
 
         // Search initiation
         search = view.findViewById(R.id.search_home);
-        search.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                filter(editable.toString());
-            }
-        });
+//        search.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//                filter(editable.toString());
+//            }
+//        });
 
 
         //Filter menu initiation
@@ -992,6 +992,7 @@ public class HomeFragment extends Fragment {
 
         if(requestCode == HOME_RQCODE) { // Xử lý khi thêm transaction mới
             if(resultCode == Activity.RESULT_OK) {
+                Log.d("-------------Test result from add trans ", "OKE");
                 DataHelper dataHelper = new DataHelper();
                 Transaction resTransaction = (Transaction) data.getParcelableExtra("transaction");
                 String msId = resTransaction.getMoneySourceId();
@@ -1016,7 +1017,9 @@ public class HomeFragment extends Fragment {
                         moneySourceAdapter.notifyDataSetChanged();
 
                         // Cập nhập lại view của list transaction
-                        if(selectedMoneySource.getMoneySourceId().compareTo(msId) == 0) {
+                        Log.d("-------------Test result from add trans ", selectedMoneySource.getMoneySourceId() + " compared with " + msId);
+                        if(selectedMoneySource.getMoneySourceId().equals(msId)) {
+                            Log.d("-------------Test result from add trans ", "Equals");
                             selectedMoneySource = ms;
 
                             transactionList.clear();

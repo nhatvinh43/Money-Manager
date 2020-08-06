@@ -125,13 +125,12 @@ public class DataHelper {
         db.collection("moneySources").whereEqualTo("userId", uID).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    public void onComplete(@NonNull final Task<QuerySnapshot> task) {
                         if (task.isComplete()){
 
                         }
                         if (task.isSuccessful()) {
                             final ArrayList<MoneySource> moneySourceList = new ArrayList<>();
-                            int count = 0;
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 final MoneySource ms = new MoneySource();
                                 ms.setUserId((String) document.getData().get("userId"));
@@ -142,40 +141,54 @@ public class DataHelper {
                                 ms.setCurrencyId((String) document.getData().get("currencyId"));
                                 ms.setCurrencyName((String) document.getData().get("currencyName"));
 
-                                if(count == task.getResult().size() - 1) {
-                                    getTransaction(new TransactionCallBack() {
-                                        @Override
-                                        public void onCallBack(ArrayList<Transaction> list) {
-                                            ms.setTransactionsList(list);
-                                            moneySourceList.add(ms);
+                                getTransaction(new TransactionCallBack() {
+                                    @Override
+                                    public void onCallBack(ArrayList<Transaction> list) {
+                                        ms.setTransactionsList(list);
+                                        moneySourceList.add(ms);
+
+                                        Log.d("------------------------ Size", moneySourceList.size() + "  ---");
+                                        if(moneySourceList.size() == task.getResult().size()) {
                                             callBack.onCallBack(moneySourceList);
                                         }
+                                    }
 
-                                        @Override
-                                        public void onCallBackFail(String message) {
+                                    @Override
+                                    public void onCallBackFail(String message) {
 
-                                        }
-                                    }, document.getId());
-                                    Log.d("Test", "---------------");
-                                }
-                                else {
-                                    getTransaction(new TransactionCallBack() {
-                                        @Override
-                                        public void onCallBack(ArrayList<Transaction> list) {
-                                            ms.setTransactionsList(list);
-                                            moneySourceList.add(ms);
-                                        }
-
-                                        @Override
-                                        public void onCallBackFail(String message) {
-
-                                        }
-                                    }, document.getId());
-                                    Log.d("Test", "---------------");
-                                }
-
-                                count++;
+                                    }
+                                }, document.getId());
                             }
+
+                        } else {
+                            callBack.onCallBackFail(task.getException().getMessage());
+                        }
+                    }
+                });
+    }
+
+    public void getMoneySourceWithoutTransactionList(final MoneySourceCallBack callBack, String uID) {
+        db.collection("moneySources").whereEqualTo("userId", uID).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull final Task<QuerySnapshot> task) {
+                        if (task.isComplete()){
+
+                        }
+                        if (task.isSuccessful()) {
+                            final ArrayList<MoneySource> moneySourceList = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                final MoneySource ms = new MoneySource();
+                                ms.setUserId((String) document.getData().get("userId"));
+                                ms.setMoneySourceId(document.getId());
+                                ms.setMoneySourceName((String) document.getData().get("moneySourceName"));
+                                ms.setAmount(document.getDouble("amount"));
+                                ms.setLimit(document.getDouble("limit"));
+                                ms.setCurrencyId((String) document.getData().get("currencyId"));
+                                ms.setCurrencyName((String) document.getData().get("currencyName"));
+                                moneySourceList.add(ms);
+                            }
+                            callBack.onCallBack(moneySourceList);
 
                         } else {
                             callBack.onCallBackFail(task.getException().getMessage());
