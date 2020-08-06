@@ -44,6 +44,7 @@ import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -61,6 +62,8 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 
@@ -125,6 +128,11 @@ public class HomeFragment extends Fragment {
     ArrayList<Transaction> transactionList;
     HomeTransactionAdapter transactionAdapter;
     LayoutAnimationController aController;
+
+    // Filter and Sort
+    Spinner sortMenu;
+    Spinner filterMenu;
+    EditText search;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -238,6 +246,8 @@ public class HomeFragment extends Fragment {
         viewByMenu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                sortMenu.setSelection(0);
+                filterMenu.setSelection(0);
 
                 Calendar myCalendar = Calendar.getInstance();
                 mYear = myCalendar.get(Calendar.YEAR);
@@ -257,11 +267,15 @@ public class HomeFragment extends Fragment {
                         transactionList.addAll(modifierTransactionListByViewMode());
                         transactionAdapter.notifyDataSetChanged();
                         transactionRecycleView.scheduleLayoutAnimation();
+
+                        search.setText("");
                         break;
                     }
                     case "Tuần":
                     {
                         viewMode = ViewMode.WEEK;
+
+                        search.setText("");
                         break;
                     }
                     case "Tháng":
@@ -275,11 +289,15 @@ public class HomeFragment extends Fragment {
                         transactionList.addAll(modifierTransactionListByViewMode());
                         transactionAdapter.notifyDataSetChanged();
                         transactionRecycleView.scheduleLayoutAnimation();
+
+                        search.setText("");
                         break;
                     }
                     case "Quý":
                     {
                         viewMode = ViewMode.QUARTER;
+
+                        search.setText("");
                         break;
                     }
                     case "Năm":
@@ -293,6 +311,8 @@ public class HomeFragment extends Fragment {
                         transactionList.addAll(modifierTransactionListByViewMode());
                         transactionAdapter.notifyDataSetChanged();
                         transactionRecycleView.scheduleLayoutAnimation();
+
+                        search.setText("");
                         break;
                     }
                     case "Chọn":
@@ -362,9 +382,11 @@ public class HomeFragment extends Fragment {
                             }
                         });
 
+                        search.setText("");
                         break;
                     }
                 }
+
             }
 
             @Override
@@ -379,7 +401,8 @@ public class HomeFragment extends Fragment {
         View.OnClickListener dateSelector = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                sortMenu.setSelection(0);
+                filterMenu.setSelection(0);
                 switch(viewMode)
                 {
                     case DAY:
@@ -592,7 +615,7 @@ public class HomeFragment extends Fragment {
                     }
                 }
 
-
+                search.setText("");
             }
         };
 
@@ -652,15 +675,20 @@ public class HomeFragment extends Fragment {
 
                 if(newState!=RecyclerView.SCROLL_STATE_SETTLING)
                 {
+                    sortMenu.setSelection(0);
+                    filterMenu.setSelection(0);
+
                     selectedMoneySource = moneySourceList.get(pos);
                     waveLoadingView.setCenterTitle(converter.moneyToString((double)selectedMoneySource.getLimit()));
                     todayIncome.setText("Thêm sau");
                     todaySpending.setText("Thêm sau");
 
                     transactionList.clear();
-                    transactionList.addAll(modifierTransactionListByDate());
+                    transactionList.addAll(modifierTransactionListByViewMode());
                     transactionAdapter.notifyDataSetChanged();
                     transactionRecycleView.scheduleLayoutAnimation();
+
+                    search.setText("");
                 }
 
 
@@ -700,18 +728,72 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        // Search initiation
+        search = view.findViewById(R.id.search_home);
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                filter(editable.toString());
+            }
+        });
 
 
         //Filter menu initiation
-        Spinner filterMenu = view.findViewById(R.id.filter_home);
+        sortMenu = view.findViewById(R.id.sort_home);
+        filterMenu = view.findViewById(R.id.filter_home);
         String[] filterMenuItems = new String[]{"Tất cả", "Thu nhập", "Chi tiêu", "Định kỳ"};
         ArrayAdapter<String> filterAdapter = new ArrayAdapter<String>(view.getContext(), R.layout.spinner_menu, filterMenuItems);
         filterMenu.setAdapter(filterAdapter);
         filterMenu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                sortMenu.setSelection(0);
+                String selectedItem = parent.getItemAtPosition(position).toString();
+                ArrayList<Transaction> filterList = new ArrayList<>();
+                switch (selectedItem) {
+                    case "Tất cả":
+                        transactionList.clear();
+                        transactionList.addAll(modifierTransactionListByViewMode());
+                        transactionAdapter.notifyDataSetChanged();
+                        transactionRecycleView.scheduleLayoutAnimation();
+                        break;
+                    case "Thu nhập":
+                        transactionList.clear();
+                        transactionList.addAll(modifierTransactionListByViewMode());
+                        for(Transaction trans : transactionList) {
+                            if(trans.getTransactionIsIncome()) filterList.add(trans);
+                        }
 
+                        transactionList.clear();
+                        transactionList.addAll(filterList);
+                        transactionAdapter.notifyDataSetChanged();
+                        transactionRecycleView.scheduleLayoutAnimation();
+                        break;
+                    case "Chi tiêu":
+                        transactionList.clear();
+                        transactionList.addAll(modifierTransactionListByViewMode());
+                        for(Transaction trans : transactionList) {
+                            if(!trans.getTransactionIsIncome()) filterList.add(trans);
+                        }
+
+                        transactionList.clear();
+                        transactionList.addAll(filterList);
+                        transactionAdapter.notifyDataSetChanged();
+                        transactionRecycleView.scheduleLayoutAnimation();
+                        break;
+                    case "Định kỳ":
+                        break;
+                }
             }
 
             @Override
@@ -721,14 +803,59 @@ public class HomeFragment extends Fragment {
         });
 
         //Sort menu initiation
-        Spinner sortMenu = view.findViewById(R.id.sort_home);
         String[] sortMenuItems = new String[]{"Mới nhất", "Cũ nhất", "Lớn nhất", "Nhỏ nhất"};
         ArrayAdapter<String> sortAdapter = new ArrayAdapter<String>(view.getContext(),  R.layout.spinner_menu, sortMenuItems);
         sortMenu.setAdapter(sortAdapter);
         sortMenu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getItemAtPosition(position).toString();
+                switch (selectedItem) {
+                    case "Mới nhất":
+                        for(int i = 0; i<transactionList.size() - 1; i++) {
+                            for(int j = i + 1; j<transactionList.size(); j++) {
+                                if(transactionList.get(j).getTransactionTime().compareTo(transactionList.get(i).getTransactionTime()) > 0)
+                                    Collections.swap(transactionList, i, j);
+                            }
+                        }
 
+                        transactionAdapter.notifyDataSetChanged();
+                        transactionRecycleView.scheduleLayoutAnimation();
+                        break;
+                    case "Cũ nhất":
+                        for(int i = 0; i<transactionList.size() - 1; i++) {
+                            for(int j = i + 1; j<transactionList.size(); j++) {
+                                if(transactionList.get(j).getTransactionTime().compareTo(transactionList.get(i).getTransactionTime()) < 0)
+                                    Collections.swap(transactionList, i, j);
+                            }
+                        }
+
+                        transactionAdapter.notifyDataSetChanged();
+                        transactionRecycleView.scheduleLayoutAnimation();
+                        break;
+                    case "Lớn nhất":
+                        for(int i = 0; i<transactionList.size() - 1; i++) {
+                            for(int j = i + 1; j<transactionList.size(); j++) {
+                                if((double)transactionList.get(j).getTransactionAmount() > (double)transactionList.get(i).getTransactionAmount())
+                                    Collections.swap(transactionList, i, j);
+                            }
+                        }
+
+                        transactionAdapter.notifyDataSetChanged();
+                        transactionRecycleView.scheduleLayoutAnimation();
+                        break;
+                    case "Nhỏ nhất":
+                        for(int i = 0; i<transactionList.size() - 1; i++) {
+                            for(int j = i + 1; j<transactionList.size(); j++) {
+                                if((double)transactionList.get(j).getTransactionAmount() < (double)transactionList.get(i).getTransactionAmount())
+                                    Collections.swap(transactionList, i, j);
+                            }
+                        }
+
+                        transactionAdapter.notifyDataSetChanged();
+                        transactionRecycleView.scheduleLayoutAnimation();
+                        break;
+                }
             }
 
             @Override
@@ -764,6 +891,33 @@ public class HomeFragment extends Fragment {
                 break;
         }
         return day;
+    }
+
+    private void filter(String text) {
+        ArrayList<Transaction> filterList = new ArrayList<>();
+
+        if(text.isEmpty()) {
+            filterList.addAll(transactionList);
+        } else {
+            MoneyToStringConverter converter = new MoneyToStringConverter();
+            SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            for(Transaction trans : transactionList) {
+                String money = converter.moneyToString((double)trans.getTransactionAmount());
+                String expenditureName = trans.getExpenditureName().toLowerCase();
+                String date = sdf1.format(new Date(trans.getTransactionTime().getTime()));
+                String time = sdf.format(new Date(trans.getTransactionTime().getTime()));
+
+                if(money.contains(text.toLowerCase())
+                        || expenditureName.contains((text.toLowerCase()))
+                        || date.contains(text.toLowerCase())
+                        || time.contains(text.toLowerCase())) {
+                    filterList.add(trans);
+                }
+            }
+        }
+
+        transactionAdapter.getFilter(filterList);
     }
 
     private ArrayList<Transaction> modifierTransactionListByViewMode() {
