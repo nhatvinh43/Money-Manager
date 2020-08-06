@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".HomeFragment"
+    android:paddingHorizontal="20dp"
     android:background="@color/black">
 
 
@@ -12,13 +13,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/homeContainer"
-            android:visibility="invisible"
+            android:visibility="visible"
             android:paddingTop="50dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="20dp"
                 android:id="@+id/titleRow">
                 <LinearLayout
                     android:layout_centerVertical="true"
@@ -38,18 +38,6 @@
                         android:text="@string/today"
                         android:textColor="@color/white"/>
                     <TextView
-                        android:id="@+id/date_home"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?attr/selectableItemBackground"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-light"
-                        android:textSize="25sp"
-                        android:text="@string/todaySample"
-                        android:textColor="@color/white"
-                        android:layout_marginStart="7dp"/>
-                    <TextView
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?attr/selectableItemBackground"
@@ -68,7 +56,7 @@
                 <Spinner
                     android:layout_gravity="end"
                     android:id="@+id/viewBy_home"
-                    android:layout_width="90dp"
+                    android:layout_width="75dp"
                     android:layout_height="35dp"
                     android:spinnerMode="dropdown"
                     android:popupBackground="@drawable/transaction_item"
@@ -78,15 +66,27 @@
 
             </RelativeLayout>
 
+            <TextView
+                android:layout_below="@id/titleRow"
+                android:id="@+id/date_home"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"
+                android:layout_marginTop="5dp"
+                android:textSize="18sp"
+                android:layout_marginStart="2dp"
+                android:text="@string/todaySample"
+                android:textColor="@color/white"/>
 
             <androidx.core.widget.NestedScrollView
-                android:layout_below="@id/titleRow"
+                android:layout_below="@id/date_home"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:scrollbars="none"
-                android:paddingTop="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp">
+                android:paddingTop="20dp">
 
 
                 <RelativeLayout
@@ -160,9 +160,9 @@
                             <me.itangqi.waveloadingview.WaveLoadingView
                                     android:id="@+id/waveLoadingView"
                                     android:layout_width="0dp"
-                                    android:layout_weight="1.4"
+                                    android:layout_weight="1.36"
                                     android:layout_gravity="center_vertical"
-                                    android:layout_height="220dp"
+                                    android:layout_height="210dp"
                                     app:wlv_borderWidth="0dp"
                                     app:wlv_progressValue="60"
                                     app:wlv_shapeType="circle"
