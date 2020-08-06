@@ -83,6 +83,17 @@ public class HomeFragment extends Fragment {
     public static final int HOME_RQCODE = 2;
     public static final int HOME_TRANSACTION_RQCODE = 3;
     ViewMode viewMode = ViewMode.DAY;
+    Calendar fromCal = Calendar.getInstance();
+    Calendar toCal = Calendar.getInstance();
+
+    enum ViewMode {
+        DAY,
+        WEEK,
+        MONTH,
+        QUARTER,
+        YEAR,
+        MANUAL
+    }
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -187,14 +198,6 @@ public class HomeFragment extends Fragment {
         selectedMoneySource = moneySourceList.get(0);
     }
 
-    enum ViewMode {
-        DAY,
-        WEEK,
-        MONTH,
-        QUARTER,
-        YEAR,
-        MANUAL
-    }
     private void initView(View view) {
         final MoneyToStringConverter converter = new MoneyToStringConverter();
 
@@ -236,12 +239,24 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+                Calendar myCalendar = Calendar.getInstance();
+                mYear = myCalendar.get(Calendar.YEAR);
+                mMonth = myCalendar.get(Calendar.MONTH);
+                mDay = myCalendar.get(Calendar.DAY_OF_MONTH);
+
                 String selectedItem = parent.getItemAtPosition(position).toString();
                 switch (selectedItem)
                 {
                     case "Ngày":
                     {
+                        dateHome.setText(sdf.format(myCalendar.getTime()));
+                        dayOfWeek.setText("Hôm nay");
+
                         viewMode = ViewMode.DAY;
+                        transactionList.clear();
+                        transactionList.addAll(modifierTransactionListByViewMode());
+                        transactionAdapter.notifyDataSetChanged();
+                        transactionRecycleView.scheduleLayoutAnimation();
                         break;
                     }
                     case "Tuần":
@@ -251,7 +266,15 @@ public class HomeFragment extends Fragment {
                     }
                     case "Tháng":
                     {
+                        SimpleDateFormat sdf_month = new SimpleDateFormat("MM/yyyy");
+                        dateHome.setText(sdf_month.format(myCalendar.getTime()));
+                        dayOfWeek.setText("Tháng này");
+
                         viewMode = ViewMode.MONTH;
+                        transactionList.clear();
+                        transactionList.addAll(modifierTransactionListByViewMode());
+                        transactionAdapter.notifyDataSetChanged();
+                        transactionRecycleView.scheduleLayoutAnimation();
                         break;
                     }
                     case "Quý":
@@ -261,19 +284,83 @@ public class HomeFragment extends Fragment {
                     }
                     case "Năm":
                     {
+                        SimpleDateFormat sdf_month = new SimpleDateFormat("yyyy");
+                        dateHome.setText(sdf_month.format(myCalendar.getTime()));
+                        dayOfWeek.setText("Năm nay");
+
                         viewMode = ViewMode.YEAR;
+                        transactionList.clear();
+                        transactionList.addAll(modifierTransactionListByViewMode());
+                        transactionAdapter.notifyDataSetChanged();
+                        transactionRecycleView.scheduleLayoutAnimation();
                         break;
                     }
                     case "Chọn":
                     {
                         viewMode = ViewMode.MANUAL;
-
-                        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getContext());
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                         builder.setView(R.layout.dialog_choose_time);
                         final AlertDialog chooseTimeDialog  = builder.create();
                         chooseTimeDialog.show();
                         chooseTimeDialog.getWindow().setLayout(1000,1200);
                         chooseTimeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                        final TextView fromTV = chooseTimeDialog.findViewById(R.id.start_choose_time);
+                        final TextView toTV = chooseTimeDialog.findViewById(R.id.end_choose_time);
+
+                        // Chọn ngày bắt đầu
+                        chooseTimeDialog.findViewById(R.id.chooseStart_choose_time).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+                                    @Override
+                                    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                                        Calendar myCalendar = Calendar.getInstance();
+                                        myCalendar.set(Calendar.YEAR, i);
+                                        myCalendar.set(Calendar.MONTH, i1);
+                                        myCalendar.set(Calendar.DAY_OF_MONTH, i2);
+                                        fromTV.setText(sdf.format(myCalendar.getTime()));
+                                        fromCal = myCalendar;
+                                    }
+                                };
+                                new DatePickerDialog(getContext(), R.style.DatePickerDialog, date, mYear, mMonth, mDay).show();
+                            }
+                        });
+
+                        // Chọn ngày kết thúc
+                        chooseTimeDialog.findViewById(R.id.chooseEnd_choose_time).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+                                    @Override
+                                    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                                        Calendar myCalendar = Calendar.getInstance();
+                                        myCalendar.set(Calendar.YEAR, i);
+                                        myCalendar.set(Calendar.MONTH, i1);
+                                        myCalendar.set(Calendar.DAY_OF_MONTH, i2);
+                                        toTV.setText(sdf.format(myCalendar.getTime()));
+                                        toCal = myCalendar;
+                                    }
+                                };
+
+                                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), R.style.DatePickerDialog, date, mYear, mMonth, mDay);
+                                datePickerDialog.getDatePicker().setMinDate(fromCal.getTimeInMillis() - 1000);
+                                datePickerDialog.show();
+                            }
+                        });
+
+                        chooseTimeDialog.findViewById(R.id.confirm_choose_time).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                dateHome.setText(sdf.format(fromCal.getTime()) + " - " + sdf.format(toCal.getTime()));
+
+                                transactionList.clear();
+                                transactionList.addAll(modifierTransactionListByViewMode());
+                                transactionAdapter.notifyDataSetChanged();
+                                transactionRecycleView.scheduleLayoutAnimation();
+                                chooseTimeDialog.dismiss();
+                            }
+                        });
 
                         break;
                     }
@@ -317,7 +404,7 @@ public class HomeFragment extends Fragment {
                                 mDay = myCalendar.get(Calendar.DAY_OF_MONTH);
 
                                 transactionList.clear();
-                                transactionList.addAll(modifierTransactionListByDate());
+                                transactionList.addAll(modifierTransactionListByViewMode());
                                 transactionAdapter.notifyDataSetChanged();
                                 transactionRecycleView.scheduleLayoutAnimation();
                             }
@@ -338,21 +425,47 @@ public class HomeFragment extends Fragment {
                                     @Override
                                     public void onDateSet(int selectedMonth, int selectedYear)
                                     {
-                                        //Code code code
+                                        SimpleDateFormat sdf_month = new SimpleDateFormat("MM/yyyy");
+                                        Calendar myCalendar = Calendar.getInstance();
+                                        myCalendar.set(Calendar.YEAR, selectedYear);
+                                        myCalendar.set(Calendar.MONTH, selectedMonth);
+                                        dateHome.setText(sdf_month.format(myCalendar.getTime()));
+
+                                        if(selectedMonth == Calendar.getInstance().get(Calendar.MONTH) && selectedYear == Calendar.getInstance().get(Calendar.YEAR)) {
+                                            dayOfWeek.setText("Tháng này");
+                                        } else {
+                                            dayOfWeek.setText("Tháng " + (selectedMonth + 1));
+                                        }
+
+                                        mYear = myCalendar.get(Calendar.YEAR);
+                                        mMonth = myCalendar.get(Calendar.MONTH);
+
+                                        transactionList.clear();
+                                        transactionList.addAll(modifierTransactionListByViewMode());
+                                        transactionAdapter.notifyDataSetChanged();
+                                        transactionRecycleView.scheduleLayoutAnimation();
                                     }
                                 }, today.get(Calendar.YEAR), today.get(Calendar.MONTH));
-                        builder.setActivatedMonth(Calendar.JULY)
+
+                        builder.setActivatedMonth(mMonth)
                                 .setMinYear(2010)
-                                .setActivatedYear(2020)
+                                .setActivatedYear(mYear)
                                 .setMaxYear(2099)
                                 .setMinMonth(Calendar.JANUARY)
                                 .setTitle("Chọn tháng")
                                 .setMonthRange(Calendar.JANUARY, Calendar.DECEMBER)
                                 .setOnMonthChangedListener(new MonthPickerDialog.OnMonthChangedListener() {
                                     @Override
-                                    public void onMonthChanged(int selectedMonth) {} }).setOnYearChangedListener(new MonthPickerDialog.OnYearChangedListener() {
-                            @Override
-                            public void onYearChanged(int selectedYear) {}}).build().show();
+                                    public void onMonthChanged(int selectedMonth) {
+
+                                    }
+                                })
+                                .setOnYearChangedListener(new MonthPickerDialog.OnYearChangedListener() {
+                                    @Override
+                                    public void onYearChanged(int selectedYear) {
+
+                                    }
+                                }).build().show();
                         break;
                     }
                     case QUARTER:
@@ -367,26 +480,114 @@ public class HomeFragment extends Fragment {
                                     @Override
                                     public void onDateSet(int selectedMonth, int selectedYear)
                                     {
-                                        //Bỏ qua month
+                                        SimpleDateFormat sdf_month = new SimpleDateFormat("yyyy");
+                                        Calendar myCalendar = Calendar.getInstance();
+                                        myCalendar.set(Calendar.YEAR, selectedYear);
+                                        dateHome.setText(sdf_month.format(myCalendar.getTime()));
+
+                                        if(selectedYear == Calendar.getInstance().get(Calendar.YEAR)) {
+                                            dayOfWeek.setText("Năm nay");
+                                        } else {
+                                            dayOfWeek.setText("Năm " + selectedYear);
+                                        }
+
+                                        mYear = myCalendar.get(Calendar.YEAR);
+
+                                        transactionList.clear();
+                                        transactionList.addAll(modifierTransactionListByViewMode());
+                                        transactionAdapter.notifyDataSetChanged();
+                                        transactionRecycleView.scheduleLayoutAnimation();
                                     }
                                 }, today.get(Calendar.YEAR), today.get(Calendar.MONTH));
-                        builder.setActivatedMonth(Calendar.JULY)
+
+                        builder.setActivatedMonth(mMonth)
                                 .setMinYear(2010)
-                                .setActivatedYear(2020)
+                                .setActivatedYear(mYear)
                                 .setMaxYear(2099)
                                 .setMinMonth(Calendar.JANUARY)
                                 .setTitle("Chọn năm")
                                 .showYearOnly()
                                 .setOnMonthChangedListener(new MonthPickerDialog.OnMonthChangedListener() {
                                     @Override
-                                    public void onMonthChanged(int selectedMonth) {} }).setOnYearChangedListener(new MonthPickerDialog.OnYearChangedListener() {
-                            @Override
-                            public void onYearChanged(int selectedYear) {}}).build().show();
+                                    public void onMonthChanged(int selectedMonth) {
+
+                                    }
+                                })
+                                .setOnYearChangedListener(new MonthPickerDialog.OnYearChangedListener() {
+                                    @Override
+                                    public void onYearChanged(int selectedYear) {
+
+                                    }
+                                }).build().show();
                         break;
                     }
                     case MANUAL:
                     {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setView(R.layout.dialog_choose_time);
+                        final AlertDialog chooseTimeDialog  = builder.create();
+                        chooseTimeDialog.show();
+                        chooseTimeDialog.getWindow().setLayout(1000,1200);
+                        chooseTimeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
+                        final TextView fromTV = chooseTimeDialog.findViewById(R.id.start_choose_time);
+                        final TextView toTV = chooseTimeDialog.findViewById(R.id.end_choose_time);
+                        fromTV.setText(sdf.format(fromCal.getTime()));
+                        toTV.setText(sdf.format(toCal.getTime()));
+
+                        // Chọn ngày bắt đầu
+                        chooseTimeDialog.findViewById(R.id.chooseStart_choose_time).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+                                    @Override
+                                    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                                        Calendar myCalendar = Calendar.getInstance();
+                                        myCalendar.set(Calendar.YEAR, i);
+                                        myCalendar.set(Calendar.MONTH, i1);
+                                        myCalendar.set(Calendar.DAY_OF_MONTH, i2);
+                                        fromTV.setText(sdf.format(myCalendar.getTime()));
+                                        fromCal = myCalendar;
+                                    }
+                                };
+                                new DatePickerDialog(getContext(), R.style.DatePickerDialog, date, fromCal.get(Calendar.YEAR), fromCal.get(Calendar.MONTH), fromCal.get(Calendar.DAY_OF_MONTH)).show();
+                            }
+                        });
+
+                        // Chọn ngày kết thúc
+                        chooseTimeDialog.findViewById(R.id.chooseEnd_choose_time).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+                                    @Override
+                                    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                                        Calendar myCalendar = Calendar.getInstance();
+                                        myCalendar.set(Calendar.YEAR, i);
+                                        myCalendar.set(Calendar.MONTH, i1);
+                                        myCalendar.set(Calendar.DAY_OF_MONTH, i2);
+                                        toTV.setText(sdf.format(myCalendar.getTime()));
+                                        toCal = myCalendar;
+                                    }
+                                };
+
+                                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), R.style.DatePickerDialog, date, toCal.get(Calendar.YEAR), toCal.get(Calendar.MONTH), toCal.get(Calendar.DAY_OF_MONTH));
+                                datePickerDialog.getDatePicker().setMinDate(fromCal.getTimeInMillis() - 1000);
+                                datePickerDialog.show();
+                            }
+                        });
+
+                        chooseTimeDialog.findViewById(R.id.confirm_choose_time).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                dateHome.setText(sdf.format(fromCal.getTime()) + " - " + sdf.format(toCal.getTime()));
+
+                                transactionList.clear();
+                                transactionList.addAll(modifierTransactionListByViewMode());
+                                transactionAdapter.notifyDataSetChanged();
+                                transactionRecycleView.scheduleLayoutAnimation();
+                                chooseTimeDialog.dismiss();
+                            }
+                        });
                         break;
                     }
                 }
@@ -474,7 +675,7 @@ public class HomeFragment extends Fragment {
 
         // Transaction RecycleView Initiation
         transactionRecycleView = view.findViewById(R.id.transactionList);
-        transactionList.addAll(modifierTransactionListByDate());
+        transactionList.addAll(modifierTransactionListByViewMode());
 
         GridLayoutManager transactionLayoutManager = new GridLayoutManager(getContext(), 2);
         transactionRecycleView.setLayoutManager(transactionLayoutManager);
@@ -565,21 +766,68 @@ public class HomeFragment extends Fragment {
         return day;
     }
 
+    private ArrayList<Transaction> modifierTransactionListByViewMode() {
+        if(viewMode.equals(ViewMode.DAY)) return modifierTransactionListByDate();
+        if(viewMode.equals(ViewMode.MONTH)) return modifierTransactionListByMonth();
+        if(viewMode.equals(ViewMode.YEAR)) return modifierTransactionListByYear();
+        if(viewMode.equals(ViewMode.MANUAL)) return modifierTransactionListByManual();
+        return modifierTransactionListByDate();
+    }
+
     private ArrayList<Transaction> modifierTransactionListByDate() {
         ArrayList<Transaction> modifierTransactionList = new ArrayList<>();
-        Log.d("Test in", selectedMoneySource.getMoneySourceName() + "-------------------------------------" + selectedMoneySource.getTransactionsList().size());
+        Log.d("Test filter by date", selectedMoneySource.getMoneySourceName() + "-------------------------------------" + selectedMoneySource.getTransactionsList().size());
         for(Transaction t : selectedMoneySource.getTransactionsList()) {
             Calendar c = Calendar.getInstance();
-            Log.d("Test", "---------------");
             c.setTimeInMillis(t.getTransactionTime().getTime());
             int transactionDay = c.get(Calendar.DAY_OF_MONTH);
             int transactionMonth = c.get(Calendar.MONTH);
             int transactionYeah = c.get(Calendar.YEAR);
-            Log.d("Test", Integer.toString(mDay) + " " + Integer.toString(c.get(Calendar.DAY_OF_MONTH)));
-            Log.d("Test", Integer.toString(mMonth) + " " + Integer.toString(c.get(Calendar.MONTH)));
-            Log.d("Test", Integer.toString(mYear) + " " + Integer.toString(c.get(Calendar.YEAR)));
+//            Log.d("Test", Integer.toString(mDay) + " " + Integer.toString(c.get(Calendar.DAY_OF_MONTH)));
+//            Log.d("Test", Integer.toString(mMonth) + " " + Integer.toString(c.get(Calendar.MONTH)));
+//            Log.d("Test", Integer.toString(mYear) + " " + Integer.toString(c.get(Calendar.YEAR)));
 
             if(transactionDay == mDay && transactionMonth == mMonth && transactionYeah == mYear) modifierTransactionList.add(t);
+        }
+        return modifierTransactionList;
+    }
+
+    private ArrayList<Transaction> modifierTransactionListByMonth() {
+        ArrayList<Transaction> modifierTransactionList = new ArrayList<>();
+        Log.d("Test filter by month", selectedMoneySource.getMoneySourceName() + "-------------------------------------" + selectedMoneySource.getTransactionsList().size());
+        for(Transaction t : selectedMoneySource.getTransactionsList()) {
+            Calendar c = Calendar.getInstance();
+            c.setTimeInMillis(t.getTransactionTime().getTime());
+            int transactionMonth = c.get(Calendar.MONTH);
+            int transactionYeah = c.get(Calendar.YEAR);
+
+            if(transactionMonth == mMonth && transactionYeah == mYear) modifierTransactionList.add(t);
+        }
+        return modifierTransactionList;
+    }
+
+    private ArrayList<Transaction> modifierTransactionListByYear() {
+        ArrayList<Transaction> modifierTransactionList = new ArrayList<>();
+        Log.d("Test filter by year", selectedMoneySource.getMoneySourceName() + "-------------------------------------" + selectedMoneySource.getTransactionsList().size());
+        for(Transaction t : selectedMoneySource.getTransactionsList()) {
+            Calendar c = Calendar.getInstance();
+            c.setTimeInMillis(t.getTransactionTime().getTime());
+            int transactionMonth = c.get(Calendar.MONTH);
+            int transactionYeah = c.get(Calendar.YEAR);
+
+            if(transactionYeah == mYear) modifierTransactionList.add(t);
+        }
+        return modifierTransactionList;
+    }
+
+    private ArrayList<Transaction> modifierTransactionListByManual() {
+        ArrayList<Transaction> modifierTransactionList = new ArrayList<>();
+        Log.d("Test filter by manual", selectedMoneySource.getMoneySourceName() + "-------------------------------------" + selectedMoneySource.getTransactionsList().size());
+        for(Transaction t : selectedMoneySource.getTransactionsList()) {
+            Calendar c = Calendar.getInstance();
+            c.setTimeInMillis(t.getTransactionTime().getTime());
+
+            if(c.compareTo(fromCal) >= 0 && c.compareTo(toCal) <= 0) modifierTransactionList.add(t);
         }
         return modifierTransactionList;
     }
@@ -618,7 +866,7 @@ public class HomeFragment extends Fragment {
                             selectedMoneySource = ms;
 
                             transactionList.clear();
-                            transactionList.addAll(modifierTransactionListByDate());
+                            transactionList.addAll(modifierTransactionListByViewMode());
                             transactionAdapter.notifyDataSetChanged();
                             transactionRecycleView.scheduleLayoutAnimation();
                         }
@@ -705,7 +953,7 @@ public class HomeFragment extends Fragment {
                                 selectedMoneySource = ms;
 
                                 transactionList.clear();
-                                transactionList.addAll(modifierTransactionListByDate());
+                                transactionList.addAll(modifierTransactionListByViewMode());
                                 transactionAdapter.notifyDataSetChanged();
                                 transactionRecycleView.scheduleLayoutAnimation();
                             }
@@ -741,7 +989,7 @@ public class HomeFragment extends Fragment {
                                     selectedMoneySource = ms;
 
                                     transactionList.clear();
-                                    transactionList.addAll(modifierTransactionListByDate());
+                                    transactionList.addAll(modifierTransactionListByViewMode());
                                     transactionAdapter.notifyDataSetChanged();
                                     transactionRecycleView.scheduleLayoutAnimation();
                                 }
