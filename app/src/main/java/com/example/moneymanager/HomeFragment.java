@@ -695,7 +695,6 @@ public class HomeFragment extends Fragment {
                     transactionList.addAll(modifierTransactionListByViewMode());
                     transactionAdapter.notifyDataSetChanged();
                     transactionRecycleView.scheduleLayoutAnimation();
-
                     search.setText("");
                 }
 
