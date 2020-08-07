@@ -905,7 +905,7 @@ public class HomeFragment extends Fragment {
         ArrayList<Transaction> filterList = new ArrayList<>();
 
         if(text.isEmpty()) {
-            return;
+            filterList = transactionList;
         } else {
             MoneyToStringConverter converter = new MoneyToStringConverter();
             SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
