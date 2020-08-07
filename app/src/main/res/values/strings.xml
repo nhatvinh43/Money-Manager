@@ -202,5 +202,6 @@
     <!--Manage periodic transaction-->
     <string name="periodicTransaction">Giao dịch định kỳ</string>
     <string name="addPeriodicTransaction">Thêm giao dịch định kỳ</string>
+    <string name="periodicTransactionName">Tên giao dịch</string>
 
 </resources>

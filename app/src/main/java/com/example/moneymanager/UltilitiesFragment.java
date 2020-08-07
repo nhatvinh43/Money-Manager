@@ -226,6 +226,15 @@ public class UltilitiesFragment extends Fragment {
                 });
             }
         });
+
+        //Manage Periodic Transaction
+        view.findViewById(R.id.manageSpecialTransactions_statistics).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               Intent intent = new Intent(v.getContext(), ManagePeriodicTransactions.class);
+               startActivity(intent);
+            }
+        });
     }
 
     @Override
