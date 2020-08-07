@@ -5,12 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,8 +32,11 @@ public class AddMoneySourceActivity extends AppCompatActivity {
     public static ArrayList<Currency> currencies = new ArrayList<>();
     private RecyclerView recyclerView;
     private AddMoneySourceCurrencyAdapter adapter;
-    private EditText moneySourceName, moneySourceAmount, moneySourceCurrency;
+    private EditText moneySourceName, moneySourceAmount, moneySourceCurrency, moneySourceLimit;
     private MoneySource resMoneySource = new MoneySource();
+    private MoneyToStringConverter converter = new MoneyToStringConverter();
+    private ScrollView container;
+    private ProgressBar loading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +83,6 @@ public class AddMoneySourceActivity extends AppCompatActivity {
         dataHelper = new DataHelper();
 
         resMoneySource.setUserId(firebaseAuth.getCurrentUser().getUid());
-        resMoneySource.setLimit(1000);
 
         //prepare data
         currencies.add(new Currency("Cur01", "VND"));
@@ -88,6 +93,9 @@ public class AddMoneySourceActivity extends AppCompatActivity {
         moneySourceName = findViewById(R.id.moneySourceName_addMoneySource);
         moneySourceAmount = findViewById(R.id.moneySourceAmount_addMoneySource);
         moneySourceCurrency = findViewById(R.id.moneySourceUnit_addMoneySource);
+        moneySourceLimit = findViewById(R.id.moneySourceLimit_addMoneySource);
+        container = findViewById(R.id.container);
+        loading = findViewById(R.id.loading);
 
         //Back Button
         findViewById(R.id.backButton_addMoneySource).setOnClickListener(new View.OnClickListener() {
@@ -153,27 +161,31 @@ public class AddMoneySourceActivity extends AppCompatActivity {
                     msg.setText("Vui Lòng nhập đủ thông tin");
                 }else {
                     //Thành công
-                    try {
-                        resMoneySource.setAmount(NumberFormat.getInstance().parse(moneySourceAmount.getText().toString()));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                    dialog.dismiss();
+                    container.setVisibility(View.INVISIBLE);
+                    loading.setVisibility(View.VISIBLE);
+
+                    resMoneySource.setAmount(converter.stringToMoney(moneySourceAmount.getText().toString()));
                     resMoneySource.setMoneySourceName(moneySourceName.getText().toString());
-                    //UltilitiesFragment.dataSet.add(resMoneySource);
-                    Number tmpAmount, tmpLimit;
-                    tmpAmount = 0;
-                    try {
-                        tmpAmount = NumberFormat.getInstance().parse(moneySourceAmount.getText().toString());
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    tmpLimit = 1000;
-                    dataHelper.createMoneySource(firebaseAuth.getCurrentUser().getUid(), resMoneySource.getMoneySourceName(), resMoneySource.getAmount(),
-                            resMoneySource.getLimit(), resMoneySource.getCurrencyId(), resMoneySource.getCurrencyName());
-                    Toast.makeText(dialog.getContext(), "Thành công", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent();
-                    setResult(1, intent);
-                    finish();
+                    resMoneySource.setLimit(converter.stringToMoney(moneySourceLimit.getText().toString()));
+
+                    dataHelper.setMoneySource(new MoneySourceCallBack() {
+                        @Override
+                        public void onCallBack(ArrayList<MoneySource> list) {
+                            Intent data = new Intent();
+                            data.putExtra("moneysource", list.get(0));
+                            setResult(Activity.RESULT_OK, data);
+                            Toast.makeText(dialog.getContext(), "Thêm nguồn tiền thành công", Toast.LENGTH_LONG).show();
+                            finish();
+                        }
+
+                        @Override
+                        public void onCallBackFail(String message) {
+                            Toast.makeText(AddMoneySourceActivity.this, "Thêm nguồn tiền thất bại", Toast.LENGTH_LONG).show();
+                            container.setVisibility(View.VISIBLE);
+                            loading.setVisibility(View.GONE);
+                        }
+                    },resMoneySource.getUserId(), resMoneySource.getMoneySourceName(), (double)resMoneySource.getAmount(), (double)resMoneySource.getLimit(), resMoneySource.getCurrencyId(), resMoneySource.getCurrencyName());
                 }
             }
         });

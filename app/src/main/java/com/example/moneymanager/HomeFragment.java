@@ -1216,6 +1216,16 @@ public class HomeFragment extends Fragment {
             } else if(resultCode == Activity.RESULT_CANCELED) {
                 Log.d("-------------Test result from moneysource detail ", "CANCEL");
             }
+        } else if (requestCode == HOME_NEW_MONEYSOURCE_RQCODE) {
+            if(resultCode == Activity.RESULT_OK) {
+                Log.d("-------------Test result from add moneysource ", "OKE");
+                DataHelper dataHelper = new DataHelper();
+                MoneySource resMoneySource = (MoneySource) data.getParcelableExtra("moneysource");
+                resMoneySource.setTransactionsList(new ArrayList<Transaction>());
+
+                moneySourceList.add(resMoneySource);
+                moneySourceAdapter.notifyDataSetChanged();
+            }
         }
     }
 

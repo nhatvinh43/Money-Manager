@@ -104,11 +104,14 @@ public class DataHelper {
         moneySource.put("currencyId", curID);
         moneySource.put("currencyName", curName);
 
+        final MoneySource ms = new MoneySource(amount, curID, curName, limit, msId, name, uID);
         db.collection("moneySources").document(msId).set(moneySource)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        callBack.onCallBack(new ArrayList<MoneySource>());
+                        ArrayList<MoneySource> arrayList = new ArrayList<>();
+                        arrayList.add(ms);
+                        callBack.onCallBack(arrayList);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
