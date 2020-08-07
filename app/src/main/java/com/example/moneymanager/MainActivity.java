@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), AddTransactionActivity.class);
-                startActivityForResult(intent, HomeFragment.HOME_RQCODE);
+                startActivityForResult(intent, HomeFragment.HOME_NEW_TRANSACTION_RQCODE);
             }
         });
 

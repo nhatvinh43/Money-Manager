@@ -1,9 +1,12 @@
 package com.example.moneymanager;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 
-public class MoneySource {
+public class MoneySource implements Parcelable {
     private Number amount;
     private String currencyId;
     private String currencyName;
@@ -34,6 +37,44 @@ public class MoneySource {
         this.moneySourceName = moneySourceName;
         this.userId = userId;
         this.transactionsList = null;
+    }
+
+    protected MoneySource(Parcel in) {
+        amount = in.readDouble();
+        currencyId = in.readString();
+        currencyName = in.readString();
+        moneySourceId = in.readString();
+        moneySourceName = in.readString();
+        limit = in.readDouble();
+        userId = in.readString();
+    }
+
+    public static final Creator<MoneySource> CREATOR = new Creator<MoneySource>() {
+        @Override
+        public MoneySource createFromParcel(Parcel in) {
+            return new MoneySource(in);
+        }
+
+        @Override
+        public MoneySource[] newArray(int size) {
+            return new MoneySource[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeDouble(amount.doubleValue());
+        parcel.writeString(currencyId);
+        parcel.writeString(currencyName);
+        parcel.writeString(moneySourceId);
+        parcel.writeString(moneySourceName);
+        parcel.writeDouble(limit.doubleValue());
+        parcel.writeString(userId);
     }
 
     public Number getAmount() {

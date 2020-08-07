@@ -243,6 +243,25 @@ public class DataHelper {
                 });
     }
 
+    public void deleteMoneySource(MoneySource ms){
+        db.collection("moneySources").document(ms.getMoneySourceId()).delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("-------- Delete moneysource --------", "Success");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("-------- Delete moneysource --------", "Fail");
+                    }
+                });
+
+        for(Transaction trans : ms.getTransactionsList()) {
+            deleteTransaction(trans);
+        }
+    }
+
     // Transaction model
     public String setTransaction(final TransactionCallBack transCallBack, String description, String expenditureId, String expenditureName, Number transactionAmount, String moneySourceId,
                                     boolean transactionIsIncome, Timestamp transactionTime){
@@ -449,20 +468,7 @@ public class DataHelper {
         return newMoneySourceId;
     }
 
-    public void deleteMoneySource(String MSId){
-        db.collection("moneySources").document(MSId).delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("DeleteMS",  "DocumentSnapshot successfully deleted!");
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w("DeleteMS", "Error deleting document", e);
-            }
-        });
-    }
+
     public void updateMoneySource(String MSId, String moneySourceName, Number amount, Number limit,
                                   String currencyId, String currencyName){
         Map<String, Object> moneySource = new HashMap<>();

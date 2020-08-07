@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -69,7 +70,6 @@ public class UltilitiesFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        dataSet = dataHelper.getListMoneySource(uId);
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -101,31 +101,51 @@ public class UltilitiesFragment extends Fragment {
                 categoryPanel.show();
                 categoryPanel.getWindow().setLayout(1000,1200);
                 categoryPanel.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
                 categoryPanel.findViewById(R.id.addMoneySource_manageMoneySource).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(v.getContext(), AddMoneySourceActivity.class);
+                        getActivity().startActivityForResult(intent, HomeFragment.HOME_NEW_MONEYSOURCE_RQCODE);
                         categoryPanel.dismiss();
-                        startActivityForResult(intent, 1);
+                    }
+                });
+
+                final ProgressBar loading = categoryPanel.findViewById(R.id.loading);
+                recyclerView = categoryPanel.findViewById(R.id.moneySourceList_manageMoneySource);
+                loading.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.INVISIBLE);
+
+                dataHelper.getMoneySourceWithoutTransactionList(new MoneySourceCallBack() {
+                    @Override
+                    public void onCallBack(ArrayList<MoneySource> list) {
+                        dataSet = list;
+                        adapter = new UltilitiesMoneySourceManageAdapter(categoryPanel.getContext(), list);
+                        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(categoryPanel.getContext());
+                        recyclerView.setLayoutManager(layoutManager);
+                        recyclerView.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
+
+                        loading.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
+
+                        adapter.setOnItemClickListener(new UltilitiesMoneySourceManageAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(int position) {
+                                MoneySource moneySource = dataSet.get(position);
+                                Intent intent = new Intent(categoryPanel.getContext(), MoneySourceDetailsActivity.class);
+                                intent.putExtra("MoneySourceId", moneySource.getMoneySourceId());
+                                categoryPanel.dismiss();
+                                getActivity().startActivityForResult(intent, HomeFragment.HOME_CHANGE_MONEYSOURCE_RQCODE);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCallBackFail(String message) {
 
                     }
-                });
-                adapter = new UltilitiesMoneySourceManageAdapter(categoryPanel.getContext(), dataSet);
-                recyclerView = categoryPanel.findViewById(R.id.moneySourceList_manageMoneySource);
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(categoryPanel.getContext());
-                recyclerView.setLayoutManager(layoutManager);
-                recyclerView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
-                adapter.setOnItemClickListener(new UltilitiesMoneySourceManageAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(int position) {
-                        MoneySource moneySource = dataSet.get(position);
-                        Intent intent = new Intent(categoryPanel.getContext(), MoneySourceDetailsActivity.class);
-                        intent.putExtra("MSId", moneySource.getMoneySourceId());
-                        categoryPanel.dismiss();
-                        startActivityForResult(intent, 2);
-                    }
-                });
+                }, uId);
 
             }
         });
@@ -228,17 +248,6 @@ public class UltilitiesFragment extends Fragment {
         });
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 || requestCode == 2){
-            if (resultCode == 1) {
-                dataSet.clear();
-                dataSet = dataHelper.getListMoneySource(uId);
-                adapter.notifyDataSetChanged();
-            }
-        }
-    }
 
     @Override
     public void onResume() {

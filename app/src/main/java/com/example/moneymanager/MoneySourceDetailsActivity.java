@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -12,6 +13,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,9 +31,11 @@ public class MoneySourceDetailsActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private AddMoneySourceCurrencyAdapter adapter;
     private ArrayList<Currency> currencies = new ArrayList<>();
-    private MoneySource MS, resMoneySource;
+    private MoneySource MS;
     private String MSId;
     private ArrayList<MoneySource> dataSet = new ArrayList<>();
+    private ScrollView container;
+    private ProgressBar loading;
 
     @Override
     protected void onStart() {
@@ -77,25 +82,24 @@ public class MoneySourceDetailsActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_money_source_details);
+        container = findViewById(R.id.container);
+        loading = findViewById(R.id.loading);
+
+        container.setVisibility(View.INVISIBLE);
+        loading.setVisibility(View.VISIBLE);
+
         Intent intent = getIntent();
-        MSId = intent.getStringExtra("MSId");
-        resMoneySource = new MoneySource();
-        Log.d("GetMS", MSId);
+        MSId = intent.getStringExtra("MoneySourceId");
         firebaseAuth = FirebaseAuth.getInstance();
         dataHelper = new DataHelper();
         dataHelper.getMoneySourceById(new SingleMoneySourceCallBack() {
             @Override
             public void onCallBack(MoneySource moneySource) {
                 MS = moneySource;
-                Log.d("GetMS", MS.getMoneySourceName() + MS.getCurrencyName());
-                resMoneySource.setCurrencyName(MS.getCurrencyName());//can change
-                resMoneySource.setCurrencyId(MS.getCurrencyId());//can change
-                resMoneySource.setMoneySourceName(MS.getMoneySourceName());//can change
-                resMoneySource.setAmount(MS.getAmount());//can change
-                resMoneySource.setUserId(MS.getUserId());
-                resMoneySource.setLimit(MS.getLimit());//can change
                 initView();
 
+                container.setVisibility(View.VISIBLE);
+                loading.setVisibility(View.GONE);
             }
 
             @Override
@@ -117,13 +121,13 @@ public class MoneySourceDetailsActivity extends AppCompatActivity {
         eAmount = findViewById(R.id.moneySourceAmount_moneySourceDetails);
         eCur = findViewById(R.id.moneySourceUnit_moneySourceDetails);
 
-        MoneyToStringConverter converter = new MoneyToStringConverter();
+        final MoneyToStringConverter converter = new MoneyToStringConverter();
 
         name.setText(MS.getMoneySourceName());
         eName.setText(MS.getMoneySourceName());
 
-        amount.setText(converter.moneyToString(Double.valueOf((Double) MS.getAmount())));
-        eAmount.setText(MS.getAmount().toString());
+        amount.setText(converter.moneyToString((double) MS.getAmount()));
+        eAmount.setText(converter.moneyToString((double) MS.getAmount()));
 
         cur.setText(MS.getCurrencyName());
         eCur.setText(MS.getCurrencyName());
@@ -132,9 +136,11 @@ public class MoneySourceDetailsActivity extends AppCompatActivity {
         findViewById(R.id.backButton_moneySourceDetails).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(Activity.RESULT_CANCELED);
                 finish();
             }
         });
+
         //Nút chon đơn vị tiền
         findViewById(R.id.chooseMoneySourceUnitButton_moneySourceDetails).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,13 +164,14 @@ public class MoneySourceDetailsActivity extends AppCompatActivity {
                         Currency currency = currencies.get(position);
                         Toast.makeText(categoryPanel.getContext(), currency.getCurrencyName()+" 11",Toast.LENGTH_LONG).show();
                         eCur.setText(currency.getCurrencyName());
-                        resMoneySource.setCurrencyId(currency.getCurrencyId());
-                        resMoneySource.setCurrencyName(currency.getCurrencyName());
+                        MS.setCurrencyId(currency.getCurrencyId());
+                        MS.setCurrencyName(currency.getCurrencyName());
                         categoryPanel.dismiss();
                     }
                 });
             }
         });
+
         //Nút Lưu
         findViewById(R.id.save_moneySourceDetails).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,16 +196,16 @@ public class MoneySourceDetailsActivity extends AppCompatActivity {
                 || eCur.getText().toString().length() == 0) {
                     msg.setText("Vui lòng điền đầy đủ thông tin");
                     dialog.show();
-                }else{
+                } else {
                     //Thành Công
+                    dialog.dismiss();
                     Toast.makeText(dialog.getContext(), "Chỉnh Sửa Thành Công", Toast.LENGTH_LONG).show();
-                    resMoneySource.setMoneySourceName(eName.getText().toString());
-                    resMoneySource.setAmount(Double.parseDouble(eAmount.getText().toString()));
-                    //Làm Việc Với DataBase
-                    dataHelper.updateMoneySource(MSId, resMoneySource.getMoneySourceName(),
-                            resMoneySource.getAmount(), resMoneySource.getLimit(), resMoneySource.getCurrencyId(),resMoneySource.getCurrencyName());
-                    Intent intent = new Intent();
-                    setResult(1, intent);
+                    MS.setMoneySourceName(eName.getText().toString());
+                    MS.setAmount(converter.stringToMoney(eAmount.getText().toString()));
+
+                    Intent data = new Intent();
+                    data.putExtra("moneysource", MS);
+                    setResult(Activity.RESULT_OK, data);
                     finish();
                 }
             }
@@ -220,10 +227,12 @@ public class MoneySourceDetailsActivity extends AppCompatActivity {
                 dialog.findViewById(R.id.confirm_two_button_dialog).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //delete all transaction of that money source and delete money source
-                        dataHelper.deleteMoneySource(MSId);
-                        finish();
                         dialog.dismiss();
+
+                        Intent data = new Intent();
+                        data.putExtra("moneysource", MS);
+                        setResult(Activity.RESULT_FIRST_USER, data);
+                        finish();
                     }
                 });
                 dialog.findViewById(R.id.cancel_two_button_dialog).setOnClickListener(new View.OnClickListener() {
