@@ -39,7 +39,13 @@ import com.anychart.AnyChart;
 import com.anychart.AnyChartView;
 import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
+import com.anychart.charts.Cartesian;
 import com.anychart.charts.Pie;
+import com.anychart.core.cartesian.series.Column;
+import com.anychart.enums.Anchor;
+import com.anychart.enums.HoverMode;
+import com.anychart.enums.Position;
+import com.anychart.enums.TooltipPositionMode;
 import com.google.firebase.auth.FirebaseAuth;
 import com.whiteelephant.monthpicker.MonthPickerDialog;
 
@@ -73,17 +79,23 @@ public class StatisticsFragment extends Fragment {
     TextView dateHome;
     TextView dateArrow;
     int mYear, mMonth, mDay;
-    private ArrayList<MoneySource> moneySouces = new ArrayList<>();
-    private ArrayList<Transaction> transactions = new ArrayList<>();
-    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    private DataHelper dataHelper = new DataHelper();
+    private ArrayList<MoneySource> moneySources;
+    private ArrayList<Transaction> transactions;
+    private FirebaseAuth firebaseAuth;
+    private DataHelper dataHelper;
     private RecyclerView recyclerView;
     private HomeMoneySourceAdapter homeMoneySourceAdapter;
-    private MoneySource selectedMoneySource = new MoneySource();
+    private MoneySource selectedMoneySource;
     private LayoutAnimationController layoutAnimationController;
 
     private String[] overallTitle = {"Thu", "Chi"};
-    private AnyChartView overallChart;
+    private String[] incomeTitle = {"Thưởng", "Lãi", "Lương", "Được tặng", "Khác"};
+    private String[] spendTitle = {"Ăn uống", "Sinh hoạt", "Đi lại", "Sức khỏe", "Đám tiệc", "Khác"};
+    private AnyChartView overallChart, incomeChart, spendChart;
+    private Pie overallPieChart;
+    private Cartesian incomeCartesianChart, spendingCartersianChart;
+    private Column incomeColumn, spendingColumn;
+    private ArrayList<DataEntry> dataEntries, dataEntries2, dataEntries3;
 
     ViewMode2 viewMode2 = ViewMode2.DAY;
     enum ViewMode2 {
@@ -139,6 +151,21 @@ public class StatisticsFragment extends Fragment {
         final ProgressBar loading = view.findViewById(R.id.loading_statistics);
         final RelativeLayout rl = view.findViewById(R.id.statisticsContainer);
 
+        moneySources = new ArrayList<>();
+        transactions = new ArrayList<>();
+        firebaseAuth = FirebaseAuth.getInstance();
+        dataHelper = new DataHelper();
+        selectedMoneySource = new MoneySource();
+        overallPieChart = AnyChart.pie();
+        dataEntries = new ArrayList<>();
+        incomeCartesianChart = AnyChart.column();
+        dataEntries2 = new ArrayList<>();
+        spendingCartersianChart = AnyChart.column();
+        dataEntries3 = new ArrayList<>();
+
+
+
+
         dataHelper.getMoneySource(new MoneySourceCallBack() {
             @Override
             public void onCallBack(ArrayList<MoneySource> list) {
@@ -156,10 +183,9 @@ public class StatisticsFragment extends Fragment {
     }
 
     public void getMoneySourceList(ArrayList<MoneySource> list){
-        moneySouces.clear();
-        moneySouces.addAll(list);
-        selectedMoneySource = moneySouces.get(0);
-        transactions = selectedMoneySource.getTransactionsList();
+        moneySources.clear();
+        moneySources.addAll(list);
+        selectedMoneySource = moneySources.get(0);
     }
 
     public void initView(View view){
@@ -168,8 +194,54 @@ public class StatisticsFragment extends Fragment {
         dateHome = view.findViewById(R.id.date_statistics);
         dateArrow = view.findViewById(R.id.dateArrow_statistics);
         recyclerView = view.findViewById(R.id.moneySourceList_statistics);
-        overallChart = view.findViewById(R.id.overallChart);
 
+        // prepare Overall chart
+        dataEntries.add(new ValueDataEntry(overallTitle[0], 0.0));
+        dataEntries.add(new ValueDataEntry(overallTitle[1], 0.0));
+        overallChart = view.findViewById(R.id.overallChart);
+        overallPieChart.background("#000000");
+        overallPieChart.data(dataEntries);
+        overallChart.setChart(overallPieChart);
+
+        //prepare Income chart
+//        dataEntries2.add(new ValueDataEntry(incomeTitle[0],0.0));
+//        dataEntries2.add(new ValueDataEntry(incomeTitle[1],0.0));
+//        dataEntries2.add(new ValueDataEntry(incomeTitle[2],0.0));
+//        dataEntries2.add(new ValueDataEntry(incomeTitle[3],0.0));
+//        dataEntries2.add(new ValueDataEntry(incomeTitle[4],0.0));
+//        incomeChart = view.findViewById(R.id.incomeChart);
+//        incomeColumn = incomeCartesianChart.column(dataEntries2);
+//        incomeCartesianChart.background("#000000");
+//        incomeColumn.tooltip()
+//                .titleFormat("{%X}")
+//                .position(Position.CENTER_BOTTOM)
+//                .anchor(Anchor.CENTER_BOTTOM)
+//                .offsetX(0d)
+//                .offsetY(5d)
+//                .format("${%Value}{groupsSeparator: }");
+//        incomeCartesianChart.animation(true);
+//        incomeCartesianChart.title("Income");
+//        incomeCartesianChart.yScale().minimum(0d);
+//
+//        incomeCartesianChart.yAxis(0).labels().format("${%Value}{groupsSeparator: }");
+//
+//        incomeCartesianChart.tooltip().positionMode(TooltipPositionMode.POINT);
+//        incomeCartesianChart.interactivity().hoverMode(HoverMode.BY_X);
+//        incomeCartesianChart.xAxis(0).title("Hạng mục");
+//        incomeCartesianChart.yAxis(0).title("Số tiền");
+//        incomeChart.setChart(incomeCartesianChart);
+
+        // prepare Spend chart
+//        dataEntries3.add(new ValueDataEntry(incomeTitle[0],0.0));
+//        dataEntries3.add(new ValueDataEntry(incomeTitle[1],0.0));
+//        dataEntries3.add(new ValueDataEntry(incomeTitle[2],0.0));
+//        dataEntries3.add(new ValueDataEntry(incomeTitle[3],0.0));
+//        dataEntries3.add(new ValueDataEntry(incomeTitle[4],0.0));
+//        dataEntries3.add(new ValueDataEntry(incomeTitle[5],0.0));
+//        spendChart = view.findViewById(R.id.spendingChart);
+//        spendingCartersianChart.background("#000000");
+//        spendingCartersianChart.data(dataEntries2);
+//        spendChart.setChart(spendingCartersianChart);
 
         SharedPreferences prefs = ((MainActivity)getActivity()).getSharedPreferences("MyPreferences", MODE_PRIVATE);
         String myFormat = prefs.getString("currentDate", "dd/MM/yyyy");
@@ -200,6 +272,7 @@ public class StatisticsFragment extends Fragment {
                 mMonth = myCalender.get(Calendar.MONTH);
                 mDay = myCalender.get(Calendar.DAY_OF_MONTH);
                 String selectedItem = parent.getItemAtPosition(position).toString();
+                System.out.println(transactions.size());
                 switch (selectedItem)
                 {
                     case "Ngày":
@@ -210,7 +283,7 @@ public class StatisticsFragment extends Fragment {
 
                         transactions.clear();
                         transactions.addAll(modifierTransactionListByViewMode());
-                        
+                        System.out.println(transactions.size());
                         setupDateChart();
                         break;
                     }
@@ -268,12 +341,10 @@ public class StatisticsFragment extends Fragment {
         View.OnClickListener dateSelector = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 switch(viewMode2)
                 {
                     case DAY:
                     {
-
                         DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
@@ -295,9 +366,8 @@ public class StatisticsFragment extends Fragment {
 
                                 transactions.clear();
                                 transactions.addAll(modifierTransactionListByViewMode());
+                                System.out.println("Trans Before draw: " + transactions.size());
                                 setupDateChart();
-                                System.out.println("In: " + modifierTransactionListByViewMode().size());
-
                             }
                         };
                         new DatePickerDialog(getContext(), R.style.DatePickerDialog, date, mYear, mMonth, mDay).show();
@@ -409,7 +479,7 @@ public class StatisticsFragment extends Fragment {
         final SnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(recyclerView);
 
-        homeMoneySourceAdapter = new HomeMoneySourceAdapter(moneySouces, getContext());
+        homeMoneySourceAdapter = new HomeMoneySourceAdapter(moneySources, getContext());
         recyclerView.setAdapter(homeMoneySourceAdapter);
         recyclerView.setClipToPadding(false);
         int activeColor = ContextCompat.getColor(view.getContext(), R.color.white);
@@ -447,9 +517,10 @@ public class StatisticsFragment extends Fragment {
                 }
 
                 if (newState != RecyclerView.SCROLL_STATE_SETTLING){
-                    selectedMoneySource = moneySouces.get(pos);
+                    selectedMoneySource = moneySources.get(pos);
                     transactions.clear();
                     transactions.addAll(modifierTransactionListByViewMode());
+                    System.out.println(selectedMoneySource.getMoneySourceName() + " have " + transactions.size() + "|" + selectedMoneySource.getTransactionsList().size());
                 }
             }
 
@@ -500,6 +571,7 @@ public class StatisticsFragment extends Fragment {
     }
 
     private ArrayList<Double> overallRate(){
+        System.out.println("Size of Transactions Prepare: " + transactions.size());
         ArrayList<Double> res = new ArrayList<>();
         double income, spend;
         income = 0;
@@ -518,15 +590,16 @@ public class StatisticsFragment extends Fragment {
 
     private void setupDateChart(){
         //overall Chart
-        Pie overall = AnyChart.pie();
+        System.out.println("Size of Transactions Setup: " + transactions.size());
         ArrayList<Double> res = new ArrayList<>();
         res = overallRate();
-        List<DataEntry> dataEntries = new ArrayList<>();
+        dataEntries.clear();
         for (int i = 0; i < 2; i++){
+            System.out.println(res.get(i));
             dataEntries.add(new ValueDataEntry(overallTitle[i], res.get(i)));
         }
-        overall.data(dataEntries);
-        this.overallChart.setChart(overall);
+        System.out.println(dataEntries.size());
+        overallPieChart.data(dataEntries);
     }
 
     private void setupMonthChart(View view){
