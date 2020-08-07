@@ -8,33 +8,150 @@
     android:paddingHorizontal="20dp"
     android:background="@color/black">
 
-    <ImageButton
-        android:id="@+id/backButton_manage_periodic_transactions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_arrow"
-        android:tint="@color/white"
-        android:background="@android:color/transparent"
-        android:layout_marginTop="50dp"/>
     <RelativeLayout
-        android:layout_below="@id/backButton_manage_periodic_transactions"
+        android:layout_width="match_parent"
+        android:id="@+id/topbar"
+        android:layout_marginTop="50dp"
+        android:layout_height="wrap_content">
+        <ImageButton
+            android:id="@+id/backButton_add_periodic_transactions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/ic_arrow"
+            android:tint="@color/white"
+            android:background="@android:color/transparent"/>
+
+        <TextView
+            android:layout_centerHorizontal="true"
+            android:id="@+id/PTTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:textSize="22sp"
+            android:text="@string/addPeriodicTransaction"
+            android:textColor="@color/white"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_below="@id/topbar"
         android:layout_width="match_parent"
         android:id="@+id/firstRow"
+        android:orientation="vertical"
         android:layout_marginTop="15dp"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_alignParentStart="true"
-            android:id="@+id/accountInfoTitle"
-            android:layout_width="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-light"
-            android:textSize="25sp"
-            android:text="@string/addPeriodicTransaction"
-            android:textColor="@color/white"
-            android:layout_marginTop="15dp"/>
 
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/ic_piggy_bank"
+            android:layout_centerHorizontal="true"/>
+
+        <EditText
+            android:layout_below="@id/selectRow"
+            android:layout_marginTop="20dp"
+            android:id="@+id/name_addPeriodTransaction"
+            android:fontFamily="sans-serif-light"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:textSize="15sp"
+            android:hint="@string/periodicTransactionName"
+            android:textColorHint="@color/hintText"
+            android:background="@drawable/transaction_item"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:inputType="text"/>
+
+        <RelativeLayout
+            android:id="@+id/selectRow"
+            android:layout_below="@id/icon"
+            android:layout_marginTop="50dp"
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content">
+            
+            <Spinner
+                android:id="@+id/type_addPeriodTransaction"
+                android:layout_width="80dp"
+                android:layout_height="35dp"
+                android:spinnerMode="dropdown"
+                android:popupBackground="@drawable/transaction_item"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/transaction_item"/>
+
+            <Spinner
+                android:layout_marginStart="20dp"
+                android:id="@+id/period_addPeriodTransaction"
+                android:layout_toEndOf="@id/type_addPeriodTransaction"
+                android:layout_width="80dp"
+                android:layout_height="35dp"
+                android:spinnerMode="dropdown"
+                android:popupBackground="@drawable/transaction_item"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/transaction_item"/>
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:id="@+id/chooseMoneysource"
+            android:layout_below="@id/name_addPeriodTransaction"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:weightSum="4">
+            <EditText
+                android:hint="@string/chooseMoneySource"
+                android:textColorHint="@color/hintText"
+                android:textSize="15sp"
+                android:id="@+id/moneySource_addPeriodTransaction"
+                android:enabled="false"
+                android:fontFamily="sans-serif-light"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="match_parent"
+                android:background="@drawable/transaction_item"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:inputType="text"/>
+            <Button
+                android:id="@+id/chooseMoneySourceButton_addPeriodTransaction"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="45dp"
+                android:layout_marginStart="20dp"
+                android:background="@drawable/transaction_item"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:textSize="15sp"
+                android:fontFamily="sans-serif-light"
+                android:foreground="?attr/selectableItemBackground"
+                android:text="@string/choose"/>
+
+        </LinearLayout>
+
+        <Button
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/chooseMoneysource"
+            android:id="@+id/save_addPeriodTransaction"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="50dp"
+            android:layout_width="75dp"
+            android:layout_height="40dp"
+            android:textAllCaps="false"
+            android:background="@drawable/authbtns"
+            android:fontFamily="sans-serif-light"
+            android:textSize="15sp"
+            android:foreground="?attr/selectableItemBackground"
+            android:textColor="@color/white"
+            android:text="@string/save"/>
 
     </RelativeLayout>
 

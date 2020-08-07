@@ -51,7 +51,7 @@
                 <EditText
                     android:id="@+id/moneyAmount_addTransaction"
                     android:layout_width="match_parent"
-                    android:layout_height="75dp"
+                    android:layout_height="60dp"
                     android:textSize="20sp"
                     android:hint="@string/enterMoneyAmount"
                     android:layout_marginTop="20dp"
@@ -73,7 +73,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="45dp"
                     android:orientation="horizontal"
                     android:layout_marginTop="20dp"
                     android:weightSum="4">
@@ -115,7 +115,7 @@
                     android:fontFamily="sans-serif-medium"/>
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="45dp"
                     android:orientation="horizontal"
                     android:layout_marginTop="20dp"
                     android:weightSum="4">
@@ -158,7 +158,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="45dp"
                     android:orientation="horizontal"
                     android:layout_marginTop="20dp"
                     android:weightSum="4">
@@ -215,8 +215,8 @@
                 <Button
                     android:id="@+id/save_editUserInfo"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="30dp"
-                    android:layout_width="100dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_width="75dp"
                     android:layout_height="45dp"
                     android:textAllCaps="false"
                     android:background="@drawable/authbtns"
