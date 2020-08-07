@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class HomeMoneySourceAdapter extends RecyclerView.Adapter<HomeMoneySourceAdapter.ViewHolder> {
+    private static HomeMoneySourceAdapter.ClickListener clickListener;
     ArrayList<MoneySource> mainModel;
     Context context;
     MoneyToStringConverter converter = new MoneyToStringConverter();
@@ -40,16 +41,31 @@ public class HomeMoneySourceAdapter extends RecyclerView.Adapter<HomeMoneySource
         return mainModel.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView moneySourceName;
         TextView moneySourceTotal;
         TextView moneySourceCurrency;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+
+            itemView.setOnClickListener(this);
             moneySourceName = itemView.findViewById(R.id.moneySourceName);
             moneySourceTotal = itemView.findViewById(R.id.moneySourceTotal);
             moneySourceCurrency = itemView.findViewById(R.id.moneySourceCurrency);
         }
+
+        @Override
+        public void onClick(View view) {
+            clickListener.onItemClick(getAdapterPosition(), view);
+        }
+    }
+
+    public void setOnItemClickListener(HomeMoneySourceAdapter.ClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
+
+    public interface ClickListener {
+        void onItemClick(int position, View v);
     }
 }

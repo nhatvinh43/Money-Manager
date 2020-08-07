@@ -30,6 +30,7 @@
 
 
     <ScrollView
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/addTransactionTitle"
@@ -46,60 +47,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_marginHorizontal="5dp"
-                    android:layout_height="200dp"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="0dp">
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/moneysource"
-                        android:scaleType="centerCrop"/>
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:orientation="vertical">
-                            <TextView
-                                android:layout_gravity="center_horizontal"
-                                android:id="@+id/moneySourceNameDisplay_addMoneySource"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="sans-serif"
-                                android:textColor="@color/white"
-                                android:textSize="15sp"
-                                android:text="@string/moneySourceNamePH"/>
-                            <TextView
-                                android:layout_marginTop="5dp"
-                                android:layout_gravity="center_horizontal"
-                                android:id="@+id/moneySourceAmountDisplay_addMoneySource"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="sans-serif"
-                                android:textStyle="bold"
-                                android:textColor="@color/white"
-                                android:textSize="30sp"
-                                android:text="@string/moneyPH"/>
-                            <TextView
-                                android:layout_marginTop="5dp"
-                                android:layout_gravity="center_horizontal"
-                                android:id="@+id/moneySourceUnitDisplay_addMoneySource"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="sans-serif"
-                                android:textColor="@color/white"
-                                android:textSize="15sp"
-                                android:text="@string/currencyPH"/>
-                        </LinearLayout>
-
-                    </RelativeLayout>
-                </androidx.cardview.widget.CardView>
 
                 <TextView
                     android:layout_marginTop="20dp"
@@ -216,12 +163,20 @@
                     android:textSize="15sp"
                     android:foreground="?attr/selectableItemBackground"
                     android:textColor="@color/white"
-                    android:text="@string/save"/>
+                    android:text="Tạo"/>
 
             </LinearLayout>
         </RelativeLayout>
 
 
     </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        />
 
 </RelativeLayout>

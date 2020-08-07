@@ -104,11 +104,14 @@ public class DataHelper {
         moneySource.put("currencyId", curID);
         moneySource.put("currencyName", curName);
 
+        final MoneySource ms = new MoneySource(amount, curID, curName, limit, msId, name, uID);
         db.collection("moneySources").document(msId).set(moneySource)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        callBack.onCallBack(new ArrayList<MoneySource>());
+                        ArrayList<MoneySource> arrayList = new ArrayList<>();
+                        arrayList.add(ms);
+                        callBack.onCallBack(arrayList);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -241,6 +244,25 @@ public class DataHelper {
                         Log.d("-------- Update moneysource --------", "Fail");
                     }
                 });
+    }
+
+    public void deleteMoneySource(MoneySource ms){
+        db.collection("moneySources").document(ms.getMoneySourceId()).delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("-------- Delete moneysource --------", "Success");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("-------- Delete moneysource --------", "Fail");
+                    }
+                });
+
+        for(Transaction trans : ms.getTransactionsList()) {
+            deleteTransaction(trans);
+        }
     }
 
     // Transaction model
@@ -449,20 +471,7 @@ public class DataHelper {
         return newMoneySourceId;
     }
 
-    public void deleteMoneySource(String MSId){
-        db.collection("moneySources").document(MSId).delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("DeleteMS",  "DocumentSnapshot successfully deleted!");
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w("DeleteMS", "Error deleting document", e);
-            }
-        });
-    }
+
     public void updateMoneySource(String MSId, String moneySourceName, Number amount, Number limit,
                                   String currencyId, String currencyName){
         Map<String, Object> moneySource = new HashMap<>();

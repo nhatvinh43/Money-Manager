@@ -75,6 +75,7 @@ import javax.xml.transform.Result;
 import me.itangqi.waveloadingview.WaveLoadingView;
 
 import static android.content.ContentValues.TAG;
+import static android.content.Context.ACCESSIBILITY_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 
 /**
@@ -87,8 +88,10 @@ public class HomeFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    public static final int HOME_RQCODE = 2;
-    public static final int HOME_TRANSACTION_RQCODE = 3;
+    public static final int HOME_NEW_TRANSACTION_RQCODE = 2;
+    public static final int HOME_CHANGE_TRANSACTION_RQCODE = 3;
+    public static final int HOME_NEW_MONEYSOURCE_RQCODE = 4;
+    public static final int HOME_CHANGE_MONEYSOURCE_RQCODE = 5;
     ViewMode viewMode = ViewMode.DAY;
     Calendar fromCal = Calendar.getInstance();
     Calendar toCal = Calendar.getInstance();
@@ -649,6 +652,17 @@ public class HomeFragment extends Fragment {
         final int inactiveColor = ContextCompat.getColor(view.getContext(), R.color.colorPrimaryDark);
         moneySourceRecycleView.addItemDecoration(new DotsIndicatorDecoration(9,20,100,inactiveColor,activeColor));
 
+        moneySourceAdapter.setOnItemClickListener(new HomeMoneySourceAdapter.ClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
+                MoneySource ms = moneySourceList.get(position);
+                Log.d("----------------------- Id moneysource",position + "    " + ms.getMoneySourceId());
+                Intent transactionDetailIntent = new Intent(getContext(), MoneySourceDetailsActivity.class);
+                transactionDetailIntent.putExtra("MoneySourceId", ms.getMoneySourceId());
+                startActivityForResult(transactionDetailIntent, HOME_CHANGE_MONEYSOURCE_RQCODE);
+            }
+        });
+
         // Money source item animation
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -728,10 +742,10 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClick(int position, View v) {
                 Transaction trans = transactionList.get(position);
-                Log.d("----------------------- Id ",position + "    " + trans.getTransactionId());
+                Log.d("----------------------- Id transation ",position + "    " + trans.getTransactionId());
                 Intent transactionDetailIntent = new Intent(getContext(), TransactionDetailsActivity.class);
                 transactionDetailIntent.putExtra("TransactionId", trans.getTransactionId());
-                startActivityForResult(transactionDetailIntent, HOME_TRANSACTION_RQCODE);
+                startActivityForResult(transactionDetailIntent, HOME_CHANGE_TRANSACTION_RQCODE);
             }
         });
 
@@ -997,7 +1011,7 @@ public class HomeFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == HOME_RQCODE) { // Xử lý khi thêm transaction mới
+        if(requestCode == HOME_NEW_TRANSACTION_RQCODE) { // Xử lý khi thêm transaction mới
             if(resultCode == Activity.RESULT_OK) {
                 Log.d("-------------Test result from add trans ", "OKE");
                 DataHelper dataHelper = new DataHelper();
@@ -1039,7 +1053,7 @@ public class HomeFragment extends Fragment {
                     }
                 }
             }
-        } else if (requestCode == HOME_TRANSACTION_RQCODE) { // Xử lý khi cập nhập transaction
+        } else if (requestCode == HOME_CHANGE_TRANSACTION_RQCODE) { // Xử lý khi cập nhập transaction
             if(resultCode == Activity.RESULT_OK) {
                 Log.d("-------------Test result from trans detail ", "OKE");
                 DataHelper dataHelper = new DataHelper();
@@ -1165,6 +1179,51 @@ public class HomeFragment extends Fragment {
                 }
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 Log.d("-------------Test result from trans detail ", "CANCEL");
+            }
+        } else if (requestCode == HOME_CHANGE_MONEYSOURCE_RQCODE) { // Thay đổi thông tin nguồn tiền
+            if(resultCode == Activity.RESULT_OK) {
+                Log.d("-------------Test result from moneysource detail ", "OKE");
+                DataHelper dataHelper = new DataHelper();
+                MoneySource resMoneySource = (MoneySource) data.getParcelableExtra("moneysource");
+                String msId = resMoneySource.getMoneySourceId();
+
+                for(MoneySource ms : moneySourceList) {
+                    if(ms.getMoneySourceId().equals(msId)) {
+                        ms.setAmount(resMoneySource.getAmount());
+                        ms.setMoneySourceName(resMoneySource.getMoneySourceName());
+                        // Đơn vị tiền tệ thêm sau
+
+                        dataHelper.updateMoneySource(ms);
+                        moneySourceAdapter.notifyDataSetChanged();
+                        break;
+                    }
+                }
+            } else if(resultCode == Activity.RESULT_FIRST_USER) {
+                Log.d("-------------Test result from moneysource detail ", "DELETE");
+                DataHelper dataHelper = new DataHelper();
+                MoneySource resMoneySource = (MoneySource) data.getParcelableExtra("moneysource");
+                String msId = resMoneySource.getMoneySourceId();
+
+                for(int i=0; i<moneySourceList.size(); i++) {
+                    if(moneySourceList.get(i).getMoneySourceId().equals(msId)) {
+                        dataHelper.deleteMoneySource(moneySourceList.get(i));
+                        moneySourceList.remove(i);
+                        moneySourceAdapter.notifyDataSetChanged();
+                        break;
+                    }
+                }
+            } else if(resultCode == Activity.RESULT_CANCELED) {
+                Log.d("-------------Test result from moneysource detail ", "CANCEL");
+            }
+        } else if (requestCode == HOME_NEW_MONEYSOURCE_RQCODE) {
+            if(resultCode == Activity.RESULT_OK) {
+                Log.d("-------------Test result from add moneysource ", "OKE");
+                DataHelper dataHelper = new DataHelper();
+                MoneySource resMoneySource = (MoneySource) data.getParcelableExtra("moneysource");
+                resMoneySource.setTransactionsList(new ArrayList<Transaction>());
+
+                moneySourceList.add(resMoneySource);
+                moneySourceAdapter.notifyDataSetChanged();
             }
         }
     }

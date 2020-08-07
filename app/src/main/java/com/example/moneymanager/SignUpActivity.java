@@ -160,7 +160,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 public void onCallBackFail(String message) {
 
                                 }
-                            }, user.getUid(), "Ví chung", 0.0, 0.0, "curId", "VND");
+                            }, user.getUid(), "Ví chung", 0.0, 0.0, "Cur01", "VND");
 
                         } else {
                             Toast.makeText(SignUpActivity.this, "Thất bại: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
