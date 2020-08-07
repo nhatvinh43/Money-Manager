@@ -3,6 +3,10 @@ package com.example.moneymanager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 public class AddPeriodicTransaction extends AppCompatActivity {
 
@@ -46,5 +50,52 @@ public class AddPeriodicTransaction extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_add_periodic_transaction);
+
+        //Back
+        findViewById(R.id.backButton_add_periodic_transactions).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        //Type menu initiation
+        Spinner typeMenu =findViewById(R.id.type_addPeriodTransaction);
+        String[] typeMenuItems = new String[]{"Thu","Chi"};
+
+        ArrayAdapter<String> typeAdapter = new ArrayAdapter<String>(this, R.layout.spinner_menu, typeMenuItems);
+        typeMenu.setAdapter(typeAdapter);
+        typeMenu.setSelection(0);
+        typeMenu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        //Period menu initiation
+        Spinner periodMenu =findViewById(R.id.period_addPeriodTransaction);
+        String[] periodMenuItems = new String[]{"Ngày","Tháng", "Năm"};
+
+        ArrayAdapter<String> periodAdapter = new ArrayAdapter<String>(this, R.layout.spinner_menu, periodMenuItems);
+        periodMenu.setAdapter(periodAdapter);
+        periodMenu.setSelection(0);
+        periodMenu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
     }
 }
