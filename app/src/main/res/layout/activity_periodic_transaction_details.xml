@@ -26,6 +26,7 @@
             android:background="@android:color/transparent"/>
 
         <Spinner
+            android:enabled="false"
             android:layout_centerVertical="true"
             android:id="@+id/period_periodicTransactionDetails"
             android:layout_alignParentEnd="true"

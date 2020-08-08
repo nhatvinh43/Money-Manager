@@ -1,8 +1,11 @@
 package com.example.moneymanager;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.sql.Timestamp;
 
-public class PeriodicTransaction {
+public class PeriodicTransaction implements Parcelable {
     private String description;
     private String expenditureId;
     private String expenditureName;
@@ -13,6 +16,19 @@ public class PeriodicTransaction {
     private boolean transactionIsIncome;
     private Timestamp transactionTime;
     private String periodicType;
+
+    public PeriodicTransaction() {
+        this.description = "";
+        this.expenditureId = "";
+        this.expenditureName = "";
+        this.transactionAmount = 0;
+        this.transactionId = "";
+        this.moneySourceId = "";
+        this.moneySourceName = "";
+        this.transactionIsIncome = true;
+        this.transactionTime = null;
+        this.periodicType = "";
+    }
 
     public PeriodicTransaction(String description, String expenditureId, String expenditureName, Number transactionAmount, String transactionId, String moneySourceId, String moneySourceName, boolean transactionIsIncome, Timestamp transactionTime, String periodicType) {
         this.description = description;
@@ -25,6 +41,50 @@ public class PeriodicTransaction {
         this.transactionIsIncome = transactionIsIncome;
         this.transactionTime = transactionTime;
         this.periodicType = periodicType;
+    }
+
+    protected PeriodicTransaction(Parcel in) {
+        description = in.readString();
+        expenditureId = in.readString();
+        expenditureName = in.readString();
+        transactionAmount = in.readDouble();
+        transactionId = in.readString();
+        moneySourceId = in.readString();
+        moneySourceName = in.readString();
+        transactionIsIncome = in.readByte() != 0;
+        periodicType = in.readString();
+        transactionTime = new Timestamp(in.readLong());
+    }
+
+    public static final Creator<PeriodicTransaction> CREATOR = new Creator<PeriodicTransaction>() {
+        @Override
+        public PeriodicTransaction createFromParcel(Parcel in) {
+            return new PeriodicTransaction(in);
+        }
+
+        @Override
+        public PeriodicTransaction[] newArray(int size) {
+            return new PeriodicTransaction[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(description);
+        parcel.writeString(expenditureId);
+        parcel.writeString(expenditureName);
+        parcel.writeDouble(transactionAmount.doubleValue());
+        parcel.writeString(transactionId);
+        parcel.writeString(moneySourceId);
+        parcel.writeString(moneySourceName);
+        parcel.writeByte((byte) (transactionIsIncome ? 1 : 0));
+        parcel.writeString(periodicType);
+        parcel.writeLong(transactionTime.getTime());
     }
 
     public String getMoneySourceName() {
@@ -106,4 +166,5 @@ public class PeriodicTransaction {
     public void setPeriodicType(String periodicType) {
         this.periodicType = periodicType;
     }
+
 }

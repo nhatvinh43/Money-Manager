@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -13,7 +14,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
@@ -98,7 +101,11 @@ public class ManagePeriodicTransactions extends AppCompatActivity {
         periodicTransactionAdapter.setOnItemClickListener(new UltilitiesPeriodicManageAdapter.ClickListener() {
             @Override
             public void onItemClick(int position, View v) {
-                // Click vào item
+                PeriodicTransaction peTrans = periodicTrasactionList.get(position);
+                Log.d("----------------------- Id transation ",position + "    " + peTrans.getTransactionId());
+                Intent transactionDetailIntent = new Intent(ManagePeriodicTransactions.this , PeriodicTransactionDetails.class);
+                transactionDetailIntent.putExtra("periodicTransaction", peTrans);
+                startActivityForResult(transactionDetailIntent, ULTILITIES_CHANGE_PERIODICTRANSACION_RQCODE);
             }
         });
 
@@ -106,6 +113,7 @@ public class ManagePeriodicTransactions extends AppCompatActivity {
         findViewById(R.id.backButton_manage_periodic_transactions).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(Activity.RESULT_CANCELED);
                 finish();
             }
         });
@@ -202,7 +210,7 @@ public class ManagePeriodicTransactions extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("periodicTransactionList", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();
-        String json = gson.toJson(periodicTrasactionList);
+        String json = gson.toJson(periodicTrasactionListFull);
         editor.putString("list", json);
         editor.apply();
     }
@@ -218,6 +226,7 @@ public class ManagePeriodicTransactions extends AppCompatActivity {
             periodicTrasactionListFull = new ArrayList<>();
             periodicTrasactionList = new ArrayList<>();
         } else {
+            periodicTrasactionList = new ArrayList<>();
             periodicTrasactionList.addAll(periodicTrasactionListFull);
         }
     }
@@ -232,7 +241,7 @@ public class ManagePeriodicTransactions extends AppCompatActivity {
             SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
             for(PeriodicTransaction trans : periodicTrasactionList) {
-                String money = converter.moneyToString((double)trans.getTransactionAmount());
+                String money = converter.moneyToString(trans.getTransactionAmount().doubleValue());
                 String expenditureName = trans.getExpenditureName().toLowerCase();
                 String moneySourceName = trans.getMoneySourceName().toLowerCase();
 
@@ -250,5 +259,68 @@ public class ManagePeriodicTransactions extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == ULTILITIES_NEW_PERIODICTRANSACION_RQCODE) {
+            if(resultCode == Activity.RESULT_OK) { // Thêm giao dịch định kỳ
+                Log.d("-------------Test result from add periodictrans ", "OKE");
+                PeriodicTransaction resPeriodicTransaction = (PeriodicTransaction) data.getParcelableExtra("periodicTransaction");
+                periodicTrasactionListFull.add(resPeriodicTransaction);
+                periodicTrasactionList.add(resPeriodicTransaction);
+                periodicTransactionAdapter.notifyDataSetChanged();
+                saveData();
+            }
+        }
+        else if(requestCode == ULTILITIES_CHANGE_PERIODICTRANSACION_RQCODE) { // Thay đổi giao dịch định kỳ
+            if(resultCode == Activity.RESULT_OK) {
+                Log.d("-------------Test result from periodictrans detail ", "OKE");
+                DataHelper dataHelper = new DataHelper();
+                PeriodicTransaction resPeriodicTransaction = (PeriodicTransaction) data.getParcelableExtra("periodicTransaction");
+                for(int i = 0; i < periodicTrasactionListFull.size(); i++) {
+                    PeriodicTransaction peTrans = periodicTrasactionListFull.get(i);
+                    if(peTrans.getTransactionId().equals(resPeriodicTransaction.getTransactionId())) {
+                        periodicTrasactionListFull.remove(i);
+                        periodicTrasactionListFull.add(i, resPeriodicTransaction);
+                        break;
+                    }
+                }
+
+                for(int i = 0; i < periodicTrasactionList.size(); i++) {
+                    PeriodicTransaction peTrans = periodicTrasactionList.get(i);
+                    if(peTrans.getTransactionId().equals(resPeriodicTransaction.getTransactionId())) {
+                        periodicTrasactionList.remove(i);
+                        periodicTrasactionList.add(i, resPeriodicTransaction);
+                        break;
+                    }
+                }
+
+                dataHelper.updatePeriodicTransaction(resPeriodicTransaction);
+                periodicTransactionAdapter.notifyDataSetChanged();
+                saveData();
+            } else if (resultCode == Activity.RESULT_FIRST_USER) {
+                Log.d("-------------Test result from periodictrans detail ", "DELETE");
+                DataHelper dataHelper = new DataHelper();
+                PeriodicTransaction resPeriodicTransaction = (PeriodicTransaction) data.getParcelableExtra("periodicTransaction");
+                for(int i = 0; i < periodicTrasactionListFull.size(); i++) {
+                    PeriodicTransaction peTrans = periodicTrasactionListFull.get(i);
+                    if(peTrans.getTransactionId().equals(resPeriodicTransaction.getTransactionId())) {
+                        periodicTrasactionListFull.remove(i);
+                        break;
+                    }
+                }
+
+                for(int i = 0; i < periodicTrasactionList.size(); i++) {
+                    PeriodicTransaction peTrans = periodicTrasactionList.get(i);
+                    if(peTrans.getTransactionId().equals(resPeriodicTransaction.getTransactionId())) {
+                        periodicTrasactionList.remove(i);
+                        break;
+                    }
+                }
+
+                dataHelper.deletePeriodicTransaction(resPeriodicTransaction);
+                periodicTransactionAdapter.notifyDataSetChanged();
+                saveData();
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                Log.d("-------------Test result from periodictrans detail ", "CANCEL");
+            }
+        }
     }
 }

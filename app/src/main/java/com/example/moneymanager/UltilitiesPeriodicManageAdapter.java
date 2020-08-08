@@ -43,18 +43,21 @@ public class UltilitiesPeriodicManageAdapter extends RecyclerView.Adapter<Ultili
         int id = context.getResources().getIdentifier("com.example.moneymanager:drawable/" + iconString, null, null);
 
         holder.transactionName.setText(mainModel.get(position).getExpenditureName());
-        holder.transactionAmount.setText((mainModel.get(position).getTransactionIsIncome() == true ? "+" : "-") + converter.moneyToString((double)mainModel.get(position).getTransactionAmount()));
+        holder.transactionAmount.setText((mainModel.get(position).getTransactionIsIncome() == true ? "+" : "-") + converter.moneyToString(mainModel.get(position).getTransactionAmount().doubleValue()));
         holder.transactionAmount.setTextColor(mainModel.get(position).getTransactionIsIncome() == true ? Color.GREEN : Color.RED);
         holder.transactionMoneySource.setText(mainModel.get(position).getMoneySourceName());
         holder.transactionIcon.setImageResource(id);
 
         Date time = new Date(mainModel.get(position).getTransactionTime().getTime());
         if(mainModel.get(position).getPeriodicType().equals("day")) {
-            holder.transactionTime.setText(sfd_day.format(time) + " Hằng ngày");
+            holder.transactionTime.setText(sfd_day.format(time));
+            holder.transactionPeriodicType.setText("Hằng ngày");
         } else if (mainModel.get(position).getPeriodicType().equals("month")) {
-            holder.transactionTime.setText(sfd_day.format(time) + " " + sfd_month.format(time) + " Hằng tháng");
+            holder.transactionTime.setText(sfd_day.format(time) + " ngày " + sfd_month.format(time));
+            holder.transactionPeriodicType.setText("Hằng tháng");
         } else if (mainModel.get(position).getPeriodicType().equals("year")) {
-            holder.transactionTime.setText(sfd_day.format(time) + " " + sfd_year.format(time) + " Hằng năm");
+            holder.transactionTime.setText(sfd_day.format(time) + " ngày " + sfd_year.format(time));
+            holder.transactionPeriodicType.setText("Hằng năm");
         }
     }
 
@@ -68,6 +71,7 @@ public class UltilitiesPeriodicManageAdapter extends RecyclerView.Adapter<Ultili
         TextView transactionTime;
         TextView transactionAmount;
         TextView transactionMoneySource;
+        TextView transactionPeriodicType;
         ImageView transactionIcon;
 
         public ViewHolder(@NonNull View itemView) {
@@ -78,6 +82,7 @@ public class UltilitiesPeriodicManageAdapter extends RecyclerView.Adapter<Ultili
             transactionTime = itemView.findViewById(R.id.time_periodTransaction);
             transactionAmount = itemView.findViewById(R.id.amount_periodTransaction);
             transactionMoneySource = itemView.findViewById(R.id.moneySource_periodTransaction);
+            transactionPeriodicType = itemView.findViewById(R.id.periodicType_periodTransaction);
             transactionIcon = itemView.findViewById(R.id.icon_periodTransaction);
         }
 

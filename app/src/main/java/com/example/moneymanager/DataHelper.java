@@ -289,12 +289,11 @@ public class DataHelper {
                         Log.d("AddTran", "Successfully");
                     }
                 }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                transCallBack.onCallBackFail(e.getMessage());
-                Log.w("CreateNewMoneySource", "Error writing document", e);
-            }
-        });
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        transCallBack.onCallBackFail(e.getMessage());
+                    }
+                });
         return newTransactionId;
     }
 
@@ -390,6 +389,83 @@ public class DataHelper {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.d("-------- Delete transacion --------", "Fail");
+                    }
+                });
+    }
+
+    // PeriodicTransaction Model
+    public String setPeriodicTransaction(final PeriodicTransactionCallBack transCallBack, String description, String expenditureId, String expenditureName, Number transactionAmount, String moneySourceId, String moneySourceName,
+                                 boolean transactionIsIncome, Timestamp transactionTime, String periodicType){
+        String newTransactionId = db.collection("periodicTransactions").document().getId();
+        Map<String, Object> transaction = new HashMap<>();
+        transaction.put("moneySourceId", moneySourceId);
+        transaction.put("moneySourceName", moneySourceName);
+        transaction.put("transactionAmount", transactionAmount);
+        transaction.put("transactionIsIncome", transactionIsIncome);
+        transaction.put("description", description);
+        transaction.put("expenditureId", expenditureId);
+        transaction.put("expenditureName", expenditureName);
+        transaction.put("transactionTime", transactionTime);
+        transaction.put("periodicType", periodicType);
+
+        final PeriodicTransaction trans = new PeriodicTransaction(description, expenditureId, expenditureName, transactionAmount, newTransactionId, moneySourceId, moneySourceName, transactionIsIncome, transactionTime, periodicType);
+        db.collection("periodicTransactions").document(newTransactionId).set(transaction)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        ArrayList<PeriodicTransaction> arrayList = new ArrayList<>();
+                        arrayList.add(trans);
+                        transCallBack.onCallBack(arrayList);
+                        Log.d("AddTran", "Successfully");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        transCallBack.onCallBackFail(e.getMessage());
+                    }
+                });
+        return newTransactionId;
+    }
+
+    public void updatePeriodicTransaction(PeriodicTransaction trans) {
+        Map<String, Object> transaction = new HashMap<>();
+        transaction.put("moneySourceId", trans.getMoneySourceId());
+        transaction.put("moneySourceName", trans.getMoneySourceName());
+        transaction.put("transactionAmount", trans.getTransactionAmount());
+        transaction.put("transactionIsIncome", trans.getTransactionIsIncome());
+        transaction.put("description", trans.getDescription());
+        transaction.put("expenditureId", trans.getExpenditureId());
+        transaction.put("expenditureName", trans.getExpenditureName());
+        transaction.put("transactionTime", trans.getTransactionTime());
+        transaction.put("periodicType", trans.getPeriodicType());
+
+        db.collection("periodicTransactions").document(trans.getTransactionId()).set(transaction)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("-------- Update periodic transaction --------", "Success");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("-------- Update periodic transacion --------", "Fail");
+                    }
+                });
+    }
+
+    public void deletePeriodicTransaction(PeriodicTransaction trans) {
+        db.collection("periodicTransactions").document(trans.getTransactionId()).delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("-------- Delete periodic transaction --------", "Success");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("-------- Delete periodic transacion --------", "Fail");
                     }
                 });
     }
