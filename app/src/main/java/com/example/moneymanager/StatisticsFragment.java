@@ -35,6 +35,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.anychart.APIlib;
 import com.anychart.AnyChart;
 import com.anychart.AnyChartView;
 import com.anychart.chart.common.dataentry.DataEntry;
@@ -163,8 +164,14 @@ public class StatisticsFragment extends Fragment {
         spendingCartersianChart = AnyChart.column();
         dataEntries3 = new ArrayList<>();
 
+        overallChart = view.findViewById(R.id.overallChart);
+        APIlib.getInstance().setActiveAnyChartView(overallChart);
 
+        incomeChart = view.findViewById(R.id.incomeChart);
+        APIlib.getInstance().setActiveAnyChartView(incomeChart);
 
+        spendChart = view.findViewById(R.id.spendChart);
+        APIlib.getInstance().setActiveAnyChartView(spendChart);
 
         dataHelper.getMoneySource(new MoneySourceCallBack() {
             @Override
@@ -196,52 +203,64 @@ public class StatisticsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.moneySourceList_statistics);
 
         // prepare Overall chart
-        dataEntries.add(new ValueDataEntry(overallTitle[0], 0.0));
-        dataEntries.add(new ValueDataEntry(overallTitle[1], 0.0));
-        overallChart = view.findViewById(R.id.overallChart);
-        overallPieChart.background("#000000");
+        dataEntries.clear();
+        dataEntries.add(new ValueDataEntry(overallTitle[0], 10));
+        dataEntries.add(new ValueDataEntry(overallTitle[1], 10));
         overallPieChart.data(dataEntries);
+        overallPieChart.background("#000000");
         overallChart.setChart(overallPieChart);
 
         //prepare Income chart
-//        dataEntries2.add(new ValueDataEntry(incomeTitle[0],0.0));
-//        dataEntries2.add(new ValueDataEntry(incomeTitle[1],0.0));
-//        dataEntries2.add(new ValueDataEntry(incomeTitle[2],0.0));
-//        dataEntries2.add(new ValueDataEntry(incomeTitle[3],0.0));
-//        dataEntries2.add(new ValueDataEntry(incomeTitle[4],0.0));
-//        incomeChart = view.findViewById(R.id.incomeChart);
-//        incomeColumn = incomeCartesianChart.column(dataEntries2);
-//        incomeCartesianChart.background("#000000");
-//        incomeColumn.tooltip()
-//                .titleFormat("{%X}")
-//                .position(Position.CENTER_BOTTOM)
-//                .anchor(Anchor.CENTER_BOTTOM)
-//                .offsetX(0d)
-//                .offsetY(5d)
-//                .format("${%Value}{groupsSeparator: }");
-//        incomeCartesianChart.animation(true);
-//        incomeCartesianChart.title("Income");
-//        incomeCartesianChart.yScale().minimum(0d);
-//
-//        incomeCartesianChart.yAxis(0).labels().format("${%Value}{groupsSeparator: }");
-//
-//        incomeCartesianChart.tooltip().positionMode(TooltipPositionMode.POINT);
-//        incomeCartesianChart.interactivity().hoverMode(HoverMode.BY_X);
-//        incomeCartesianChart.xAxis(0).title("Hạng mục");
-//        incomeCartesianChart.yAxis(0).title("Số tiền");
-//        incomeChart.setChart(incomeCartesianChart);
+        dataEntries2.clear();
+        dataEntries2.add(new ValueDataEntry(incomeTitle[0],1));
+        dataEntries2.add(new ValueDataEntry(incomeTitle[1],2));
+        dataEntries2.add(new ValueDataEntry(incomeTitle[2],3));
+        dataEntries2.add(new ValueDataEntry(incomeTitle[3],2));
+        dataEntries2.add(new ValueDataEntry(incomeTitle[4],1));
+        incomeColumn = incomeCartesianChart.column(dataEntries2);
+        incomeCartesianChart.background("#000000");
+        incomeColumn.tooltip()
+                .titleFormat("{%X}")
+                .position(Position.CENTER_BOTTOM)
+                .anchor(Anchor.CENTER_BOTTOM)
+                .offsetX(0d)
+                .offsetY(5d)
+                .format("${%Value}{groupsSeparator: }");
+        incomeCartesianChart.yScale().minimum(0d);
+
+        incomeCartesianChart.yAxis(0).labels().format("${%Value}{groupsSeparator: }");
+
+        incomeCartesianChart.tooltip().positionMode(TooltipPositionMode.POINT);
+        incomeCartesianChart.interactivity().hoverMode(HoverMode.BY_X);
+        incomeCartesianChart.xAxis(0).title("Hạng mục");
+        incomeCartesianChart.yAxis(0).title("Số tiền");
+        incomeChart.setChart(incomeCartesianChart);
 
         // prepare Spend chart
-//        dataEntries3.add(new ValueDataEntry(incomeTitle[0],0.0));
-//        dataEntries3.add(new ValueDataEntry(incomeTitle[1],0.0));
-//        dataEntries3.add(new ValueDataEntry(incomeTitle[2],0.0));
-//        dataEntries3.add(new ValueDataEntry(incomeTitle[3],0.0));
-//        dataEntries3.add(new ValueDataEntry(incomeTitle[4],0.0));
-//        dataEntries3.add(new ValueDataEntry(incomeTitle[5],0.0));
-//        spendChart = view.findViewById(R.id.spendingChart);
-//        spendingCartersianChart.background("#000000");
-//        spendingCartersianChart.data(dataEntries2);
-//        spendChart.setChart(spendingCartersianChart);
+        dataEntries3.add(new ValueDataEntry(spendTitle[0],0.0));
+        dataEntries3.add(new ValueDataEntry(spendTitle[1],0.0));
+        dataEntries3.add(new ValueDataEntry(spendTitle[2],0.0));
+        dataEntries3.add(new ValueDataEntry(spendTitle[3],0.0));
+        dataEntries3.add(new ValueDataEntry(spendTitle[4],0.0));
+        dataEntries3.add(new ValueDataEntry(spendTitle[5],0.0));
+        spendingColumn = spendingCartersianChart.column(dataEntries3);
+        spendingCartersianChart.background("#000000");
+        spendingCartersianChart.tooltip()
+                .titleFormat("{%X}")
+                .position(Position.CENTER_BOTTOM)
+                .anchor(Anchor.CENTER_BOTTOM)
+                .offsetX(0d)
+                .offsetY(5d)
+                .format("${%Value}{groupsSeparator: }");
+        spendingCartersianChart.yScale().minimum(0d);
+
+        spendingCartersianChart.yAxis(0).labels().format("${%Value}{groupsSeparator: }");
+
+        spendingCartersianChart.tooltip().positionMode(TooltipPositionMode.POINT);
+        spendingCartersianChart.interactivity().hoverMode(HoverMode.BY_X);
+        spendingCartersianChart.xAxis(0).title("Hạng mục");
+        spendingCartersianChart.yAxis(0).title("Số tiền");
+        spendChart.setChart(spendingCartersianChart);
 
         SharedPreferences prefs = ((MainActivity)getActivity()).getSharedPreferences("MyPreferences", MODE_PRIVATE);
         String myFormat = prefs.getString("currentDate", "dd/MM/yyyy");
@@ -599,7 +618,11 @@ public class StatisticsFragment extends Fragment {
             dataEntries.add(new ValueDataEntry(overallTitle[i], res.get(i)));
         }
         System.out.println(dataEntries.size());
+        APIlib.getInstance().setActiveAnyChartView(overallChart);
         overallPieChart.data(dataEntries);
+
+        APIlib.getInstance().setActiveAnyChartView(incomeChart);
+        incomeCartesianChart.title("income");
     }
 
     private void setupMonthChart(View view){
