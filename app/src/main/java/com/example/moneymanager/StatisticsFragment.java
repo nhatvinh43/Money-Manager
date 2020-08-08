@@ -80,6 +80,8 @@ public class StatisticsFragment extends Fragment {
     TextView dateHome;
     TextView dateArrow;
     int mYear, mMonth, mDay;
+    private Calendar fromDate = Calendar.getInstance();
+    private Calendar toDate = Calendar.getInstance();
     private ArrayList<MoneySource> moneySources;
     private ArrayList<Transaction> transactions;
     private FirebaseAuth firebaseAuth;
@@ -321,6 +323,10 @@ public class StatisticsFragment extends Fragment {
                         dateHome.setText(sdf_month.format(myCalender.getTime()));
                         dayOfWeek.setText("Tháng nay");
                         viewMode2 = viewMode2.MONTH;
+                        transactions.clear();
+                        transactions.addAll(modifierTransactionListByViewMode());
+                        setupDateChart();
+
                         break;
                     }
                     case "Quý":
@@ -334,6 +340,10 @@ public class StatisticsFragment extends Fragment {
                         dateHome.setText(sdf_month.format(myCalender.getTime()));
                         dayOfWeek.setText("Năm nay");
                         viewMode2 = viewMode2.YEAR;
+
+                        transactions.clear();
+                        transactions.addAll(modifierTransactionListByViewMode());
+                        setupDateChart();
                         break;
                     }
                     case "Chọn":
@@ -346,7 +356,60 @@ public class StatisticsFragment extends Fragment {
                         chooseTimeDialog.show();
                         chooseTimeDialog.getWindow().setLayout(1000,1200);
                         chooseTimeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        final TextView fromDateTV = chooseTimeDialog.findViewById(R.id.start_choose_time);
+                        final TextView toDateTV = chooseTimeDialog.findViewById(R.id.end_choose_time);
 
+                        //chọn ngày bắt đầu
+                        chooseTimeDialog.findViewById(R.id.chooseStart_choose_time).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+                                    @Override
+                                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                        Calendar myCalendar = Calendar.getInstance();
+                                        myCalendar.set(Calendar.YEAR, year);
+                                        myCalendar.set(Calendar.MONTH, month);
+                                        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                                        fromDateTV.setText(sdf.format(myCalendar.getTime()));
+                                        fromDate = myCalendar;
+                                    }
+                                };
+                                new DatePickerDialog(getContext(), R.style.DatePickerDialog, date, mYear, mMonth, mDay).show();
+                            }
+                        });
+
+                        //chọn ngày kết thúc
+                        chooseTimeDialog.findViewById(R.id.chooseEnd_choose_time).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+                                    @Override
+                                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                        Calendar myCalendar = Calendar.getInstance();
+                                        myCalendar.set(Calendar.YEAR, year);
+                                        myCalendar.set(Calendar.MONTH, month);
+                                        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                                        toDateTV.setText(sdf.format(myCalendar.getTime()));
+                                        toDate = myCalendar;
+                                    }
+                                };
+                                new DatePickerDialog(getContext(), R.style.DatePickerDialog, date, mYear, mMonth, mDay).show();
+                            }
+                        });
+
+                        //nút xác nhận
+                        chooseTimeDialog.findViewById(R.id.confirm_choose_time).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dayOfWeek.setText("Mốc thời gian");
+                                dateHome.setText(sdf.format(fromDate.getTime()) + " - " + sdf.format(toDate.getTime()));
+
+                                transactions.clear();
+                                transactions.addAll(modifierTransactionListByViewMode());
+                                setupDateChart();
+                                chooseTimeDialog.dismiss();
+                            }
+                        });
                         break;
                     }
                 }
@@ -389,7 +452,6 @@ public class StatisticsFragment extends Fragment {
 
                                 transactions.clear();
                                 transactions.addAll(modifierTransactionListByViewMode());
-                                System.out.println("Trans Before draw: " + transactions.size());
                                 setupDateChart();
                             }
                         };
@@ -423,6 +485,10 @@ public class StatisticsFragment extends Fragment {
 
                                         mYear = myCalendar.get(Calendar.YEAR);
                                         mMonth = myCalendar.get(Calendar.MONTH);
+
+                                        transactions.clear();
+                                        transactions.addAll(modifierTransactionListByViewMode());
+                                        setupDateChart();
                                     }
                                 }, today.get(Calendar.YEAR), today.get(Calendar.MONTH));
                         builder.setActivatedMonth(Calendar.JULY)
@@ -463,6 +529,9 @@ public class StatisticsFragment extends Fragment {
                                         }
 
                                         mYear = myCalendar.get(Calendar.YEAR);
+                                        transactions.clear();
+                                        transactions.addAll(modifierTransactionListByViewMode());
+                                        setupDateChart();
                                     }
                                 }, today.get(Calendar.YEAR), today.get(Calendar.MONTH));
                         builder.setActivatedMonth(Calendar.JULY)
@@ -481,7 +550,66 @@ public class StatisticsFragment extends Fragment {
                     }
                     case MANUAL:
                     {
+                        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getContext());
+                        builder.setView(R.layout.dialog_choose_time);
+                        final AlertDialog chooseTimeDialog  = builder.create();
+                        chooseTimeDialog.show();
+                        chooseTimeDialog.getWindow().setLayout(1000,1200);
+                        chooseTimeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        final TextView fromDateTV = chooseTimeDialog.findViewById(R.id.start_choose_time);
+                        final TextView toDateTV = chooseTimeDialog.findViewById(R.id.end_choose_time);
 
+                        //chọn ngày bắt đầu
+                        chooseTimeDialog.findViewById(R.id.chooseStart_choose_time).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+                                    @Override
+                                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                        Calendar myCalendar = Calendar.getInstance();
+                                        myCalendar.set(Calendar.YEAR, year);
+                                        myCalendar.set(Calendar.MONTH, month);
+                                        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                                        fromDateTV.setText(sdf.format(myCalendar.getTime()));
+                                        fromDate = myCalendar;
+                                    }
+                                };
+                                new DatePickerDialog(getContext(), R.style.DatePickerDialog, date, mYear, mMonth, mDay).show();
+                            }
+                        });
+
+                        //chọn ngày kết thúc
+                        chooseTimeDialog.findViewById(R.id.chooseEnd_choose_time).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+                                    @Override
+                                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                        Calendar myCalendar = Calendar.getInstance();
+                                        myCalendar.set(Calendar.YEAR, year);
+                                        myCalendar.set(Calendar.MONTH, month);
+                                        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                                        toDateTV.setText(sdf.format(myCalendar.getTime()));
+                                        toDate = myCalendar;
+                                    }
+                                };
+                                new DatePickerDialog(getContext(), R.style.DatePickerDialog, date, mYear, mMonth, mDay).show();
+                            }
+                        });
+
+                        //nút xác nhận
+                        chooseTimeDialog.findViewById(R.id.confirm_choose_time).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dayOfWeek.setText("Mốc thời gian");
+                                dateHome.setText(sdf.format(fromDate.getTime()) + " - " + sdf.format(toDate.getTime()));
+
+                                transactions.clear();
+                                transactions.addAll(modifierTransactionListByViewMode());
+                                setupDateChart();
+                                chooseTimeDialog.dismiss();
+                            }
+                        });
                         break;
                     }
                 }
@@ -565,17 +693,40 @@ public class StatisticsFragment extends Fragment {
 
     private ArrayList<Transaction> modifierTransactionListByManual() {
         ArrayList<Transaction> res = new ArrayList<>();
-
+        for (Transaction t : selectedMoneySource.getTransactionsList()){
+            Calendar c = Calendar.getInstance();
+            c.setTimeInMillis(t.getTransactionTime().getTime());
+            if (c.compareTo(fromDate) >= 0 && c.compareTo(toDate) <=0){
+                res.add(t);
+            }
+        }
         return res;
     }
 
     private ArrayList<Transaction> modifierTransactionListByYear() {
         ArrayList<Transaction> res = new ArrayList<>();
+        for (Transaction t : selectedMoneySource.getTransactionsList()){
+            Calendar c = Calendar.getInstance();
+            c.setTimeInMillis(t.getTransactionTime().getTime());
+            int transactionYear = c.get(Calendar.YEAR);
+            if (transactionYear == mYear){
+                res.add(t);
+            }
+        }
         return res;
     }
 
     private ArrayList<Transaction> modifierTransactionListByMonth() {
         ArrayList<Transaction> res = new ArrayList<>();
+        for (Transaction t : selectedMoneySource.getTransactionsList()){
+            Calendar c = Calendar.getInstance();
+            c.setTimeInMillis(t.getTransactionTime().getTime());
+            int transactionMonth = c.get(Calendar.MONTH);
+            int transactionYear = c.get(Calendar.YEAR);
+            if (transactionMonth == mMonth && transactionYear == mYear) {
+                res.add(t);
+            }
+        }
         return res;
     }
 
@@ -688,6 +839,9 @@ public class StatisticsFragment extends Fragment {
         return res;
     }
 
+    private void setupChart(){
+        if (viewMode2 == ViewMode2.DAY) setupDateChart();
+    }
 
     private void setupDateChart(){
         //overall Chart
