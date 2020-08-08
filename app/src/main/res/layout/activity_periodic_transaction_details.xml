@@ -4,30 +4,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TransactionDetailsActivity"
+    tools:context=".PeriodicTransactionDetails"
     android:animateLayoutChanges="true"
+    android:paddingHorizontal="20dp"
     android:background="@color/black">
 
-    <ImageButton
-        android:id="@+id/backButton_transactionDetails"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_arrow"
-        android:tint="@color/white"
-        android:background="@android:color/transparent"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="50dp"/>
 
+
+    <RelativeLayout
+        android:id="@+id/topBar_periodicTransactionDetails"
+        android:layout_width="match_parent"
+        android:layout_marginTop="50dp"
+        android:layout_height="wrap_content">
+        <ImageButton
+            android:layout_alignParentStart="true"
+            android:id="@+id/backButton_periodicTransactionDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow"
+            android:tint="@color/white"
+            android:background="@android:color/transparent"/>
+
+        <Spinner
+            android:layout_centerVertical="true"
+            android:id="@+id/period_periodicTransactionDetails"
+            android:layout_alignParentEnd="true"
+            android:layout_width="80dp"
+            android:layout_height="35dp"
+            android:spinnerMode="dropdown"
+            android:popupBackground="@drawable/transaction_item"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/authbtns"/>
+
+    </RelativeLayout>
 
 
     <ScrollView
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/backButton_transactionDetails"
+        android:layout_below="@id/topBar_periodicTransactionDetails"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="40dp"
-        android:paddingHorizontal="20dp">
+        android:layout_marginBottom="40dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,7 +53,7 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/transactionIcon_transactionDetails"
+                android:id="@+id/transactionIcon_periodicTransactionDetails"
                 android:layout_gravity="center_horizontal"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
@@ -68,7 +86,7 @@
 
                 <EditText
                     android:enabled="false"
-                    android:id="@+id/amount_transactionDetails"
+                    android:id="@+id/amount_periodicTransactionDetails"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="@string/moneySubtractPH"
@@ -95,7 +113,7 @@
                 android:layout_marginTop="20dp"
                 android:weightSum="4">
                 <EditText
-                    android:id="@+id/moneySource_transactionDetails"
+                    android:id="@+id/moneySource_periodicTransactionDetails"
                     android:enabled="false"
                     android:fontFamily="sans-serif-light"
                     android:layout_width="0dp"
@@ -124,7 +142,7 @@
                 android:layout_marginTop="20dp"
                 android:weightSum="4">
                 <EditText
-                    android:id="@+id/dateTime_transactionDetails"
+                    android:id="@+id/dateTime_periodicTransactionDetails"
                     android:enabled="false"
                     android:fontFamily="sans-serif-light"
                     android:layout_width="0dp"
@@ -136,7 +154,7 @@
                     android:inputType="date"/>
 
                 <Button
-                    android:id="@+id/chooseDateTime_transactionDetails"
+                    android:id="@+id/chooseDateTime_periodicTransactionDetails"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="45dp"
@@ -164,7 +182,7 @@
                 android:fontFamily="sans-serif-medium"/>
             <EditText
                 android:enabled="false"
-                android:id="@+id/description_transactionDetails"
+                android:id="@+id/description_periodicTransactionDetails"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingVertical="40dp"
@@ -186,7 +204,7 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/editAndSave_transactionDetails"
+                    android:id="@+id/editAndSave_periodicTransactionDetails"
                     android:layout_width="80dp"
                     android:layout_height="45dp"
                     android:textAllCaps="false"
@@ -199,7 +217,7 @@
                     android:text="@string/edit"/>
 
                 <Button
-                    android:id="@+id/delete_transactionDetails"
+                    android:id="@+id/delete_periodicTransactionDetails"
                     android:layout_width="wrap_content"
                     android:layout_height="45dp"
                     android:layout_marginStart="15dp"
