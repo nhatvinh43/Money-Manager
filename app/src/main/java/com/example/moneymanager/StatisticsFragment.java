@@ -164,14 +164,7 @@ public class StatisticsFragment extends Fragment {
         spendingCartersianChart = AnyChart.column();
         dataEntries3 = new ArrayList<>();
 
-        overallChart = view.findViewById(R.id.overallChart);
-        APIlib.getInstance().setActiveAnyChartView(overallChart);
 
-        incomeChart = view.findViewById(R.id.incomeChart);
-        APIlib.getInstance().setActiveAnyChartView(incomeChart);
-
-        spendChart = view.findViewById(R.id.spendChart);
-        APIlib.getInstance().setActiveAnyChartView(spendChart);
 
         dataHelper.getMoneySource(new MoneySourceCallBack() {
             @Override
@@ -203,9 +196,11 @@ public class StatisticsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.moneySourceList_statistics);
 
         // prepare Overall chart
-        dataEntries.clear();
         dataEntries.add(new ValueDataEntry(overallTitle[0], 10));
         dataEntries.add(new ValueDataEntry(overallTitle[1], 10));
+        overallChart = view.findViewById(R.id.overallChart);
+        APIlib.getInstance().setActiveAnyChartView(overallChart);
+        overallPieChart = AnyChart.pie();
         overallPieChart.data(dataEntries);
         overallPieChart.background("#000000");
         overallChart.setChart(overallPieChart);
@@ -217,6 +212,11 @@ public class StatisticsFragment extends Fragment {
         dataEntries2.add(new ValueDataEntry(incomeTitle[2],3));
         dataEntries2.add(new ValueDataEntry(incomeTitle[3],2));
         dataEntries2.add(new ValueDataEntry(incomeTitle[4],1));
+
+        incomeChart = view.findViewById(R.id.incomeChart);
+        APIlib.getInstance().setActiveAnyChartView(incomeChart);
+        incomeCartesianChart = AnyChart.column();
+
         incomeColumn = incomeCartesianChart.column(dataEntries2);
         incomeCartesianChart.background("#000000");
         incomeColumn.tooltip()
@@ -237,12 +237,16 @@ public class StatisticsFragment extends Fragment {
         incomeChart.setChart(incomeCartesianChart);
 
         // prepare Spend chart
-        dataEntries3.add(new ValueDataEntry(spendTitle[0],0.0));
-        dataEntries3.add(new ValueDataEntry(spendTitle[1],0.0));
-        dataEntries3.add(new ValueDataEntry(spendTitle[2],0.0));
-        dataEntries3.add(new ValueDataEntry(spendTitle[3],0.0));
-        dataEntries3.add(new ValueDataEntry(spendTitle[4],0.0));
-        dataEntries3.add(new ValueDataEntry(spendTitle[5],0.0));
+        dataEntries3.add(new ValueDataEntry(spendTitle[0],1));
+        dataEntries3.add(new ValueDataEntry(spendTitle[1],2));
+        dataEntries3.add(new ValueDataEntry(spendTitle[2],3));
+        dataEntries3.add(new ValueDataEntry(spendTitle[3],3));
+        dataEntries3.add(new ValueDataEntry(spendTitle[4],2));
+        dataEntries3.add(new ValueDataEntry(spendTitle[5],1));
+
+        spendChart = view.findViewById(R.id.spendChart);
+        APIlib.getInstance().setActiveAnyChartView(spendChart);
+        spendingCartersianChart = AnyChart.column();
         spendingColumn = spendingCartersianChart.column(dataEntries3);
         spendingCartersianChart.background("#000000");
         spendingCartersianChart.tooltip()
@@ -539,7 +543,7 @@ public class StatisticsFragment extends Fragment {
                     selectedMoneySource = moneySources.get(pos);
                     transactions.clear();
                     transactions.addAll(modifierTransactionListByViewMode());
-                    System.out.println(selectedMoneySource.getMoneySourceName() + " have " + transactions.size() + "|" + selectedMoneySource.getTransactionsList().size());
+                    setupDateChart();
                 }
             }
 
@@ -593,8 +597,8 @@ public class StatisticsFragment extends Fragment {
         System.out.println("Size of Transactions Prepare: " + transactions.size());
         ArrayList<Double> res = new ArrayList<>();
         double income, spend;
-        income = 0;
-        spend = 0;
+        income = 0.0;
+        spend = 0.0;
         for (int i = 0; i < transactions.size(); i++){
             if (transactions.get(i).getTransactionIsIncome()){
                 income += (double) transactions.get(i).getTransactionAmount();
@@ -606,6 +610,84 @@ public class StatisticsFragment extends Fragment {
         res.add(spend);
         return res;
     }
+    private ArrayList<Double> incomeRate(){
+        ArrayList<Double> res = new ArrayList<>();
+        double bonus, profit, salary, gift, other;
+        bonus = 0.0;
+        profit = 0.0;
+        salary = 0.0;
+        gift = 0.0;
+        other = 0.0;
+        for (int i = 0; i < transactions.size(); i++){
+            if (transactions.get(i).getTransactionIsIncome()){
+                switch (transactions.get(i).getExpenditureId()){
+                    case "Exp07":
+                        bonus += (double) transactions.get(i).getTransactionAmount();
+                        break;
+                    case "Exp08":
+                        profit += (double) transactions.get(i).getTransactionAmount();
+                        break;
+                    case "Exp09":
+                        salary += (double) transactions.get(i).getTransactionAmount();
+                        break;
+                    case "Exp10":
+                        gift += (double) transactions.get(i).getTransactionAmount();
+                        break;
+                    case "Exp11":
+                        other += (double) transactions.get(i).getTransactionAmount();
+                        break;
+                }
+            }
+        }
+        res.add(bonus);
+        res.add(profit);
+        res.add(salary);
+        res.add(gift);
+        res.add(other);
+        return res;
+    }
+    private ArrayList<Double> spendRate(){
+        ArrayList<Double> res = new ArrayList<>();
+        double food, bill, traval, health, party, other;
+        food = 0.0;
+        bill = 0.0;
+        traval = 0.0;
+        health = 0.0;
+        party = 0.0;
+        other = 0.0;
+        for (int i = 0; i < transactions.size(); i++){
+            if (!transactions.get(i).getTransactionIsIncome()){
+                switch (transactions.get(i).getExpenditureId()){
+                    case "Exp01":
+                        food += (double) transactions.get(i).getTransactionAmount();
+                        break;
+                    case "Exp02":
+                        bill += (double) transactions.get(i).getTransactionAmount();
+                        break;
+                    case "Exp03":
+                        traval += (double) transactions.get(i).getTransactionAmount();
+                        break;
+                    case "Exp04":
+                        health += (double) transactions.get(i).getTransactionAmount();
+                        break;
+                    case "Exp05":
+                        party += (double) transactions.get(i).getTransactionAmount();
+                        break;
+                    case "Exp06":
+                        other += (double) transactions.get(i).getTransactionAmount();
+                        break;
+                }
+            }
+        }
+        res.add(food);
+        res.add(bill);
+        res.add(traval);
+        res.add(health);
+        res.add(party);
+        res.add(other);
+        return res;
+    }
+
 
     private void setupDateChart(){
         //overall Chart
@@ -614,15 +696,30 @@ public class StatisticsFragment extends Fragment {
         res = overallRate();
         dataEntries.clear();
         for (int i = 0; i < 2; i++){
-            System.out.println(res.get(i));
             dataEntries.add(new ValueDataEntry(overallTitle[i], res.get(i)));
         }
         System.out.println(dataEntries.size());
         APIlib.getInstance().setActiveAnyChartView(overallChart);
         overallPieChart.data(dataEntries);
-
+        //income Chart
+        ArrayList<Double> resIncome = new ArrayList<>();
+        resIncome = incomeRate();
+        dataEntries2.clear();
+        for (int i = 0; i < resIncome.size(); i++){
+            dataEntries2.add(new ValueDataEntry(incomeTitle[i], resIncome.get(i)));
+        }
         APIlib.getInstance().setActiveAnyChartView(incomeChart);
-        incomeCartesianChart.title("income");
+        incomeCartesianChart.data(dataEntries2);
+
+        //spend Chart
+        ArrayList<Double> resSpend = new ArrayList<>();
+        resSpend = spendRate();
+        dataEntries3.clear();
+        for (int i = 0; i < resSpend.size(); i++){
+            dataEntries3.add(new ValueDataEntry(spendTitle[i], resSpend.get(i)));
+        }
+        APIlib.getInstance().setActiveAnyChartView(spendChart);
+        spendingCartersianChart.data(dataEntries3);
     }
 
     private void setupMonthChart(View view){
