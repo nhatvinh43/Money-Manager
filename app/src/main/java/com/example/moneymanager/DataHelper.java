@@ -427,6 +427,50 @@ public class DataHelper {
         return newTransactionId;
     }
 
+    public void getPeriodicTransaction(final PeriodicTransactionCallBack transCallBack, String userID) {
+        getMoneySourceWithoutTransactionList(new MoneySourceCallBack() {
+            @Override
+            public void onCallBack(final ArrayList<MoneySource> list) {
+                db.collection("periodicTransactions").get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                ArrayList<PeriodicTransaction> transactionList = new ArrayList<>();
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    String msId = (String) document.getData().get("moneySourceId");
+
+                                    for(MoneySource ms : list) {
+                                        if (msId.equals(ms.getMoneySourceId())) {
+                                            PeriodicTransaction ts = new PeriodicTransaction();
+                                            ts.setMoneySourceId((String) document.getData().get("moneySourceId"));
+                                            ts.setMoneySourceName((String) document.getData().get("moneySourceName"));
+                                            ts.setTransactionId(document.getId());
+                                            ts.setTransactionAmount(document.getDouble("transactionAmount"));
+                                            ts.setTransactionIsIncome((boolean) document.getData().get("transactionIsIncome"));
+                                            ts.setDescription((String) document.getData().get("description"));
+                                            ts.setExpenditureId((String) document.getData().get("expenditureId"));
+                                            ts.setExpenditureName((String) document.getData().get("expenditureName"));
+                                            ts.setTransactionTime(new Timestamp((document.getDate("transactionTime")).getTime()));
+                                            ts.setPeriodicType((String) document.getData().get("periodicType"));
+
+                                            transactionList.add(ts);
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                transCallBack.onCallBack(transactionList);
+                            }
+                        });
+            }
+
+            @Override
+            public void onCallBackFail(String message) {
+
+            }
+        }, userID);
+    }
+
     public void updatePeriodicTransaction(PeriodicTransaction trans) {
         Map<String, Object> transaction = new HashMap<>();
         transaction.put("moneySourceId", trans.getMoneySourceId());

@@ -1,5 +1,7 @@
 package com.example.moneymanager;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -40,7 +42,9 @@ public class MainActivity extends AppCompatActivity {
     final FragmentManager fm = getSupportFragmentManager();
     Fragment active = fragment1;
 
-    FirebaseAuth fAuth;
+    FirebaseAuth fAuth = FirebaseAuth.getInstance();
+    AlarmManager alarmManager;
+    PendingIntent pendingIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +86,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_main);
+
+
         final BottomNavigationView navView = findViewById(R.id.nav_view);
         FloatingActionButton addTransaction = findViewById(R.id.addTransactionButton);
         addTransaction.setOnClickListener(new View.OnClickListener() {
@@ -91,8 +97,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, HomeFragment.HOME_NEW_TRANSACTION_RQCODE);
             }
         });
-
-        fAuth = FirebaseAuth.getInstance();
 
         //Fragment controls
         fm.beginTransaction().add(R.id.main_container, fragment4, "4").hide(fragment4).commit();
@@ -134,8 +138,6 @@ public class MainActivity extends AppCompatActivity {
 
         navView.getMenu().getItem(2).setEnabled(false);
         //End fragment controls
-
-
     }
 
     @Override
