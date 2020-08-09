@@ -21,7 +21,7 @@
            android:textSize="30sp"
            android:text="@string/settings"
            android:textColor="@color/white"
-           android:layout_marginTop="70dp"
+           android:layout_marginTop="50dp"
            android:layout_marginStart="20dp"/>
        <LinearLayout
            android:paddingHorizontal="30dp"

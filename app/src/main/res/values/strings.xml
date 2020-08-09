@@ -208,4 +208,7 @@
     <string name="spendingStatistics">Thống kê chi tiêu</string>
     <string name="incomeStatistics">Thống kê thu nhập</string>
 
+    <string name="totalIncome">Tổng thu nhập</string>
+    <string name="totalSpending">Tổng chi tiêu</string>
+
 </resources>
