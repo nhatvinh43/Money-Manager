@@ -15,7 +15,7 @@
         android:tint="@color/white"
         android:background="@android:color/transparent"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="40dp"/>
+        android:layout_marginTop="50dp"/>
     <TextView
         android:layout_below="@id/backButton_addMoneySource"
         android:id="@+id/addTransactionTitle"

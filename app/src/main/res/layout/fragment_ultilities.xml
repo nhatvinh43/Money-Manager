@@ -20,133 +20,6 @@
             android:layout_marginTop="70dp"
             android:layout_marginStart="20dp"/>
 
-        <RelativeLayout
-            android:paddingHorizontal="30dp"
-            android:layout_marginTop="30dp"
-            android:layout_below="@+id/utilitiesTitle"
-            android:id="@+id/mainUtilitiesRow"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:layout_alignParentStart="true"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
-                    android:textSize="15sp"
-                    android:text="@string/unitOfCurrency"
-                    android:layout_gravity="center_horizontal"
-                    android:textColor="@color/white"/>
-
-                <TextView
-                    android:id="@+id/currentUnit_statistics"
-                    android:layout_marginTop="15dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
-                    android:textSize="25sp"
-                    android:text="@string/currencyPH"
-                    android:layout_gravity="center_horizontal"
-                    android:textColor="@color/white"/>
-
-                <TextView
-                    android:id="@+id/changeCurrentUnit_statistics"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif"
-                    android:textSize="15sp"
-                    android:layout_marginTop="15dp"
-                    android:text="@string/change"
-                    android:layout_gravity="center_horizontal"
-                    android:textColor="?colorAccent"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_centerInParent="true"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
-                    android:textSize="15sp"
-                    android:text="@string/moneySource"
-                    android:layout_gravity="center_horizontal"
-                    android:textColor="@color/white"/>
-
-                <TextView
-                    android:id="@+id/moneySourcesCount_statistics"
-                    android:layout_marginTop="15dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
-                    android:textSize="25sp"
-                    android:text="0"
-                    android:layout_gravity="center_horizontal"
-                    android:textColor="@color/white"/>
-
-                <TextView
-                    android:id="@+id/manageMoneySourcesButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif"
-                    android:textSize="15sp"
-                    android:layout_marginTop="15dp"
-                    android:text="@string/manage"
-                    android:layout_gravity="center_horizontal"
-                    android:textColor="?colorAccent"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_alignParentEnd="true"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
-                    android:textSize="15sp"
-                    android:text="@string/specialTransaction"
-                    android:layout_gravity="center_horizontal"
-                    android:textColor="@color/white"/>
-
-                <TextView
-                    android:id="@+id/specialTransactionsCount_statistics"
-                    android:layout_marginTop="15dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
-                    android:textSize="25sp"
-                    android:text="0"
-                    android:layout_gravity="center_horizontal"
-                    android:textColor="@color/white"/>
-
-                <TextView
-                    android:id="@+id/manageSpecialTransactions_statistics"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif"
-                    android:textSize="15sp"
-                    android:layout_marginTop="15dp"
-                    android:text="@string/manage"
-                    android:layout_gravity="center_horizontal"
-                    android:textColor="?colorAccent"/>
-
-            </LinearLayout>
-
-        </RelativeLayout>
-
 
 
         <LinearLayout
@@ -155,7 +28,7 @@
             android:layout_centerHorizontal="true"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:layout_below="@id/mainUtilitiesRow"
+            android:layout_below="@id/utilitiesTitle"
             android:id="@+id/subUtilitiesRow"
             android:orientation="horizontal">
             <LinearLayout
@@ -300,6 +173,98 @@
 
 
         </LinearLayout>
+
+        <RelativeLayout
+            android:layout_centerHorizontal="true"
+            android:paddingHorizontal="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_below="@+id/subUtilitiesRow"
+            android:id="@+id/mainUtilitiesRow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/msSection"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="15sp"
+                    android:text="@string/moneySource"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="@color/white"/>
+
+                <TextView
+                    android:id="@+id/moneySourcesCount_statistics"
+                    android:layout_marginTop="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="25sp"
+                    android:text="0"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="@color/white"/>
+
+                <TextView
+                    android:id="@+id/manageMoneySourcesButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:textSize="15sp"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/manage"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="?colorAccent"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_toEndOf="@id/msSection"
+                android:layout_width="120dp"
+                android:layout_marginStart="20dp"
+                android:layout_height="120dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="15sp"
+                    android:text="@string/specialTransaction"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="@color/white"/>
+
+                <TextView
+                    android:id="@+id/specialTransactionsCount_statistics"
+                    android:layout_marginTop="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="25sp"
+                    android:text="0"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="@color/white"/>
+
+                <TextView
+                    android:id="@+id/manageSpecialTransactions_statistics"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:textSize="15sp"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/manage"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="?colorAccent"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
 
         <TextView
             android:visibility="invisible"

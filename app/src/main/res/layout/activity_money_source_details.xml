@@ -16,7 +16,7 @@
         android:tint="@color/white"
         android:background="@android:color/transparent"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="40dp"/>
+        android:layout_marginTop="50dp"/>
     <TextView
         android:layout_below="@id/backButton_moneySourceDetails"
         android:id="@+id/addTransactionTitle"
@@ -128,6 +128,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/moneySourceAmount"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:fontFamily="sans-serif-medium"/>
+
+                <EditText
+                    android:layout_marginTop="15dp"
+                    android:id="@+id/moneySourceLimit_moneySourceDetails"
+                    android:fontFamily="sans-serif-light"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/transaction_item"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:inputType="number"/>
+
+                <TextView
+                    android:layout_marginTop="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/limit"
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     android:fontFamily="sans-serif-medium"/>

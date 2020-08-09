@@ -55,7 +55,7 @@
                 android:textSize="22sp"
                 android:fontFamily="sans-serif-medium"/>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -63,13 +63,13 @@
                 android:paddingHorizontal="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginHorizontal="100dp"
-                android:background="@drawable/redgradient">
+                android:background="@drawable/authbtns">
 
                 <EditText
+                    android:layout_centerInParent="true"
                     android:enabled="false"
                     android:id="@+id/amount_transactionDetails"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="@string/moneySubtractPH"
                     android:textAlignment="center"
@@ -77,7 +77,8 @@
                     android:textSize="18sp"
                     android:fontFamily="sans-serif-medium"/>
 
-            </LinearLayout>
+            </RelativeLayout>
+
 
             <TextView
                 android:layout_marginTop="30dp"
