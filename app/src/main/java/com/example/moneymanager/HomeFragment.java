@@ -217,6 +217,9 @@ public class HomeFragment extends Fragment {
     private void initView(View view) {
         final MoneyToStringConverter converter = new MoneyToStringConverter();
 
+        final LinearLayout transactionsSection = view.findViewById(R.id.transactions_home);
+        final LinearLayout noTransactionsSection = view.findViewById(R.id.noTodayTransaction_home);
+
 
         // Moneysource Info Initiation
         final WaveLoadingView waveLoadingView = view.findViewById(R.id.waveLoadingView);
@@ -439,6 +442,7 @@ public class HomeFragment extends Fragment {
 
                                 transactionList.clear();
                                 transactionList.addAll(modifierTransactionListByViewMode());
+                                renderError(transactionList, transactionsSection, noTransactionsSection);
                                 transactionAdapter.notifyDataSetChanged();
                                 transactionRecycleView.scheduleLayoutAnimation();
                             }
@@ -476,6 +480,7 @@ public class HomeFragment extends Fragment {
 
                                         transactionList.clear();
                                         transactionList.addAll(modifierTransactionListByViewMode());
+                                        renderError(transactionList, transactionsSection, noTransactionsSection);
                                         transactionAdapter.notifyDataSetChanged();
                                         transactionRecycleView.scheduleLayoutAnimation();
                                     }
@@ -529,6 +534,7 @@ public class HomeFragment extends Fragment {
 
                                         transactionList.clear();
                                         transactionList.addAll(modifierTransactionListByViewMode());
+                                        renderError(transactionList, transactionsSection, noTransactionsSection);
                                         transactionAdapter.notifyDataSetChanged();
                                         transactionRecycleView.scheduleLayoutAnimation();
                                     }
@@ -617,6 +623,7 @@ public class HomeFragment extends Fragment {
 
                                 transactionList.clear();
                                 transactionList.addAll(modifierTransactionListByViewMode());
+                                renderError(transactionList, transactionsSection, noTransactionsSection);
                                 transactionAdapter.notifyDataSetChanged();
                                 transactionRecycleView.scheduleLayoutAnimation();
                                 chooseTimeDialog.dismiss();
@@ -707,6 +714,7 @@ public class HomeFragment extends Fragment {
 
                     transactionList.clear();
                     transactionList.addAll(modifierTransactionListByViewMode());
+                    renderError(transactionList, transactionsSection, noTransactionsSection);
                     transactionAdapter.notifyDataSetChanged();
                     transactionRecycleView.scheduleLayoutAnimation();
                     search.setText("");
@@ -749,6 +757,9 @@ public class HomeFragment extends Fragment {
             }
         });
 
+
+        renderError(transactionList, transactionsSection, noTransactionsSection);
+
         // Search initiation
         search = view.findViewById(R.id.search_home);
         search.addTextChangedListener(new TextWatcher() {
@@ -785,6 +796,7 @@ public class HomeFragment extends Fragment {
                     case "Tất cả":
                         transactionList.clear();
                         transactionList.addAll(modifierTransactionListByViewMode());
+                        renderError(transactionList, transactionsSection, noTransactionsSection);
                         transactionAdapter.notifyDataSetChanged();
                         transactionRecycleView.scheduleLayoutAnimation();
                         break;
@@ -797,6 +809,7 @@ public class HomeFragment extends Fragment {
 
                         transactionList.clear();
                         transactionList.addAll(filterList);
+                        renderError(transactionList, transactionsSection, noTransactionsSection);
                         transactionAdapter.notifyDataSetChanged();
                         transactionRecycleView.scheduleLayoutAnimation();
                         break;
@@ -809,6 +822,7 @@ public class HomeFragment extends Fragment {
 
                         transactionList.clear();
                         transactionList.addAll(filterList);
+                        renderError(transactionList, transactionsSection, noTransactionsSection);
                         transactionAdapter.notifyDataSetChanged();
                         transactionRecycleView.scheduleLayoutAnimation();
                         break;
@@ -1228,4 +1242,17 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    void renderError(ArrayList<Transaction> transactionList, LinearLayout transactionsSection, LinearLayout noTransactionsSection)
+    {
+        if(transactionList.isEmpty())
+        {
+            transactionsSection.setVisibility(View.GONE);
+            noTransactionsSection.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            transactionsSection.setVisibility(View.VISIBLE);
+            noTransactionsSection.setVisibility(View.GONE);
+        }
+    }
 }

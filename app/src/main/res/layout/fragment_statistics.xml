@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/statisticsContainer"
-        android:visibility="invisible"
+        android:visibility="visible"
         android:paddingTop="50dp">
 
         <RelativeLayout
@@ -117,10 +117,79 @@
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:fontFamily="sans-serif-medium"/>
+
+                    <RelativeLayout
+                        android:id="@+id/numbersRow"
+                        android:layout_marginTop="15dp"
+                        android:layout_below="@id/statisticsTittle"
+                        android:layout_width="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:id="@+id/incomeRow"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_gravity="center_horizontal"
+                                android:id="@+id/totalIncomeTitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="15dp"
+                                android:text="@string/totalIncome"
+                                android:textColor="@color/white"
+                                android:textSize="15sp"
+                                android:fontFamily="sans-serif-light"/>
+                            <TextView
+                                android:layout_gravity="center_horizontal"
+                                android:id="@+id/totalIncome"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:text="@string/moneyPH"
+                                android:textColor="@color/white"
+                                android:textSize="22dp"
+                                android:fontFamily="sans-serif"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_toEndOf="@id/incomeRow"
+                            android:id="@+id/spendingRow"
+                            android:layout_marginStart="50dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_gravity="center_horizontal"
+                                android:id="@+id/totalSpendingTitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="15dp"
+                                android:text="@string/totalSpending"
+                                android:textColor="@color/white"
+                                android:textSize="15sp"
+                                android:fontFamily="sans-serif-light"/>
+                            <TextView
+                                android:layout_gravity="center_horizontal"
+                                android:id="@+id/totalSpending"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:text="@string/moneyPH"
+                                android:textColor="@color/white"
+                                android:textSize="22dp"
+                                android:fontFamily="sans-serif"/>
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
                     <com.anychart.AnyChartView
-                        android:layout_width="200dp"
-                        android:layout_height="200dp"
-                        android:layout_below="@+id/statisticsTittle"
+                        android:layout_marginTop="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        android:layout_below="@+id/numbersRow"
                         android:id="@+id/overallChart"/>
                     <LinearLayout
                         android:id="@+id/noTransaction_statistics"
@@ -165,7 +234,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/chart"
+                            android:text="@string/details"
                             android:id="@+id/chartTitle"
                             android:textColor="@color/white"
                             android:textSize="18sp"
@@ -210,22 +279,44 @@
                         android:layout_marginBottom="80dp"
                         android:layout_below="@id/detailsTitle">
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/incomeStatistics"
+                            android:textColor="@color/white"
+                            android:layout_gravity="center_horizontal"
+                            android:textSize="15sp"
+                            android:layout_marginTop="30dp"
+                            android:fontFamily="sans-serif-light"/>
+
+                        <com.anychart.AnyChartView
+                            android:id="@+id/incomeChart"
+                            android:layout_width="match_parent"
+                            android:layout_height="250dp"
+                            android:layout_below="@+id/detailsTitle"
+                            android:layout_marginTop="20dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/spendingStatistics"
+                            android:textColor="@color/white"
+                            android:layout_marginTop="30dp"
+                            android:layout_gravity="center_horizontal"
+                            android:textSize="15sp"
+                            android:fontFamily="sans-serif-light"/>
+
+                        <com.anychart.AnyChartView
+                            android:id="@+id/spendChart"
+                            android:layout_width="match_parent"
+                            android:layout_height="250dp"
+                            android:layout_below="@+id/incomeChart"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="20dp"/>
 
                     </LinearLayout>
 
-                    <com.anychart.AnyChartView
-                        android:id="@+id/incomeChart"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:layout_below="@+id/detailsTitle"
-                        android:layout_marginTop="5dp" />
-                    <com.anychart.AnyChartView
-                        android:id="@+id/spendChart"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:layout_below="@+id/incomeChart"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="20dp"/>
+
 
                 </RelativeLayout>
             </RelativeLayout>
