@@ -289,15 +289,45 @@ public class DataHelper {
                         Log.d("AddTran", "Successfully");
                     }
                 }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                transCallBack.onCallBackFail(e.getMessage());
-                Log.w("CreateNewMoneySource", "Error writing document", e);
-            }
-        });
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        transCallBack.onCallBackFail(e.getMessage());
+                    }
+                });
         return newTransactionId;
     }
 
+    public void setTransactionFromPeriodicTransaction(PeriodicTransaction periodicTransaction) {
+        String newTransactionId = db.collection("transactions").document().getId();
+        Map<String, Object> transaction = new HashMap<>();
+        transaction.put("moneySourceId", periodicTransaction.getMoneySourceId());
+        transaction.put("transactionAmount", periodicTransaction.getTransactionAmount().doubleValue());
+        transaction.put("transactionIsIncome", periodicTransaction.getTransactionIsIncome());
+        transaction.put("description", periodicTransaction.getDescription());
+        transaction.put("expenditureId", periodicTransaction.getExpenditureId());
+        transaction.put("expenditureName", periodicTransaction.getExpenditureName());
+        transaction.put("transactionTime", periodicTransaction.getTransactionTime());
+
+//        final Transaction trans = new Transaction();
+//        trans.setDescription(periodicTransaction.getDescription());
+//        trans.setExpenditureId(periodicTransaction.getExpenditureId());
+//        trans.setExpenditureName(periodicTransaction.getExpenditureName());
+//        trans.setTransactionAmount(periodicTransaction.getTransactionAmount());
+//        trans.setTransactionId(newTransactionId);
+//        trans.setMoneySourceId(periodicTransaction.getMoneySourceId());
+//        trans.setTransactionIsIncome(periodicTransaction.getTransactionIsIncome());
+//        trans.setTransactionTime(periodicTransaction.getTransactionTime());
+        db.collection("transactions").document(newTransactionId).set(transaction)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                    }
+                });
+    }
 
     public void getTransaction(final TransactionCallBack transCallBack, String msID) {
 
@@ -390,6 +420,127 @@ public class DataHelper {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.d("-------- Delete transacion --------", "Fail");
+                    }
+                });
+    }
+
+    // PeriodicTransaction Model
+    public String setPeriodicTransaction(final PeriodicTransactionCallBack transCallBack, String description, String expenditureId, String expenditureName, Number transactionAmount, String moneySourceId, String moneySourceName,
+                                 boolean transactionIsIncome, Timestamp transactionTime, String periodicType){
+        String newTransactionId = db.collection("periodicTransactions").document().getId();
+        Map<String, Object> transaction = new HashMap<>();
+        transaction.put("moneySourceId", moneySourceId);
+        transaction.put("moneySourceName", moneySourceName);
+        transaction.put("transactionAmount", transactionAmount);
+        transaction.put("transactionIsIncome", transactionIsIncome);
+        transaction.put("description", description);
+        transaction.put("expenditureId", expenditureId);
+        transaction.put("expenditureName", expenditureName);
+        transaction.put("transactionTime", transactionTime);
+        transaction.put("periodicType", periodicType);
+
+        final PeriodicTransaction trans = new PeriodicTransaction(description, expenditureId, expenditureName, transactionAmount, newTransactionId, moneySourceId, moneySourceName, transactionIsIncome, transactionTime, periodicType);
+        db.collection("periodicTransactions").document(newTransactionId).set(transaction)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        ArrayList<PeriodicTransaction> arrayList = new ArrayList<>();
+                        arrayList.add(trans);
+                        transCallBack.onCallBack(arrayList);
+                        Log.d("AddTran", "Successfully");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        transCallBack.onCallBackFail(e.getMessage());
+                    }
+                });
+        return newTransactionId;
+    }
+
+    public void getPeriodicTransaction(final PeriodicTransactionCallBack transCallBack, String userID) {
+        getMoneySourceWithoutTransactionList(new MoneySourceCallBack() {
+            @Override
+            public void onCallBack(final ArrayList<MoneySource> list) {
+                db.collection("periodicTransactions").get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                ArrayList<PeriodicTransaction> transactionList = new ArrayList<>();
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    String msId = (String) document.getData().get("moneySourceId");
+
+                                    for(MoneySource ms : list) {
+                                        if (msId.equals(ms.getMoneySourceId())) {
+                                            PeriodicTransaction ts = new PeriodicTransaction();
+                                            ts.setMoneySourceId((String) document.getData().get("moneySourceId"));
+                                            ts.setMoneySourceName((String) document.getData().get("moneySourceName"));
+                                            ts.setTransactionId(document.getId());
+                                            ts.setTransactionAmount(document.getDouble("transactionAmount"));
+                                            ts.setTransactionIsIncome((boolean) document.getData().get("transactionIsIncome"));
+                                            ts.setDescription((String) document.getData().get("description"));
+                                            ts.setExpenditureId((String) document.getData().get("expenditureId"));
+                                            ts.setExpenditureName((String) document.getData().get("expenditureName"));
+                                            ts.setTransactionTime(new Timestamp((document.getDate("transactionTime")).getTime()));
+                                            ts.setPeriodicType((String) document.getData().get("periodicType"));
+
+                                            transactionList.add(ts);
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                transCallBack.onCallBack(transactionList);
+                            }
+                        });
+            }
+
+            @Override
+            public void onCallBackFail(String message) {
+
+            }
+        }, userID);
+    }
+
+    public void updatePeriodicTransaction(PeriodicTransaction trans) {
+        Map<String, Object> transaction = new HashMap<>();
+        transaction.put("moneySourceId", trans.getMoneySourceId());
+        transaction.put("moneySourceName", trans.getMoneySourceName());
+        transaction.put("transactionAmount", trans.getTransactionAmount());
+        transaction.put("transactionIsIncome", trans.getTransactionIsIncome());
+        transaction.put("description", trans.getDescription());
+        transaction.put("expenditureId", trans.getExpenditureId());
+        transaction.put("expenditureName", trans.getExpenditureName());
+        transaction.put("transactionTime", trans.getTransactionTime());
+        transaction.put("periodicType", trans.getPeriodicType());
+
+        db.collection("periodicTransactions").document(trans.getTransactionId()).set(transaction)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("-------- Update periodic transaction --------", "Success");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("-------- Update periodic transacion --------", "Fail");
+                    }
+                });
+    }
+
+    public void deletePeriodicTransaction(PeriodicTransaction trans) {
+        db.collection("periodicTransactions").document(trans.getTransactionId()).delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("-------- Delete periodic transaction --------", "Success");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("-------- Delete periodic transacion --------", "Fail");
                     }
                 });
     }

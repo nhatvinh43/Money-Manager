@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -48,6 +49,7 @@ import com.facebook.appevents.AppEventsLogger;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -144,9 +146,24 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()) {
-                            Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                            finish();
+                            FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+                            DataHelper dataHelper = new DataHelper();
+
+                            dataHelper.getPeriodicTransaction(new PeriodicTransactionCallBack() {
+                                @Override
+                                public void onCallBack(ArrayList<PeriodicTransaction> list) {
+                                    saveData(list);
+
+                                    Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                    finish();
+                                }
+
+                                @Override
+                                public void onCallBackFail(String message) {
+
+                                }
+                            }, firebaseAuth.getCurrentUser().getUid());
                         } else {
                             Toast.makeText(LoginActivity.this, "Thất bại: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             unLoading();
@@ -281,8 +298,20 @@ public class LoginActivity extends AppCompatActivity {
                                             new DataHelper().setMoneySource(new MoneySourceCallBack() {
                                                 @Override
                                                 public void onCallBack(ArrayList<MoneySource> list) {
-                                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                                    finish();
+                                                    new DataHelper().getPeriodicTransaction(new PeriodicTransactionCallBack() {
+                                                        @Override
+                                                        public void onCallBack(ArrayList<PeriodicTransaction> list) {
+                                                            saveData(list);
+
+                                                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                                            finish();
+                                                        }
+
+                                                        @Override
+                                                        public void onCallBackFail(String message) {
+
+                                                        }
+                                                    }, user.getUid());
                                                 }
 
                                                 @Override
@@ -326,9 +355,20 @@ public class LoginActivity extends AppCompatActivity {
                                                     new DataHelper().setMoneySource(new MoneySourceCallBack() {
                                                         @Override
                                                         public void onCallBack(ArrayList<MoneySource> list) {
-                                                            unLoading();
-                                                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                                            finish();
+                                                            new DataHelper().getPeriodicTransaction(new PeriodicTransactionCallBack() {
+                                                                @Override
+                                                                public void onCallBack(ArrayList<PeriodicTransaction> list) {
+                                                                    saveData(list);
+
+                                                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                                                    finish();
+                                                                }
+
+                                                                @Override
+                                                                public void onCallBackFail(String message) {
+
+                                                                }
+                                                            }, user.getUid());
                                                         }
 
                                                         @Override
@@ -353,4 +393,12 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    private void saveData(ArrayList<PeriodicTransaction> periodicTrasactionListFull) {
+        SharedPreferences sharedPreferences = getSharedPreferences("periodicTransactionList", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(periodicTrasactionListFull);
+        editor.putString("list", json);
+        editor.apply();
+    }
 }

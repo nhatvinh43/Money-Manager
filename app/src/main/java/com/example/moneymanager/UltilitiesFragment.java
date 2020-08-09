@@ -2,6 +2,7 @@ package com.example.moneymanager;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -13,15 +14,22 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,6 +39,7 @@ import java.util.ArrayList;
 public class UltilitiesFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    public static final int ULTILITIES_MANAGE_PERIODICTRANSACION_RQCODE = 20;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -57,6 +66,10 @@ public class UltilitiesFragment extends Fragment {
     DataHelper dataHelper = new DataHelper();
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     String uId = firebaseAuth.getCurrentUser().getUid();
+    int msCount = 0;
+
+    private TextView periodicTransactionCount;
+    private TextView moneySourceCount;
 
     // TODO: Rename and change types and number of parameters
     public static UltilitiesFragment newInstance(String param1, String param2) {
@@ -92,6 +105,11 @@ public class UltilitiesFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
+        periodicTransactionCount = view.findViewById(R.id.specialTransactionsCount_statistics);
+        periodicTransactionCount.setText(getPeriodicTrasactionNumber());
+        moneySourceCount = view.findViewById(R.id.moneySourcesCount_statistics);
+        getMoneySourceNumber();
+
         view.findViewById(R.id.manageMoneySourcesButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -239,12 +257,58 @@ public class UltilitiesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                Intent intent = new Intent(v.getContext(), ManagePeriodicTransactions.class);
-               startActivity(intent);
+               startActivityForResult(intent, ULTILITIES_MANAGE_PERIODICTRANSACION_RQCODE);
             }
         });
     }
 
+    private String getPeriodicTrasactionNumber() {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("periodicTransactionList", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("list", null);
+        Type type = new TypeToken<ArrayList<PeriodicTransaction>>() {}.getType();
 
+        ArrayList<PeriodicTransaction> periodicTrasactionListFull = gson.fromJson(json, type);
+        if(periodicTrasactionListFull == null) {
+            return "0";
+        }
+         return String.valueOf(periodicTrasactionListFull.size());
+    }
+
+    private void getMoneySourceNumber() {
+        dataHelper.getMoneySourceWithoutTransactionList(new MoneySourceCallBack() {
+            @Override
+            public void onCallBack(ArrayList<MoneySource> list) {
+                msCount = list.size();
+                moneySourceCount.setText(String.valueOf(msCount));
+            }
+
+            @Override
+            public void onCallBackFail(String message) {
+
+            }
+        }, firebaseAuth.getCurrentUser().getUid());
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == ULTILITIES_MANAGE_PERIODICTRANSACION_RQCODE) {
+            if(resultCode == Activity.RESULT_CANCELED) {
+                periodicTransactionCount.setText(getPeriodicTrasactionNumber());
+            }
+        } else if (requestCode == HomeFragment.HOME_CHANGE_MONEYSOURCE_RQCODE) {
+            if(resultCode == Activity.RESULT_FIRST_USER) {
+                msCount -= 1;
+                moneySourceCount.setText(String.valueOf(msCount));
+            }
+        } else if (requestCode == HomeFragment.HOME_NEW_MONEYSOURCE_RQCODE) { // Thêm mới nguồn tiền
+            if(resultCode == Activity.RESULT_OK) {
+                msCount += 1;
+                moneySourceCount.setText(String.valueOf(msCount));
+            }
+        }
+    }
 
     @Override
     public void onResume() {

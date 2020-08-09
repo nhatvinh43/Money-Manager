@@ -1,7 +1,12 @@
 package com.example.moneymanager;
 
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -28,6 +33,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,11 +46,15 @@ public class MainActivity extends AppCompatActivity {
     final FragmentManager fm = getSupportFragmentManager();
     Fragment active = fragment1;
 
-    FirebaseAuth fAuth;
+    FirebaseAuth fAuth = FirebaseAuth.getInstance();
+    AlarmManager alarmManager;
+    Intent alarmIntent;
+    PendingIntent pendingIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        createNotificationChannel();
 
         String colorScheme = getSharedPreferences("MyPreferences", MODE_PRIVATE).getString("currentColor", "yellow");
 
@@ -82,6 +92,22 @@ public class MainActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_main);
+        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmIntent = new Intent(MainActivity.this, NewDayReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.cancel(pendingIntent);
+
+        Calendar alarmStartTime = Calendar.getInstance();
+        Calendar now = Calendar.getInstance();
+        alarmStartTime.set(Calendar.HOUR_OF_DAY, 0);
+        alarmStartTime.set(Calendar.MINUTE, 0);
+        alarmStartTime.set(Calendar.SECOND, 0);
+        if (now.after(alarmStartTime)) {
+            alarmStartTime.add(Calendar.DATE, 1);
+        }
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+
         final BottomNavigationView navView = findViewById(R.id.nav_view);
         FloatingActionButton addTransaction = findViewById(R.id.addTransactionButton);
         addTransaction.setOnClickListener(new View.OnClickListener() {
@@ -91,8 +117,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, HomeFragment.HOME_NEW_TRANSACTION_RQCODE);
             }
         });
-
-        fAuth = FirebaseAuth.getInstance();
 
         //Fragment controls
         fm.beginTransaction().add(R.id.main_container, fragment4, "4").hide(fragment4).commit();
@@ -134,8 +158,19 @@ public class MainActivity extends AppCompatActivity {
 
         navView.getMenu().getItem(2).setEnabled(false);
         //End fragment controls
+    }
 
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "TransactionNotification";
+            String description = "Add Periodic Transaction";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(PeriodicTransactionService.NOTIFICATION_CHANNEL_ID, name, importance);
+            channel.setDescription(description);
 
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
     @Override

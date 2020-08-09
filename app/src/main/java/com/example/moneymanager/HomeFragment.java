@@ -1229,7 +1229,7 @@ public class HomeFragment extends Fragment {
             } else if(resultCode == Activity.RESULT_CANCELED) {
                 Log.d("-------------Test result from moneysource detail ", "CANCEL");
             }
-        } else if (requestCode == HOME_NEW_MONEYSOURCE_RQCODE) {
+        } else if (requestCode == HOME_NEW_MONEYSOURCE_RQCODE) { // Thêm mới nguồn tiền
             if(resultCode == Activity.RESULT_OK) {
                 Log.d("-------------Test result from add moneysource ", "OKE");
                 DataHelper dataHelper = new DataHelper();
