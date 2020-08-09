@@ -86,7 +86,6 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:scrollbars="none"
-            android:paddingBottom="20dp"
             android:paddingTop="20dp">
 
 
@@ -118,11 +117,79 @@
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:fontFamily="sans-serif-medium"/>
+
+                    <RelativeLayout
+                        android:id="@+id/numbersRow"
+                        android:layout_marginTop="15dp"
+                        android:layout_below="@id/statisticsTittle"
+                        android:layout_width="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:id="@+id/incomeRow"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_gravity="center_horizontal"
+                                android:id="@+id/totalIncomeTitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="15dp"
+                                android:text="@string/totalIncome"
+                                android:textColor="@color/white"
+                                android:textSize="15sp"
+                                android:fontFamily="sans-serif-light"/>
+                            <TextView
+                                android:layout_gravity="center_horizontal"
+                                android:id="@+id/totalIncome"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:text="@string/moneyPH"
+                                android:textColor="@color/white"
+                                android:textSize="22dp"
+                                android:fontFamily="sans-serif"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_toEndOf="@id/incomeRow"
+                            android:id="@+id/spendingRow"
+                            android:layout_marginStart="50dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_gravity="center_horizontal"
+                                android:id="@+id/totalSpendingTitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="15dp"
+                                android:text="@string/totalSpending"
+                                android:textColor="@color/white"
+                                android:textSize="15sp"
+                                android:fontFamily="sans-serif-light"/>
+                            <TextView
+                                android:layout_gravity="center_horizontal"
+                                android:id="@+id/totalSpending"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:text="@string/moneyPH"
+                                android:textColor="@color/white"
+                                android:textSize="22dp"
+                                android:fontFamily="sans-serif"/>
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
                     <com.anychart.AnyChartView
                         android:layout_marginTop="20dp"
                         android:layout_width="match_parent"
                         android:layout_height="250dp"
-                        android:layout_below="@+id/statisticsTittle"
+                        android:layout_below="@+id/numbersRow"
                         android:id="@+id/overallChart"/>
                     <LinearLayout
                         android:id="@+id/noTransaction_statistics"
