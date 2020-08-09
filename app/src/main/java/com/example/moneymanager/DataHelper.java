@@ -297,6 +297,37 @@ public class DataHelper {
         return newTransactionId;
     }
 
+    public void setTransactionFromPeriodicTransaction(PeriodicTransaction periodicTransaction) {
+        String newTransactionId = db.collection("transactions").document().getId();
+        Map<String, Object> transaction = new HashMap<>();
+        transaction.put("moneySourceId", periodicTransaction.getMoneySourceId());
+        transaction.put("transactionAmount", periodicTransaction.getTransactionAmount().doubleValue());
+        transaction.put("transactionIsIncome", periodicTransaction.getTransactionIsIncome());
+        transaction.put("description", periodicTransaction.getDescription());
+        transaction.put("expenditureId", periodicTransaction.getExpenditureId());
+        transaction.put("expenditureName", periodicTransaction.getExpenditureName());
+        transaction.put("transactionTime", periodicTransaction.getTransactionTime());
+
+//        final Transaction trans = new Transaction();
+//        trans.setDescription(periodicTransaction.getDescription());
+//        trans.setExpenditureId(periodicTransaction.getExpenditureId());
+//        trans.setExpenditureName(periodicTransaction.getExpenditureName());
+//        trans.setTransactionAmount(periodicTransaction.getTransactionAmount());
+//        trans.setTransactionId(newTransactionId);
+//        trans.setMoneySourceId(periodicTransaction.getMoneySourceId());
+//        trans.setTransactionIsIncome(periodicTransaction.getTransactionIsIncome());
+//        trans.setTransactionTime(periodicTransaction.getTransactionTime());
+        db.collection("transactions").document(newTransactionId).set(transaction)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                    }
+                });
+    }
 
     public void getTransaction(final TransactionCallBack transCallBack, String msID) {
 
