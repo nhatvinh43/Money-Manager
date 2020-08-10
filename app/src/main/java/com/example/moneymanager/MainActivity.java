@@ -1,6 +1,7 @@
 package com.example.moneymanager;
 
 import android.app.AlarmManager;
+import android.app.IntentService;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -95,18 +96,21 @@ public class MainActivity extends AppCompatActivity {
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarmIntent = new Intent(MainActivity.this, NewDayReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.cancel(pendingIntent);
+        if (alarmManager != null) {
+            alarmManager.cancel(pendingIntent);
+        }
 
         Calendar alarmStartTime = Calendar.getInstance();
-        Calendar now = Calendar.getInstance();
-        alarmStartTime.set(Calendar.HOUR_OF_DAY, 0);
-        alarmStartTime.set(Calendar.MINUTE, 0);
-        alarmStartTime.set(Calendar.SECOND, 0);
+        Calendar now = alarmStartTime.getInstance();
+        alarmStartTime.setTimeInMillis(System.currentTimeMillis());
+        alarmStartTime.set(Calendar.HOUR_OF_DAY, 00);
+        alarmStartTime.set(Calendar.MINUTE, 00);
+        alarmStartTime.set(Calendar.SECOND, 00);
         if (now.after(alarmStartTime)) {
             alarmStartTime.add(Calendar.DATE, 1);
         }
 
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
 
         final BottomNavigationView navView = findViewById(R.id.nav_view);
         FloatingActionButton addTransaction = findViewById(R.id.addTransactionButton);

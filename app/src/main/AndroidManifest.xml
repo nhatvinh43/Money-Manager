@@ -68,8 +68,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".NewDayReceiver"
-            android:enabled="true"/>
+        <receiver android:name=".NewDayReceiver"/>
         <service android:name=".PeriodicTransactionService"/>
     </application>
 

@@ -225,10 +225,8 @@ public class HomeFragment extends Fragment {
         final WaveLoadingView waveLoadingView = view.findViewById(R.id.waveLoadingView);
         todayIncome = view.findViewById(R.id.todayIncome_home);
         todaySpending = view.findViewById(R.id.todaySpending_home);
-
-        waveLoadingView.setCenterTitle(converter.moneyToString((double)selectedMoneySource.getLimit()));
-        todayIncome.setText("Thêm sau");
-        todaySpending.setText("Thêm sau");
+        todayIncome.setTextColor(Color.GREEN);
+        todaySpending.setTextColor(Color.RED);
 
         // Calendar Initiation
         dayOfWeek = view.findViewById(R.id.weekDay_home);
@@ -401,6 +399,8 @@ public class HomeFragment extends Fragment {
                     }
                 }
 
+                todayIncome.setText("+" + getTodayIncome());
+                todaySpending.setText("-" + getTodaySpending());
             }
 
             @Override
@@ -445,6 +445,9 @@ public class HomeFragment extends Fragment {
                                 renderError(transactionList, transactionsSection, noTransactionsSection);
                                 transactionAdapter.notifyDataSetChanged();
                                 transactionRecycleView.scheduleLayoutAnimation();
+
+                                todayIncome.setText("+" + getTodayIncome());
+                                todaySpending.setText("-" + getTodaySpending());
                             }
                         };
                         new DatePickerDialog(getContext(), R.style.DatePickerDialog, date, mYear, mMonth, mDay).show();
@@ -483,6 +486,9 @@ public class HomeFragment extends Fragment {
                                         renderError(transactionList, transactionsSection, noTransactionsSection);
                                         transactionAdapter.notifyDataSetChanged();
                                         transactionRecycleView.scheduleLayoutAnimation();
+
+                                        todayIncome.setText("+" + getTodayIncome());
+                                        todaySpending.setText("-" + getTodaySpending());
                                     }
                                 }, today.get(Calendar.YEAR), today.get(Calendar.MONTH));
 
@@ -537,6 +543,9 @@ public class HomeFragment extends Fragment {
                                         renderError(transactionList, transactionsSection, noTransactionsSection);
                                         transactionAdapter.notifyDataSetChanged();
                                         transactionRecycleView.scheduleLayoutAnimation();
+
+                                        todayIncome.setText("+" + getTodayIncome());
+                                        todaySpending.setText("-" + getTodaySpending());
                                     }
                                 }, today.get(Calendar.YEAR), today.get(Calendar.MONTH));
 
@@ -626,6 +635,9 @@ public class HomeFragment extends Fragment {
                                 renderError(transactionList, transactionsSection, noTransactionsSection);
                                 transactionAdapter.notifyDataSetChanged();
                                 transactionRecycleView.scheduleLayoutAnimation();
+
+                                todayIncome.setText("+" + getTodayIncome());
+                                todaySpending.setText("-" + getTodaySpending());
                                 chooseTimeDialog.dismiss();
                             }
                         });
@@ -709,14 +721,15 @@ public class HomeFragment extends Fragment {
 
                     selectedMoneySource = moneySourceList.get(pos);
                     waveLoadingView.setCenterTitle(converter.moneyToString((double)selectedMoneySource.getLimit()));
-                    todayIncome.setText("Thêm sau");
-                    todaySpending.setText("Thêm sau");
 
                     transactionList.clear();
                     transactionList.addAll(modifierTransactionListByViewMode());
                     renderError(transactionList, transactionsSection, noTransactionsSection);
                     transactionAdapter.notifyDataSetChanged();
                     transactionRecycleView.scheduleLayoutAnimation();
+
+                    todayIncome.setText("+" + getTodayIncome());
+                    todaySpending.setText("-" + getTodaySpending());
                     search.setText("");
                 }
 
@@ -733,6 +746,10 @@ public class HomeFragment extends Fragment {
         // Transaction RecycleView Initiation
         transactionRecycleView = view.findViewById(R.id.transactionList);
         transactionList.addAll(modifierTransactionListByViewMode());
+
+        waveLoadingView.setCenterTitle(converter.moneyToString((double)selectedMoneySource.getLimit()));
+        todayIncome.setText("+" + getTodayIncome());
+        todaySpending.setText("-" + getTodaySpending());
 
         GridLayoutManager transactionLayoutManager = new GridLayoutManager(getContext(), 2);
         transactionRecycleView.setLayoutManager(transactionLayoutManager);
@@ -1019,6 +1036,30 @@ public class HomeFragment extends Fragment {
             if(c.compareTo(fromCal) >= 0 && c.compareTo(toCal) <= 0) modifierTransactionList.add(t);
         }
         return modifierTransactionList;
+    }
+
+    private String getTodayIncome() {
+        MoneyToStringConverter converter = new MoneyToStringConverter();
+        double total = 0;
+        for(Transaction trans : transactionList) {
+            if(trans.getTransactionIsIncome()) {
+                total += trans.getTransactionAmount().doubleValue();
+            }
+        }
+
+        return converter.moneyToString(total);
+    }
+
+    private String getTodaySpending() {
+        MoneyToStringConverter converter = new MoneyToStringConverter();
+        double total = 0;
+        for(Transaction trans : transactionList) {
+            if(!trans.getTransactionIsIncome()) {
+                total += trans.getTransactionAmount().doubleValue();
+            }
+        }
+
+        return converter.moneyToString(total);
     }
 
     @Override
