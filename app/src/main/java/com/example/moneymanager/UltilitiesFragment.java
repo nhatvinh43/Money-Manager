@@ -409,7 +409,7 @@ public class UltilitiesFragment extends Fragment {
         if(periodicTrasactionListFull == null) {
             return "0";
         }
-         return String.valueOf(periodicTrasactionListFull.size());
+        return String.valueOf(periodicTrasactionListFull.size());
     }
 
     private void getMoneySourceNumber() {
@@ -427,6 +427,34 @@ public class UltilitiesFragment extends Fragment {
         }, firebaseAuth.getCurrentUser().getUid());
     }
 
+    private void deletePeriodicTransaction(String msId) {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("periodicTransactionList", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("list", null);
+        Type type = new TypeToken<ArrayList<PeriodicTransaction>>() {}.getType();
+
+        DataHelper dataHelper = new DataHelper();
+        ArrayList<PeriodicTransaction> periodicTrasactionListFull = gson.fromJson(json, type);
+        ArrayList<PeriodicTransaction> newPeriodicTrasactionListFull = new ArrayList<>();
+
+        if(periodicTrasactionListFull != null) {
+            for(int i=0; i<periodicTrasactionListFull.size(); i++) {
+                PeriodicTransaction peTrans = periodicTrasactionListFull.get(i);
+                if(peTrans.getMoneySourceId().equals(msId)) {
+                    dataHelper.deletePeriodicTransaction(peTrans);
+                } else {
+                    newPeriodicTrasactionListFull.add(peTrans);
+                }
+            }
+        }
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson1 = new Gson();
+        String json1 = gson1.toJson(newPeriodicTrasactionListFull);
+        editor.putString("list", json1);
+        editor.apply();
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -438,6 +466,13 @@ public class UltilitiesFragment extends Fragment {
             if(resultCode == Activity.RESULT_FIRST_USER) {
                 msCount -= 1;
                 moneySourceCount.setText(String.valueOf(msCount));
+
+                // Xóa giao dịch định kỳ
+                MoneySource resMoneySource = (MoneySource) data.getParcelableExtra("moneysource");
+                String msId = resMoneySource.getMoneySourceId();
+                deletePeriodicTransaction(msId);
+
+                periodicTransactionCount.setText(getPeriodicTrasactionNumber());
             }
         } else if (requestCode == HomeFragment.HOME_NEW_MONEYSOURCE_RQCODE) { // Thêm mới nguồn tiền
             if(resultCode == Activity.RESULT_OK) {

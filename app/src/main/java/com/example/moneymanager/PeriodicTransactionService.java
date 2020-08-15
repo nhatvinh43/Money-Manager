@@ -37,21 +37,22 @@ public class PeriodicTransactionService extends IntentService {
         PeriodicTransaction resPeriodicTransaction = (PeriodicTransaction) intent.getParcelableExtra("periodicTransaction");
         MoneyToStringConverter converter = new MoneyToStringConverter();
         String title = "";
+        String subject = "";
         String content = "";
         if(resPeriodicTransaction.getPeriodicType().equals("day")) {
             title = "Giao dịch định kỳ ngày";
-            content = "Đã tự động thêm giao dịch định kỳ ngày với nội dung:\n\t" +
-                    "Tên nguồn tiền: " + resPeriodicTransaction.getMoneySourceName() + "\n\t" +
+            subject = "Đã tự động thêm giao dịch định kỳ ngày với nội dung:";
+            content = "Tên nguồn tiền: " + resPeriodicTransaction.getMoneySourceName() + "\n\t" +
                     "Tên giao dịch: " + resPeriodicTransaction.getExpenditureName() + "\n\tSố tiền: " + converter.moneyToString(resPeriodicTransaction.getTransactionAmount().doubleValue());
         } else if(resPeriodicTransaction.getPeriodicType().equals("month")) {
             title = "Giao dịch định kỳ tháng";
-            content = "Đã tự động thêm giao dịch định kỳ tháng với nội dung:\n\t" +
-                    "Tên nguồn tiền: " + resPeriodicTransaction.getMoneySourceName() + "\n\t" +
+            subject = "Đã tự động thêm giao dịch định kỳ tháng với nội dung:";
+            content = "Tên nguồn tiền: " + resPeriodicTransaction.getMoneySourceName() + "\n\t" +
                     "Tên giao dịch: " + resPeriodicTransaction.getExpenditureName() + "\n\tSố tiền: " + converter.moneyToString(resPeriodicTransaction.getTransactionAmount().doubleValue());
         } else if(resPeriodicTransaction.getPeriodicType().equals("year")) {
             title = "Giao dịch định kỳ năm";
-            content = "Đã tự động thêm giao dịch định kỳ năm với nội dung:\n\t" +
-                    "Tên nguồn tiền: " + resPeriodicTransaction.getMoneySourceName() + "\n\t" +
+            subject = "Đã tự động thêm giao dịch định kỳ năm với nội dung:";
+            content = "Tên nguồn tiền: " + resPeriodicTransaction.getMoneySourceName() + "\n\t" +
                     "Tên giao dịch: " + resPeriodicTransaction.getExpenditureName() + "\n\tSố tiền: " + converter.moneyToString(resPeriodicTransaction.getTransactionAmount().doubleValue());
         }
 
@@ -62,8 +63,7 @@ public class PeriodicTransactionService extends IntentService {
         pendingIntent = PendingIntent.getActivity(context, 0, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Resources res = this.getResources();
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
-        notification= new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
+        notification = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(R.drawable.ic_piggy_bank)
                 .setLargeIcon(BitmapFactory.decodeResource(res, R.drawable.ic_piggy_bank))
@@ -71,7 +71,8 @@ public class PeriodicTransactionService extends IntentService {
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setContentTitle(title)
-                .setContentText(content)
+                .setContentText(subject)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(content))
                 .build();
 
         notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
