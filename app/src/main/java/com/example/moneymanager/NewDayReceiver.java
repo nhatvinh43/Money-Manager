@@ -21,6 +21,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.NOTIFICATION_SERVICE;
@@ -143,6 +144,9 @@ public class NewDayReceiver extends BroadcastReceiver {
                 .build();
 
         notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.notify(NOTIFICATION_ID, notification);
+        int m = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
+        Random random = new Random();
+        m += random.nextInt(100) + 1;
+        notificationManager.notify(m, notification);
     }
 }
