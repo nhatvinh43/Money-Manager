@@ -347,7 +347,7 @@ public class UltilitiesFragment extends Fragment {
                         builder.setView(R.layout.dialog_one_button);
                         final AlertDialog dialog = builder.create();
                         dialog.show();
-                        dialog.getWindow().setLayout(850,400);
+                        dialog.getWindow().setLayout(850,600);
                         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         final TextView msg = dialog.findViewById(R.id.message_one_button_dialog);
                         dialog.findViewById(R.id.confirm_one_button_dialog).setOnClickListener(new View.OnClickListener() {
