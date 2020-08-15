@@ -63,8 +63,7 @@ public class PeriodicTransactionService extends IntentService {
         pendingIntent = PendingIntent.getActivity(context, 0, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Resources res = this.getResources();
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
-        notification= new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
+        notification = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(R.drawable.ic_piggy_bank)
                 .setLargeIcon(BitmapFactory.decodeResource(res, R.drawable.ic_piggy_bank))

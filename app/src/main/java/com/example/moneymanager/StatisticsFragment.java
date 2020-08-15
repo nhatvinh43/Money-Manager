@@ -642,8 +642,10 @@ public class StatisticsFragment extends Fragment {
             @Override
             public void run() {
                 RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(0);
-//                CardView cv = viewHolder.itemView.findViewById(R.id.cardContainer);
-//                cv.animate().setDuration(100).scaleX(1).scaleY(1).setInterpolator(new AccelerateInterpolator()).start();
+                if(viewHolder != null) {
+                    CardView cv = viewHolder.itemView.findViewById(R.id.cardContainer);
+                    cv.animate().setDuration(100).scaleX(1).scaleY(1).setInterpolator(new AccelerateInterpolator()).start();
+                }
             }
         }, 100);
 
