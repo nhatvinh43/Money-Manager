@@ -678,7 +678,7 @@ public class HomeFragment extends Fragment {
                 Log.d("----------------------- Id moneysource",position + "    " + ms.getMoneySourceId());
                 Intent transactionDetailIntent = new Intent(getContext(), MoneySourceDetailsActivity.class);
                 transactionDetailIntent.putExtra("MoneySourceId", ms.getMoneySourceId());
-                startActivityForResult(transactionDetailIntent, HOME_CHANGE_MONEYSOURCE_RQCODE);
+                getActivity().startActivityForResult(transactionDetailIntent, HOME_CHANGE_MONEYSOURCE_RQCODE);
             }
         });
 
@@ -844,6 +844,16 @@ public class HomeFragment extends Fragment {
                         transactionRecycleView.scheduleLayoutAnimation();
                         break;
                     case "Định kỳ":
+                        transactionList.clear();
+                        transactionList.addAll(modifierTransactionListByViewMode());
+                        for(Transaction trans : transactionList) {
+                            if(trans.getIsPeriodic()) filterList.add(trans);
+                        }
+
+                        transactionList.clear();
+                        transactionList.addAll(filterList);
+                        transactionAdapter.notifyDataSetChanged();
+                        transactionRecycleView.scheduleLayoutAnimation();
                         break;
                 }
             }

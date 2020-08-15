@@ -19,9 +19,14 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -35,6 +40,7 @@ public class PeriodicTransactionDetails extends AppCompatActivity {
     private LinearLayout food, bill, travel, health, party, spendingOther, bonus, profit, salary, gifted, incomingOther;
     Spinner periodMenu;
     private boolean isChange = false;
+    private ArrayList<MoneySource> moneySourceArrayList;
 
     enum TYPE {
         DAY,
@@ -84,6 +90,28 @@ public class PeriodicTransactionDetails extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_periodic_transaction_details);
+        final ProgressBar loading = findViewById(R.id.loading);
+        final ScrollView container = findViewById(R.id.container);
+        loading.setVisibility(View.VISIBLE);
+        container.setVisibility(View.INVISIBLE);
+
+        new DataHelper().getMoneySourceWithoutTransactionList(new MoneySourceCallBack() {
+            @Override
+            public void onCallBack(ArrayList<MoneySource> list) {
+                moneySourceArrayList = list;
+                initView();
+                loading.setVisibility(View.GONE);
+                container.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onCallBackFail(String message) {
+
+            }
+        }, FirebaseAuth.getInstance().getCurrentUser().getUid());
+    }
+
+    private void initView() {
         final Button saveOrEditButton = findViewById(R.id.editAndSave_periodicTransactionDetails);
         final Button chooseDateTimeButton = findViewById(R.id.chooseDateTime_periodicTransactionDetails);
         final EditText dateTime = findViewById(R.id.dateTime_periodicTransactionDetails);
@@ -107,7 +135,12 @@ public class PeriodicTransactionDetails extends AppCompatActivity {
 
         description.setText(periodicTransaction.getDescription());
         amount.setText(converter.moneyToString(periodicTransaction.getTransactionAmount().doubleValue()));
-        moneySourceName.setText(periodicTransaction.getMoneySourceName());
+        for(MoneySource ms : moneySourceArrayList) {
+            if(ms.getMoneySourceId().equals(periodicTransaction.getMoneySourceId())) {
+                moneySourceName.setText(ms.getMoneySourceName());
+                break;
+            }
+        }
         expenditureName.setText(periodicTransaction.getExpenditureName());
         icon.setImageResource(id);
 

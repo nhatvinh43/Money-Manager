@@ -1,5 +1,6 @@
 package com.example.moneymanager;
 
+import android.app.AlarmManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -18,11 +19,13 @@ import java.util.Date;
 public class UltilitiesPeriodicManageAdapter extends RecyclerView.Adapter<UltilitiesPeriodicManageAdapter.ViewHolder> {
     private static UltilitiesPeriodicManageAdapter.ClickListener clickListener;
     ArrayList<PeriodicTransaction> mainModel;
+    ArrayList<MoneySource> moneySourceArrayList;
     Context context;
     MoneyToStringConverter converter = new MoneyToStringConverter();
 
-    public UltilitiesPeriodicManageAdapter(ArrayList<PeriodicTransaction> mainModel, Context context) {
+    public UltilitiesPeriodicManageAdapter(ArrayList<PeriodicTransaction> mainModel, ArrayList<MoneySource> moneySources, Context context) {
         this.mainModel = mainModel;
+        this.moneySourceArrayList = moneySources;
         this.context = context;
     }
 
@@ -45,7 +48,12 @@ public class UltilitiesPeriodicManageAdapter extends RecyclerView.Adapter<Ultili
         holder.transactionName.setText(mainModel.get(position).getExpenditureName());
         holder.transactionAmount.setText((mainModel.get(position).getTransactionIsIncome() == true ? "+" : "-") + converter.moneyToString(mainModel.get(position).getTransactionAmount().doubleValue()));
         holder.transactionAmount.setTextColor(mainModel.get(position).getTransactionIsIncome() == true ? Color.GREEN : Color.RED);
-        holder.transactionMoneySource.setText(mainModel.get(position).getMoneySourceName());
+        for(MoneySource ms : moneySourceArrayList) {
+            if(ms.getMoneySourceId().equals(mainModel.get(position).getMoneySourceId())) {
+                holder.transactionMoneySource.setText(ms.getMoneySourceName());
+                break;
+            }
+        }
         holder.transactionIcon.setImageResource(id);
 
         Date time = new Date(mainModel.get(position).getTransactionTime().getTime());

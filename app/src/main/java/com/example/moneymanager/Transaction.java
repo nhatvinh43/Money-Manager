@@ -16,6 +16,7 @@ public class Transaction implements Parcelable {
     private String moneySourceId;
     private boolean transactionIsIncome;
     private Timestamp transactionTime;
+    private boolean isPeriodic;
 
     public Transaction(){
         this.description = "";
@@ -26,10 +27,11 @@ public class Transaction implements Parcelable {
         this.moneySourceId = "";
         this.transactionIsIncome = true;
         this.transactionTime = null;
+        this.isPeriodic = false;
     }
 
     public Transaction(String description, String expenditureId, String expenditureName,
-                       Number transactionAmount, String transactionId, String moneySourceId, boolean transactionIsIncome, Timestamp transactionTime) {
+                       Number transactionAmount, String transactionId, String moneySourceId, boolean transactionIsIncome, Timestamp transactionTime, boolean isPeriodic) {
         this.description = description;
         this.expenditureId = expenditureId;
         this.expenditureName = expenditureName;
@@ -38,6 +40,7 @@ public class Transaction implements Parcelable {
         this.moneySourceId = moneySourceId;
         this.transactionIsIncome = transactionIsIncome;
         this.transactionTime = transactionTime;
+        this.isPeriodic = isPeriodic;
     }
 
     protected Transaction(Parcel in) {
@@ -49,6 +52,7 @@ public class Transaction implements Parcelable {
         moneySourceId = in.readString();
         transactionIsIncome = in.readByte() != 0;
         transactionTime = new Timestamp(in.readLong());
+        isPeriodic = in.readByte() != 0;
     }
 
     @Override
@@ -61,6 +65,7 @@ public class Transaction implements Parcelable {
         dest.writeString(moneySourceId);
         dest.writeByte((byte) (transactionIsIncome ? 1 : 0));
         dest.writeLong(transactionTime.getTime());
+        dest.writeByte((byte) (isPeriodic ? 1 : 0));
     }
 
     @Override
@@ -144,7 +149,11 @@ public class Transaction implements Parcelable {
         this.moneySourceId = moneySourceId;
     }
 
-    public boolean isTransactionIsIncome() {
-        return transactionIsIncome;
+    public boolean getIsPeriodic() {
+        return isPeriodic;
+    }
+
+    public void setIsPeriodic(boolean periodic) {
+        isPeriodic = periodic;
     }
 }

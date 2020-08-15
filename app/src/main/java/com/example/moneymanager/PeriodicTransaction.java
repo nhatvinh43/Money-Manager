@@ -12,7 +12,6 @@ public class PeriodicTransaction implements Parcelable {
     private Number transactionAmount;
     private String transactionId;
     private String moneySourceId;
-    private String moneySourceName;
     private boolean transactionIsIncome;
     private Timestamp transactionTime;
     private String periodicType;
@@ -24,20 +23,18 @@ public class PeriodicTransaction implements Parcelable {
         this.transactionAmount = 0;
         this.transactionId = "";
         this.moneySourceId = "";
-        this.moneySourceName = "";
         this.transactionIsIncome = true;
         this.transactionTime = null;
         this.periodicType = "";
     }
 
-    public PeriodicTransaction(String description, String expenditureId, String expenditureName, Number transactionAmount, String transactionId, String moneySourceId, String moneySourceName, boolean transactionIsIncome, Timestamp transactionTime, String periodicType) {
+    public PeriodicTransaction(String description, String expenditureId, String expenditureName, Number transactionAmount, String transactionId, String moneySourceId, boolean transactionIsIncome, Timestamp transactionTime, String periodicType) {
         this.description = description;
         this.expenditureId = expenditureId;
         this.expenditureName = expenditureName;
         this.transactionAmount = transactionAmount;
         this.transactionId = transactionId;
         this.moneySourceId = moneySourceId;
-        this.moneySourceName = moneySourceName;
         this.transactionIsIncome = transactionIsIncome;
         this.transactionTime = transactionTime;
         this.periodicType = periodicType;
@@ -50,7 +47,6 @@ public class PeriodicTransaction implements Parcelable {
         transactionAmount = in.readDouble();
         transactionId = in.readString();
         moneySourceId = in.readString();
-        moneySourceName = in.readString();
         transactionIsIncome = in.readByte() != 0;
         periodicType = in.readString();
         transactionTime = new Timestamp(in.readLong());
@@ -81,18 +77,9 @@ public class PeriodicTransaction implements Parcelable {
         parcel.writeDouble(transactionAmount.doubleValue());
         parcel.writeString(transactionId);
         parcel.writeString(moneySourceId);
-        parcel.writeString(moneySourceName);
         parcel.writeByte((byte) (transactionIsIncome ? 1 : 0));
         parcel.writeString(periodicType);
         parcel.writeLong(transactionTime.getTime());
-    }
-
-    public String getMoneySourceName() {
-        return moneySourceName;
-    }
-
-    public void setMoneySourceName(String moneySourceName) {
-        this.moneySourceName = moneySourceName;
     }
 
     public String getDescription() {
