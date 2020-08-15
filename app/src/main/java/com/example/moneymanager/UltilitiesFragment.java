@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.google.type.Money;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -110,6 +112,7 @@ public class UltilitiesFragment extends Fragment {
         moneySourceCount = view.findViewById(R.id.moneySourcesCount_statistics);
         getMoneySourceNumber();
 
+        //Quản lý nguồn tiền
         view.findViewById(R.id.manageMoneySourcesButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -242,11 +245,145 @@ public class UltilitiesFragment extends Fragment {
                 exchangeMoneyPanel.show();
                 exchangeMoneyPanel.getWindow().setLayout(1000,1200);
                 exchangeMoneyPanel.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                final MoneySource[] sourceMS = {new MoneySource()};
+                final MoneySource[] desMS = {new MoneySource()};
+                exchangeMoneyPanel.findViewById(R.id.chooseSource_exchange_money).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(v.getContext());
+                        builder.setView(R.layout.dialog_choose_money_source);
+                        final AlertDialog chooseSourceMS  = builder.create();
+                        chooseSourceMS.show();
+                        chooseSourceMS.getWindow().setLayout(1000,1200);
+                        chooseSourceMS.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        final ArrayList<MoneySource> sourcesMS = new ArrayList<>();
+//                        UltilitiesMoneySourceManageAdapter adapter = new UltilitiesMoneySourceManageAdapter(v.getContext(), sourcesMS);
+                        final RecyclerView recyclerView = chooseSourceMS.findViewById(R.id.moneySourceList_chooseMoneySource);
+                        final ProgressBar loading = chooseSourceMS.findViewById(R.id.loading);
+                        loading.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.INVISIBLE);
+                        dataHelper.getMoneySourceWithoutTransactionList(new MoneySourceCallBack() {
+                            @Override
+                            public void onCallBack(ArrayList<MoneySource> list) {
+                                sourcesMS.clear();
+                                sourcesMS.addAll(list);
+                                loading.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
+                                UltilitiesMoneySourceManageAdapter adapter = new UltilitiesMoneySourceManageAdapter(chooseSourceMS.getContext(), list);
+                                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(chooseSourceMS.getContext());
+                                recyclerView.setLayoutManager(layoutManager);
+                                recyclerView.setAdapter(adapter);
+                                adapter.notifyDataSetChanged();
+
+                                adapter.setOnItemClickListener(new UltilitiesMoneySourceManageAdapter.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(int position) {
+                                        sourceMS[0] = sourcesMS.get(position);
+                                        chooseSourceMS.dismiss();
+                                        EditText SMS = exchangeMoneyPanel.findViewById(R.id.source_exchange_money);
+                                        SMS.setText(sourceMS[0].getMoneySourceName());
+                                    }
+                                });
+                            }
+                            @Override
+                            public void onCallBackFail(String message) {
+
+                            }
+                        }, uId);
+                    }
+                });
+
+                exchangeMoneyPanel.findViewById(R.id.chooseDestination_exchange_money).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(v.getContext());
+                        builder.setView(R.layout.dialog_choose_money_source);
+                        final AlertDialog chooseSourceMS  = builder.create();
+                        chooseSourceMS.show();
+                        chooseSourceMS.getWindow().setLayout(1000,1200);
+                        chooseSourceMS.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        final ArrayList<MoneySource> sourcesMS = new ArrayList<>();
+//                        UltilitiesMoneySourceManageAdapter adapter = new UltilitiesMoneySourceManageAdapter(v.getContext(), sourcesMS);
+                        final RecyclerView recyclerView = chooseSourceMS.findViewById(R.id.moneySourceList_chooseMoneySource);
+                        final ProgressBar loading = chooseSourceMS.findViewById(R.id.loading);
+                        loading.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.INVISIBLE);
+                        dataHelper.getMoneySourceWithoutTransactionList(new MoneySourceCallBack() {
+                            @Override
+                            public void onCallBack(ArrayList<MoneySource> list) {
+                                sourcesMS.clear();
+                                sourcesMS.addAll(list);
+                                loading.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
+                                UltilitiesMoneySourceManageAdapter adapter = new UltilitiesMoneySourceManageAdapter(chooseSourceMS.getContext(), list);
+                                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(chooseSourceMS.getContext());
+                                recyclerView.setLayoutManager(layoutManager);
+                                recyclerView.setAdapter(adapter);
+                                adapter.notifyDataSetChanged();
+
+                                adapter.setOnItemClickListener(new UltilitiesMoneySourceManageAdapter.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(int position) {
+                                        desMS[0] = sourcesMS.get(position);
+                                        chooseSourceMS.dismiss();
+                                        EditText SMS = exchangeMoneyPanel.findViewById(R.id.destination_exchange_money);
+                                        SMS.setText(desMS[0].getMoneySourceName());
+                                    }
+                                });
+                            }
+                            @Override
+                            public void onCallBackFail(String message) {
+
+                            }
+                        }, uId);
+                    }
+                });
 
                 exchangeMoneyPanel.findViewById(R.id.confirm_exchange_money).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        //chuẩn bị AlertDialog
+                        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                        builder.setView(R.layout.dialog_one_button);
+                        final AlertDialog dialog = builder.create();
+                        dialog.show();
+                        dialog.getWindow().setLayout(850,400);
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        final TextView msg = dialog.findViewById(R.id.message_one_button_dialog);
+                        dialog.findViewById(R.id.confirm_one_button_dialog).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.hide();
 
+                        EditText money, sourceMS1, desMS1;
+                        money = exchangeMoneyPanel.findViewById(R.id.amount_exchange_money);
+                        sourceMS1 = exchangeMoneyPanel.findViewById(R.id.source_exchange_money);
+                        desMS1 = exchangeMoneyPanel.findViewById(R.id.destination_exchange_money);
+                        if (money.getText().toString().isEmpty() || sourceMS1.getText().toString().isEmpty() ||
+                        desMS1.getText().toString().isEmpty()){
+                            //chưa đủ thông tin
+                            dialog.show();
+                            msg.setText("Vui lòng nhập đầy đủ thông tin!");
+                        } else if (!sourceMS[0].getCurrencyName().equals(desMS[0].getCurrencyName())) {
+                            //2 nguồn tiền khác đơn vị
+                            dialog.show();
+                            msg.setText("2 nguồn tiền không chung đơn vị!");
+                        } else if (sourceMS[0].getMoneySourceId().equals(desMS[0].getMoneySourceId())){
+                            //chuyển cùng 1 nguồn tiền
+                            dialog.show();
+                            msg.setText("Không thể chuyển cùng 1 nguồn tiền!");
+                        } else {
+                            double exchangeAmount = Double.valueOf(money.getText().toString());
+                            sourceMS[0].setAmount((double)sourceMS[0].getAmount() - exchangeAmount);
+                            desMS[0].setAmount((double)desMS[0].getAmount() + exchangeAmount);
+                            Toast.makeText(v.getContext(),"chuyển thành công", Toast.LENGTH_LONG).show();
+                            dataHelper.updateMoneySource(sourceMS[0]);
+                            dataHelper.updateMoneySource(desMS[0]);
+                            exchangeMoneyPanel.dismiss();
+                        }
                     }
                 });
             }
@@ -319,4 +456,14 @@ public class UltilitiesFragment extends Fragment {
     public void onPause() {
         super.onPause();
     }
+    public double calculateTax(double totalIncome, double salaryWithIns, double dependencePerson){
+        double totalTax = 0;
+        return totalTax;
+    }
+    public double calculateProfit(double amountOfMoney, double period, double interesRate){
+        double totalProfit = 0;
+        return totalProfit;
+    }
+
+
 }
