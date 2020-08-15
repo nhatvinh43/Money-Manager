@@ -16,69 +16,77 @@
         android:tint="@color/white"
         android:background="@android:color/transparent"
         android:layout_marginTop="50dp"/>
+
     <RelativeLayout
-        android:layout_below="@id/backButton_manage_periodic_transactions"
-        android:layout_width="match_parent"
-        android:id="@+id/firstRow"
-        android:layout_marginTop="15dp"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_alignParentStart="true"
-            android:id="@+id/accountInfoTitle"
-            android:layout_width="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-light"
-            android:textSize="25sp"
-            android:text="@string/periodicTransaction"
-            android:textColor="@color/white"
-            android:layout_marginTop="15dp"/>
-
-        <Spinner
-            android:id="@+id/viewBy_manage_periodic_transactions"
-            android:layout_width="75dp"
-            android:layout_height="35dp"
-            android:spinnerMode="dropdown"
-            android:popupBackground="@drawable/transaction_item"
-            android:background="@drawable/authbtns"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"/>
-
-
-    </RelativeLayout>
-
-
-    <EditText
-        android:layout_marginTop="20dp"
-        android:layout_below="@id/firstRow"
-        android:id="@+id/search_manage_periodic_transactions"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:background="@drawable/transaction_item"
-        android:hint="@string/searchTransaction"
-        android:textAlignment="center"
-        android:fontFamily="sans-serif-light"
-        android:textSize="15sp"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/periodicTransactions"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="40dp"
-        android:layout_marginTop="20dp"
-        android:layout_below="@id/search_manage_periodic_transactions"/>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addPeriodicTransaction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="40dp"
-        android:layout_marginEnd="20dp"
-        android:src="@drawable/ic_plus"
-        app:fabCustomSize="50dp"/>
+        android:id="@+id/container"
+        android:layout_below="@id/backButton_manage_periodic_transactions">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:id="@+id/firstRow"
+            android:layout_marginTop="15dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_alignParentStart="true"
+                android:id="@+id/accountInfoTitle"
+                android:layout_width="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"
+                android:textSize="25sp"
+                android:text="@string/periodicTransaction"
+                android:textColor="@color/white"
+                android:layout_marginTop="15dp"/>
+
+            <Spinner
+                android:id="@+id/viewBy_manage_periodic_transactions"
+                android:layout_width="75dp"
+                android:layout_height="35dp"
+                android:spinnerMode="dropdown"
+                android:popupBackground="@drawable/transaction_item"
+                android:background="@drawable/authbtns"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"/>
+
+
+        </RelativeLayout>
+
+
+        <EditText
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/firstRow"
+            android:id="@+id/search_manage_periodic_transactions"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/transaction_item"
+            android:hint="@string/searchTransaction"
+            android:textAlignment="center"
+            android:fontFamily="sans-serif-light"
+            android:textSize="15sp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/periodicTransactions"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="40dp"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/search_manage_periodic_transactions"/>
+    </RelativeLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addPeriodicTransaction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/ic_plus"
+            app:fabCustomSize="50dp"/>
+
+
     <ProgressBar
         android:id="@+id/loading"
         android:layout_centerInParent="true"

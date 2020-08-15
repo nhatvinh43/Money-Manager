@@ -1,9 +1,16 @@
 package com.example.moneymanager;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.BitmapFactory;
+
+import androidx.core.app.NotificationCompat;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -16,20 +23,24 @@ import java.util.Calendar;
 import java.util.Date;
 
 import static android.content.Context.MODE_PRIVATE;
+import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class NewDayReceiver extends BroadcastReceiver {
     private Context context;
     private ArrayList<PeriodicTransaction> periodicTrasactionListFull;
     private DataHelper dataHelper;
-    private Intent service;
+
+    private NotificationManager notificationManager;
+    private PendingIntent pendingIntent;
+    private static int NOTIFICATION_ID = 1;
+    public static String NOTIFICATION_CHANNEL_ID = "my_channel_id";
+    Notification notification;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         this.context = context;
         dataHelper = new DataHelper();
         loadData();
-
-        service = new Intent(context, PeriodicTransactionService.class);
 
         for(PeriodicTransaction peTrans : periodicTrasactionListFull) {
            addTransaction(peTrans);
@@ -59,11 +70,11 @@ public class NewDayReceiver extends BroadcastReceiver {
 
                 Calendar newPeriodicTime_day = Calendar.getInstance();
                 newPeriodicTime_day.set(Calendar.HOUR_OF_DAY, periodicTime_day.get(Calendar.HOUR_OF_DAY));
+                newPeriodicTime_day.set(Calendar.MINUTE, periodicTime_day.get(Calendar.MINUTE));
                 peTrans.setTransactionTime(new Timestamp(newPeriodicTime_day.getTimeInMillis()));
 
                 dataHelper.setTransactionFromPeriodicTransaction(peTrans);
-                service.putExtra("periodicTransaction", peTrans);
-                context.startService(service);
+                notificationBuil(peTrans);
                 break;
             case "month":
                 Calendar periodicTime_month = Calendar.getInstance();
@@ -72,11 +83,11 @@ public class NewDayReceiver extends BroadcastReceiver {
                 if(periodicTime_month.get(Calendar.DAY_OF_MONTH) == now_day) {
                     Calendar newPeriodicTime_month = Calendar.getInstance();
                     newPeriodicTime_month.set(Calendar.HOUR_OF_DAY, periodicTime_month.get(Calendar.HOUR_OF_DAY));
+                    newPeriodicTime_month.set(Calendar.MINUTE, periodicTime_month.get(Calendar.MINUTE));
                     peTrans.setTransactionTime(new Timestamp(newPeriodicTime_month.getTimeInMillis()));
 
                     dataHelper.setTransactionFromPeriodicTransaction(peTrans);
-                    service.putExtra("periodicTransaction", peTrans);
-                    context.startService(service);
+                    notificationBuil(peTrans);
                 }
                 break;
             case "year":
@@ -86,13 +97,52 @@ public class NewDayReceiver extends BroadcastReceiver {
                 if(periodicTime_year.get(Calendar.DAY_OF_MONTH) == now_day && periodicTime_year.get(Calendar.MONTH) == now_month) {
                     Calendar newPeriodicTime_year = Calendar.getInstance();
                     newPeriodicTime_year.set(Calendar.HOUR_OF_DAY, periodicTime_year.get(Calendar.HOUR_OF_DAY));
+                    newPeriodicTime_year.set(Calendar.MINUTE, periodicTime_year.get(Calendar.MINUTE));
                     peTrans.setTransactionTime(new Timestamp(newPeriodicTime_year.getTimeInMillis()));
 
                     dataHelper.setTransactionFromPeriodicTransaction(peTrans);
-                    service.putExtra("periodicTransaction", peTrans);
-                    context.startService(service);
+                    notificationBuil(peTrans);
                 }
                 break;
         }
+    }
+
+    public void notificationBuil(PeriodicTransaction resPeriodicTransaction) {
+        MoneyToStringConverter converter = new MoneyToStringConverter();
+        String title = "";
+        String subject = "";
+        String content = "";
+        if(resPeriodicTransaction.getPeriodicType().equals("day")) {
+            title = "Giao dịch định kỳ ngày";
+            subject = "Đã tự động thêm giao dịch định kỳ ngày với nội dung:";
+            content = "Tên giao dịch: " + resPeriodicTransaction.getExpenditureName() + "\n\tSố tiền: " + converter.moneyToString(resPeriodicTransaction.getTransactionAmount().doubleValue());
+        } else if(resPeriodicTransaction.getPeriodicType().equals("month")) {
+            title = "Giao dịch định kỳ tháng";
+            subject = "Đã tự động thêm giao dịch định kỳ tháng với nội dung:";
+            content = "Tên giao dịch: " + resPeriodicTransaction.getExpenditureName() + "\n\tSố tiền: " + converter.moneyToString(resPeriodicTransaction.getTransactionAmount().doubleValue());
+        } else if(resPeriodicTransaction.getPeriodicType().equals("year")) {
+            title = "Giao dịch định kỳ năm";
+            subject = "Đã tự động thêm giao dịch định kỳ năm với nội dung:";
+            content = "Tên giao dịch: " + resPeriodicTransaction.getExpenditureName() + "\n\tSố tiền: " + converter.moneyToString(resPeriodicTransaction.getTransactionAmount().doubleValue());
+        }
+
+        notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+
+        Intent myIntent = new Intent(context, SplashActivity.class);
+        pendingIntent = PendingIntent.getActivity(context, 0, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        notification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
+                .setContentIntent(pendingIntent)
+                .setSmallIcon(R.drawable.ic_piggy_bank)
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setContentTitle(title)
+                .setContentText(subject)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(content))
+                .build();
+
+        notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.notify(NOTIFICATION_ID, notification);
     }
 }

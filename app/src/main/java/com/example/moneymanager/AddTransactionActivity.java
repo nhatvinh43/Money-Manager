@@ -428,7 +428,7 @@ public class AddTransactionActivity extends AppCompatActivity {
                                                  },
                             resTransaction.getDescription(), resTransaction.getExpenditureId(),
                             resTransaction.getExpenditureName(), resTransaction.getTransactionAmount(), resTransaction.getMoneySourceId(),
-                            resTransaction.getTransactionIsIncome(), resTransaction.getTransactionTime());
+                            resTransaction.getTransactionIsIncome(), resTransaction.getTransactionTime(), false);
                 }
             }
         });

@@ -22,8 +22,11 @@ import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -38,9 +41,12 @@ public class ManagePeriodicTransactions extends AppCompatActivity {
     public static final int ULTILITIES_CHANGE_PERIODICTRANSACION_RQCODE = 11;
     ArrayList<PeriodicTransaction> periodicTrasactionListFull;
     ArrayList<PeriodicTransaction> periodicTrasactionList;
+    ArrayList<MoneySource> moneySourcesList;
     RecyclerView periodicTransactionRecycleView;
     UltilitiesPeriodicManageAdapter periodicTransactionAdapter;
     LayoutAnimationController aController;
+    ProgressBar loading;
+    RelativeLayout container;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,14 +88,35 @@ public class ManagePeriodicTransactions extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_manage_periodic_transactions);
+        container = findViewById(R.id.container);
+        loading = findViewById(R.id.loading);
+        container.setVisibility(View.INVISIBLE);
+        loading.setVisibility(View.VISIBLE);
 
+        new DataHelper().getMoneySourceWithoutTransactionList(new MoneySourceCallBack() {
+            @Override
+            public void onCallBack(ArrayList<MoneySource> list) {
+                moneySourcesList = list;
+                initView();
+                container.setVisibility(View.VISIBLE);
+                loading.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onCallBackFail(String message) {
+
+            }
+        }, FirebaseAuth.getInstance().getCurrentUser().getUid());
+    }
+
+    private void initView() {
         periodicTransactionRecycleView = findViewById(R.id.periodicTransactions);
         loadData();
 
         GridLayoutManager transactionLayoutManager = new GridLayoutManager(ManagePeriodicTransactions.this , 2);
         periodicTransactionRecycleView.setLayoutManager(transactionLayoutManager);
 
-        periodicTransactionAdapter = new UltilitiesPeriodicManageAdapter(periodicTrasactionList, ManagePeriodicTransactions.this);
+        periodicTransactionAdapter = new UltilitiesPeriodicManageAdapter(periodicTrasactionList, moneySourcesList, ManagePeriodicTransactions.this);
         periodicTransactionRecycleView.setAdapter(periodicTransactionAdapter);
         periodicTransactionRecycleView.addItemDecoration(new SpaceItemDecoration(2,30,false));
 
@@ -203,7 +230,6 @@ public class ManagePeriodicTransactions extends AppCompatActivity {
                 filter(editable.toString());
             }
         });
-
     }
 
     private void saveData() {
@@ -243,7 +269,13 @@ public class ManagePeriodicTransactions extends AppCompatActivity {
             for(PeriodicTransaction trans : periodicTrasactionList) {
                 String money = converter.moneyToString(trans.getTransactionAmount().doubleValue());
                 String expenditureName = trans.getExpenditureName().toLowerCase();
-                String moneySourceName = trans.getMoneySourceName().toLowerCase();
+                String moneySourceName = "";
+                for(MoneySource ms : moneySourcesList) {
+                    if(ms.getMoneySourceId().equals(trans.getMoneySourceId())) {
+                        moneySourceName = ms.getMoneySourceName();
+                        break;
+                    }
+                }
 
                 if(money.contains(text.toLowerCase())
                         || expenditureName.contains((text.toLowerCase()))

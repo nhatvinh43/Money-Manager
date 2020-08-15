@@ -42,18 +42,15 @@ public class PeriodicTransactionService extends IntentService {
         if(resPeriodicTransaction.getPeriodicType().equals("day")) {
             title = "Giao dịch định kỳ ngày";
             subject = "Đã tự động thêm giao dịch định kỳ ngày với nội dung:";
-            content = "Tên nguồn tiền: " + resPeriodicTransaction.getMoneySourceName() + "\n\t" +
-                    "Tên giao dịch: " + resPeriodicTransaction.getExpenditureName() + "\n\tSố tiền: " + converter.moneyToString(resPeriodicTransaction.getTransactionAmount().doubleValue());
+            content = "Tên giao dịch: " + resPeriodicTransaction.getExpenditureName() + "\n\tSố tiền: " + converter.moneyToString(resPeriodicTransaction.getTransactionAmount().doubleValue());
         } else if(resPeriodicTransaction.getPeriodicType().equals("month")) {
             title = "Giao dịch định kỳ tháng";
             subject = "Đã tự động thêm giao dịch định kỳ tháng với nội dung:";
-            content = "Tên nguồn tiền: " + resPeriodicTransaction.getMoneySourceName() + "\n\t" +
-                    "Tên giao dịch: " + resPeriodicTransaction.getExpenditureName() + "\n\tSố tiền: " + converter.moneyToString(resPeriodicTransaction.getTransactionAmount().doubleValue());
+            content = "Tên giao dịch: " + resPeriodicTransaction.getExpenditureName() + "\n\tSố tiền: " + converter.moneyToString(resPeriodicTransaction.getTransactionAmount().doubleValue());
         } else if(resPeriodicTransaction.getPeriodicType().equals("year")) {
             title = "Giao dịch định kỳ năm";
             subject = "Đã tự động thêm giao dịch định kỳ năm với nội dung:";
-            content = "Tên nguồn tiền: " + resPeriodicTransaction.getMoneySourceName() + "\n\t" +
-                    "Tên giao dịch: " + resPeriodicTransaction.getExpenditureName() + "\n\tSố tiền: " + converter.moneyToString(resPeriodicTransaction.getTransactionAmount().doubleValue());
+            content = "Tên giao dịch: " + resPeriodicTransaction.getExpenditureName() + "\n\tSố tiền: " + converter.moneyToString(resPeriodicTransaction.getTransactionAmount().doubleValue());
         }
 
         Context context = this.getApplicationContext();

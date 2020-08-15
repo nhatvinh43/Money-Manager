@@ -199,7 +199,6 @@ public class AddPeriodicTransaction extends AppCompatActivity {
                         MoneySource moneySource = moneySourcesList.get(position);
                         moneySourceEditText.setText(moneySource.getMoneySourceName());
                         periodicTransaction.setMoneySourceId(moneySource.getMoneySourceId());
-                        periodicTransaction.setMoneySourceName(moneySource.getMoneySourceName());
                         categoryPanel.dismiss();
                     }
                 });
@@ -493,7 +492,7 @@ public class AddPeriodicTransaction extends AppCompatActivity {
                                                           }
                                                       },
                             periodicTransaction.getDescription(), periodicTransaction.getExpenditureId(),
-                            periodicTransaction.getExpenditureName(), periodicTransaction.getTransactionAmount(), periodicTransaction.getMoneySourceId(), periodicTransaction.getMoneySourceName(),
+                            periodicTransaction.getExpenditureName(), periodicTransaction.getTransactionAmount(), periodicTransaction.getMoneySourceId(),
                             periodicTransaction.getTransactionIsIncome(), periodicTransaction.getTransactionTime(), periodicTransaction.getPeriodicType());
                 }
             }

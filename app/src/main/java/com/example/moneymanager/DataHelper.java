@@ -267,7 +267,7 @@ public class DataHelper {
 
     // Transaction model
     public String setTransaction(final TransactionCallBack transCallBack, String description, String expenditureId, String expenditureName, Number transactionAmount, String moneySourceId,
-                                    boolean transactionIsIncome, Timestamp transactionTime){
+                                    boolean transactionIsIncome, Timestamp transactionTime, boolean isPeriodic){
         String newTransactionId = db.collection("transactions").document().getId();
         Map<String, Object> transaction = new HashMap<>();
         transaction.put("moneySourceId", moneySourceId);
@@ -277,8 +277,9 @@ public class DataHelper {
         transaction.put("expenditureId", expenditureId);
         transaction.put("expenditureName", expenditureName);
         transaction.put("transactionTime", transactionTime);
+        transaction.put("isPeriodic", isPeriodic);
 
-        final Transaction trans = new Transaction(description, expenditureId, expenditureName, transactionAmount, newTransactionId, moneySourceId, transactionIsIncome, transactionTime);
+        final Transaction trans = new Transaction(description, expenditureId, expenditureName, transactionAmount, newTransactionId, moneySourceId, transactionIsIncome, transactionTime, isPeriodic);
         db.collection("transactions").document(newTransactionId).set(transaction)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -307,6 +308,7 @@ public class DataHelper {
         transaction.put("expenditureId", periodicTransaction.getExpenditureId());
         transaction.put("expenditureName", periodicTransaction.getExpenditureName());
         transaction.put("transactionTime", periodicTransaction.getTransactionTime());
+        transaction.put("isPeriodic", true);
 
 //        final Transaction trans = new Transaction();
 //        trans.setDescription(periodicTransaction.getDescription());
@@ -347,6 +349,7 @@ public class DataHelper {
                                 ts.setExpenditureId((String) document.getData().get("expenditureId"));
                                 ts.setExpenditureName((String) document.getData().get("expenditureName"));
                                 ts.setTransactionTime(new Timestamp((document.getDate("transactionTime")).getTime()));
+                                ts.setIsPeriodic((boolean) document.getData().get("isPeriodic"));
 
                                 transactionList.add(ts);
                             }
@@ -375,6 +378,8 @@ public class DataHelper {
                             ts.setExpenditureId((String) document.getData().get("expenditureId"));
                             ts.setExpenditureName((String) document.getData().get("expenditureName"));
                             ts.setTransactionTime(new Timestamp((document.getDate("transactionTime")).getTime()));
+                            ts.setIsPeriodic((boolean) document.getData().get("isPeriodic"));
+
                             singleTransCallBack.onCallBack(ts);
                         } else {
                             singleTransCallBack.onCallBackFailed(task.getException().getMessage());
@@ -392,6 +397,7 @@ public class DataHelper {
         transaction.put("expenditureId", trans.getExpenditureId());
         transaction.put("expenditureName", trans.getExpenditureName());
         transaction.put("transactionTime", trans.getTransactionTime());
+        transaction.put("isPeriodic", trans.getIsPeriodic());
 
         db.collection("transactions").document(trans.getTransactionId()).set(transaction)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -425,12 +431,11 @@ public class DataHelper {
     }
 
     // PeriodicTransaction Model
-    public String setPeriodicTransaction(final PeriodicTransactionCallBack transCallBack, String description, String expenditureId, String expenditureName, Number transactionAmount, String moneySourceId, String moneySourceName,
+    public String setPeriodicTransaction(final PeriodicTransactionCallBack transCallBack, String description, String expenditureId, String expenditureName, Number transactionAmount, String moneySourceId,
                                  boolean transactionIsIncome, Timestamp transactionTime, String periodicType){
         String newTransactionId = db.collection("periodicTransactions").document().getId();
         Map<String, Object> transaction = new HashMap<>();
         transaction.put("moneySourceId", moneySourceId);
-        transaction.put("moneySourceName", moneySourceName);
         transaction.put("transactionAmount", transactionAmount);
         transaction.put("transactionIsIncome", transactionIsIncome);
         transaction.put("description", description);
@@ -439,7 +444,7 @@ public class DataHelper {
         transaction.put("transactionTime", transactionTime);
         transaction.put("periodicType", periodicType);
 
-        final PeriodicTransaction trans = new PeriodicTransaction(description, expenditureId, expenditureName, transactionAmount, newTransactionId, moneySourceId, moneySourceName, transactionIsIncome, transactionTime, periodicType);
+        final PeriodicTransaction trans = new PeriodicTransaction(description, expenditureId, expenditureName, transactionAmount, newTransactionId, moneySourceId, transactionIsIncome, transactionTime, periodicType);
         db.collection("periodicTransactions").document(newTransactionId).set(transaction)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -474,7 +479,6 @@ public class DataHelper {
                                         if (msId.equals(ms.getMoneySourceId())) {
                                             PeriodicTransaction ts = new PeriodicTransaction();
                                             ts.setMoneySourceId((String) document.getData().get("moneySourceId"));
-                                            ts.setMoneySourceName((String) document.getData().get("moneySourceName"));
                                             ts.setTransactionId(document.getId());
                                             ts.setTransactionAmount(document.getDouble("transactionAmount"));
                                             ts.setTransactionIsIncome((boolean) document.getData().get("transactionIsIncome"));
@@ -505,7 +509,6 @@ public class DataHelper {
     public void updatePeriodicTransaction(PeriodicTransaction trans) {
         Map<String, Object> transaction = new HashMap<>();
         transaction.put("moneySourceId", trans.getMoneySourceId());
-        transaction.put("moneySourceName", trans.getMoneySourceName());
         transaction.put("transactionAmount", trans.getTransactionAmount());
         transaction.put("transactionIsIncome", trans.getTransactionIsIncome());
         transaction.put("description", trans.getDescription());
