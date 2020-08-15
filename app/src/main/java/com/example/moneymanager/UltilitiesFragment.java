@@ -201,14 +201,51 @@ public class UltilitiesFragment extends Fragment {
                 builder.setView(R.layout.dialog_calculate_tax);
                 final AlertDialog calculateTaxPanel  = builder.create();
                 calculateTaxPanel.show();
-                calculateTaxPanel.getWindow().setLayout(1000,1200);
+                calculateTaxPanel.getWindow().setLayout(1000,1400);
                 calculateTaxPanel.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
                 calculateTaxPanel.findViewById(R.id.calculate_calculateTax).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        calculateTaxPanel.findViewById(R.id.resultTitle_calculateTax).setVisibility(View.VISIBLE);
-                        calculateTaxPanel.findViewById(R.id.result_calculateTax).setVisibility(View.VISIBLE);
+                        //chuẩn bị AlertDialog
+                        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                        builder.setView(R.layout.dialog_one_button);
+                        final AlertDialog dialog = builder.create();
+                        dialog.show();
+                        dialog.getWindow().setLayout(850,400);
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        final TextView msg = dialog.findViewById(R.id.message_one_button_dialog);
+                        dialog.findViewById(R.id.confirm_one_button_dialog).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.hide();
+
+                        EditText totalIncome, insAmount, dependPer;
+                        TextView totalTax;
+                        totalIncome = calculateTaxPanel.findViewById(R.id.moneyAmount_calculateTax);
+                        insAmount = calculateTaxPanel.findViewById(R.id.insuranceAmount_calculateTax);
+                        dependPer = calculateTaxPanel.findViewById(R.id.dependentPersons_calculateTax);
+                        totalTax = calculateTaxPanel.findViewById(R.id.result_calculateTax);
+
+                        if (totalIncome.getText().toString().isEmpty() || insAmount.getText().toString().isEmpty() ||
+                        dependPer.getText().toString().isEmpty()){
+                            dialog.show();
+                            msg.setText("Vui lòng nhập đầy đủ thông tin!");
+                        } else if (Double.valueOf(dependPer.getText().toString()) > 1){
+                            dialog.show();
+                            msg.setText("Số người phụ thuộc không quá 1!");
+                        } else {
+                            double totalTaxD = calculateTax(Double.valueOf(totalIncome.getText().toString()),
+                                    Double.valueOf(insAmount.getText().toString()), Double.valueOf(dependPer.getText().toString()));
+                            MoneyToStringConverter converter = new MoneyToStringConverter();
+                            totalTax.setText(converter.moneyToString(totalTaxD));
+                            calculateTaxPanel.findViewById(R.id.resultTitle_calculateTax).setVisibility(View.VISIBLE);
+                            calculateTaxPanel.findViewById(R.id.result_calculateTax).setVisibility(View.VISIBLE);
+//                            totalTax.setVisibility(View.VISIBLE);
+                        }
                     }
                 });
             }
@@ -228,8 +265,39 @@ public class UltilitiesFragment extends Fragment {
                 calculateProfitPanel.findViewById(R.id.calculate_calculateProfit).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        calculateProfitPanel.findViewById(R.id.resultTitle_calculateProfit).setVisibility(View.VISIBLE);
-                        calculateProfitPanel.findViewById(R.id.result_calculateProfit).setVisibility(View.VISIBLE);
+                        //chuẩn bị AlertDialog
+                        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                        builder.setView(R.layout.dialog_one_button);
+                        final AlertDialog dialog = builder.create();
+                        dialog.show();
+                        dialog.getWindow().setLayout(850,400);
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        final TextView msg = dialog.findViewById(R.id.message_one_button_dialog);
+                        dialog.findViewById(R.id.confirm_one_button_dialog).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.hide();
+                        EditText amountOfMoney, period, interesRate;
+                        TextView profitRes;
+                        amountOfMoney = calculateProfitPanel.findViewById(R.id.moneyAmount_calculateProfit);
+                        period = calculateProfitPanel.findViewById(R.id.timePeriod_calculateProfit);
+                        interesRate = calculateProfitPanel.findViewById(R.id.profitRatio_calculateProfit);
+                        profitRes = calculateProfitPanel.findViewById(R.id.result_calculateProfit);
+                        if (amountOfMoney.getText().toString().isEmpty() || period.getText().toString().isEmpty() ||
+                        interesRate.getText().toString().isEmpty()){
+                            dialog.show();
+                            msg.setText("Vui lòng nhập đầy đủ thông tin!");
+                        } else {
+                            double resProfit = calculateProfit(Double.valueOf(amountOfMoney.getText().toString()),
+                                    Double.valueOf(period.getText().toString()), Double.valueOf(interesRate.getText().toString()));
+                            MoneyToStringConverter converter = new MoneyToStringConverter();
+                            profitRes.setText(converter.moneyToString(resProfit));
+                            calculateProfitPanel.findViewById(R.id.resultTitle_calculateProfit).setVisibility(View.VISIBLE);
+                            calculateProfitPanel.findViewById(R.id.result_calculateProfit).setVisibility(View.VISIBLE);
+                        }
                     }
                 });
             }
@@ -493,10 +561,45 @@ public class UltilitiesFragment extends Fragment {
     }
     public double calculateTax(double totalIncome, double salaryWithIns, double dependencePerson){
         double totalTax = 0;
+        double reduceForIncs = salaryWithIns*(10.5/100);
+        double reduceForDependPer = dependencePerson * 4400000;
+        double totalReduce = reduceForIncs + reduceForDependPer + 11000000;
+        double totalAmountForTax = totalIncome - totalReduce;
+        boolean flag = false; //có cần nộp thuế hay không
+        if (dependencePerson == 0){
+            if (totalIncome > 11000000){
+                flag = true;
+            }
+        }
+        if (dependencePerson == 1){
+            if (totalIncome > 15400000){
+                flag = true;
+            }
+        }
+        if (flag == false) {
+            totalTax = 0;
+        } else {
+            if (totalAmountForTax <= 5000000){
+                totalTax = totalAmountForTax*0.05;
+            } else if (totalAmountForTax <= 10000000){
+                totalTax = totalAmountForTax*0.1 - 250000;
+            } else if (totalAmountForTax <= 18000000){
+                totalTax = totalAmountForTax*0.15 - 750000;
+            } else if (totalAmountForTax <= 32000000){
+                totalTax = totalAmountForTax*0.2 - 1650000;
+            } else if (totalAmountForTax <= 52000000){
+                totalTax = totalAmountForTax*0.25 - 3250000;
+            } else if (totalAmountForTax <= 80000000){
+                totalTax = totalAmountForTax*0.3 - 5850000;
+            } else {
+                totalTax = totalAmountForTax*0.35 - 9850000;
+            }
+        }
         return totalTax;
     }
     public double calculateProfit(double amountOfMoney, double period, double interesRate){
         double totalProfit = 0;
+        totalProfit = amountOfMoney*(interesRate/100)/12*period;
         return totalProfit;
     }
 
