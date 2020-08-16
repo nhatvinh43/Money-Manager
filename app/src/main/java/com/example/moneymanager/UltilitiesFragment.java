@@ -72,6 +72,7 @@ public class UltilitiesFragment extends Fragment {
 
     private TextView periodicTransactionCount;
     private TextView moneySourceCount;
+    private ArrayList<Currency> currencies = new ArrayList<>();
 
     // TODO: Rename and change types and number of parameters
     public static UltilitiesFragment newInstance(String param1, String param2) {
@@ -111,6 +112,11 @@ public class UltilitiesFragment extends Fragment {
         periodicTransactionCount.setText(getPeriodicTrasactionNumber());
         moneySourceCount = view.findViewById(R.id.moneySourcesCount_statistics);
         getMoneySourceNumber();
+        //prepare Currencies
+        currencies.clear();
+        currencies.add(new Currency("Cur01", "VND"));
+        currencies.add(new Currency("Cur02", "$"));
+        currencies.add(new Currency("Cur03", "AUD"));
 
         //Quản lý nguồn tiền
         view.findViewById(R.id.manageMoneySourcesButton).setOnClickListener(new View.OnClickListener() {
@@ -182,12 +188,96 @@ public class UltilitiesFragment extends Fragment {
                 convertPanel.show();
                 convertPanel.getWindow().setLayout(1000,1200);
                 convertPanel.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                final Currency[] sourceCur = new Currency[1];
+                final Currency[] desCur = new Currency[1];
+                final EditText chooseSourceCur, chooseDesCur, amountOfMoney;
+                amountOfMoney = convertPanel.findViewById(R.id.moneyAmount_currencyConverter);
+
+                chooseSourceCur = convertPanel.findViewById(R.id.sourceUnit_currencyConverter);
+                chooseSourceCur.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(v.getContext());
+                        builder.setView(R.layout.dialog_choose_currency);
+                        final AlertDialog chooseSourceCurDialog  = builder.create();
+                        chooseSourceCurDialog.show();
+                        chooseSourceCurDialog.getWindow().setLayout(1000,1200);
+                        chooseSourceCurDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        RecyclerView recyclerView = chooseSourceCurDialog.findViewById(R.id.unitList_chooseCurrency);
+                        AddMoneySourceCurrencyAdapter addMoneySourceCurrencyAdapter = new AddMoneySourceCurrencyAdapter(chooseSourceCurDialog.getContext(), currencies);
+                        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(chooseSourceCurDialog.getContext());
+                        recyclerView.setLayoutManager(layoutManager);
+                        recyclerView.setAdapter(addMoneySourceCurrencyAdapter);
+                        addMoneySourceCurrencyAdapter.notifyDataSetChanged();
+                        addMoneySourceCurrencyAdapter.setOnItemClickListener(new AddMoneySourceCurrencyAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(int position) {
+                                sourceCur[0] = currencies.get(position);
+                                chooseSourceCur.setText(sourceCur[0].getCurrencyName());
+                                chooseSourceCurDialog.dismiss();
+                            }
+                        });
+                    }
+                });
+                chooseDesCur = convertPanel.findViewById(R.id.destinationUnit_currencyConverter);
+                chooseDesCur.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(v.getContext());
+                        builder.setView(R.layout.dialog_choose_currency);
+                        final AlertDialog chooseDesCurDialog  = builder.create();
+                        chooseDesCurDialog.show();
+                        chooseDesCurDialog.getWindow().setLayout(1000,1200);
+                        chooseDesCurDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        RecyclerView recyclerView = chooseDesCurDialog.findViewById(R.id.unitList_chooseCurrency);
+                        AddMoneySourceCurrencyAdapter addMoneySourceCurrencyAdapter = new AddMoneySourceCurrencyAdapter(chooseDesCurDialog.getContext(), currencies);
+                        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(chooseDesCurDialog.getContext());
+                        recyclerView.setLayoutManager(layoutManager);
+                        recyclerView.setAdapter(addMoneySourceCurrencyAdapter);
+                        addMoneySourceCurrencyAdapter.notifyDataSetChanged();
+                        addMoneySourceCurrencyAdapter.setOnItemClickListener(new AddMoneySourceCurrencyAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(int position) {
+                                desCur[0] = currencies.get(position);
+                                chooseDesCur.setText(desCur[0].getCurrencyName());
+                                chooseDesCurDialog.dismiss();
+                            }
+                        });
+                    }
+                });
 
                 convertPanel.findViewById(R.id.convert_currencyConverter).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        convertPanel.findViewById(R.id.resultTitle_currencyConverter).setVisibility(View.VISIBLE);
-                        convertPanel.findViewById(R.id.result_currencyConverter).setVisibility(View.VISIBLE);
+                        //chuẩn bị AlertDialog
+                        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                        builder.setView(R.layout.dialog_one_button);
+                        final AlertDialog dialog = builder.create();
+                        dialog.show();
+                        dialog.getWindow().setLayout(850,600);
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        final TextView msg = dialog.findViewById(R.id.message_one_button_dialog);
+                        dialog.findViewById(R.id.confirm_one_button_dialog).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.hide();
+
+                        if (amountOfMoney.getText().toString().isEmpty() || sourceCur[0] == null || desCur[0] == null){
+                            dialog.show();
+                            msg.setText("Vui lòng nhập đầy đủ thông tin!");
+                        } else if (sourceCur[0].getCurrencyId().equals(desCur[0].getCurrencyId())){
+                            dialog.show();
+                            msg.setText("Đơn vị đổi phải khác nhau!");
+                        } else {
+                            TextView result = convertPanel.findViewById(R.id.result_currencyConverter);
+                            result.setText("Chưa tìm được API đổi tiền!");
+                            convertPanel.findViewById(R.id.resultTitle_currencyConverter).setVisibility(View.VISIBLE);
+                            convertPanel.findViewById(R.id.result_currencyConverter).setVisibility(View.VISIBLE);
+                        }
+
                     }
                 });
             }

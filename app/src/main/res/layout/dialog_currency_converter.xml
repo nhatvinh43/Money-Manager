@@ -24,23 +24,24 @@
         android:layout_marginTop="20dp"
         android:orientation="horizontal"
         android:weightSum="3">
+
         <EditText
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
             android:id="@+id/sourceUnit_currencyConverter"
-            android:enabled="false"
-            android:hint="@string/unit"
-            android:textColorHint="@color/hintText"
-            android:textSize="15sp"
-            android:fontFamily="sans-serif-light"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="45dp"
+            android:layout_weight="1"
             android:background="@drawable/innershape"
+            android:clickable="true"
+            android:enabled="true"
+            android:focusable="false"
+            android:fontFamily="sans-serif-light"
+            android:foreground="?attr/selectableItemBackground"
+            android:hint="@string/unit"
+            android:inputType="none"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:inputType="text"/>
+            android:textColorHint="@color/hintText"
+            android:textSize="15sp" />
 
         <TextView
             android:layout_weight="1"
@@ -55,10 +56,10 @@
 
         <EditText
             android:clickable="true"
-            android:focusable="true"
+            android:focusable="false"
             android:foreground="?attr/selectableItemBackground"
             android:id="@+id/destinationUnit_currencyConverter"
-            android:enabled="false"
+            android:enabled="true"
             android:hint="@string/unit"
             android:textColorHint="@color/hintText"
             android:textSize="15sp"
