@@ -300,6 +300,15 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        //Nút FAQ
+        view.findViewById(R.id.helpButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), FAQActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     void changeDateFormat(String format, ProgressBar progressBar)

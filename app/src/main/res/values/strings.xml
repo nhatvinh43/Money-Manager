@@ -207,8 +207,20 @@
     <string name="title_activity_periodic_transaction_details">PeriodicTransactionDetails</string>
     <string name="spendingStatistics">Thống kê chi tiêu</string>
     <string name="incomeStatistics">Thống kê thu nhập</string>
-
     <string name="totalIncome">Tổng thu nhập</string>
     <string name="totalSpending">Tổng chi tiêu</string>
+
+    <!--FAQ-->
+    <string name="faq">Câu hỏi thường gặp</string>
+    <string name="q1">Làm thế nào để thêm một giao dịch mới?</string>
+    <string name="a1">Bạn có thể thêm giao dịch mới bằng cách chọn biểu tượng <b>dấu cộng (+)</b> phía dưới cùng, nhập các thông tin của giao dịch và nhấn nút <b>Lưu</b>.</string>
+    <string name="q2">Làm thế nào để thêm nguồn tiền mới?</string>
+    <string name="a2">Để thêm nguồn tiền mới, bạn hãy chọn trang <b>Tiện ích</b>, chọn nút <b>Quản lý</b> dưới mục nguồn tiền. Trong hộp thoại hiện ra, bạn hãy chọn nút <b>Thêm</b>, sau đó nhập thông tin và nhấn nút <b>Lưu</b></string>
+    <string name="q3">Giao dịch định kỳ là gì?</string>
+    <string name="a3">Giao dịch định kỳ là một loại giao dịch đặc biệt, nó sẽ được tự động thêm một cách lặp đi lặp lại sau mỗi khoảng thời gian mà bạn chỉ định. </string>
+    <string name="q4">Làm sao để thêm một giao dịch định kỳ?</string>
+    <string name="a4">Để thêm một giao dịch định kỳ, bạn có thể vào trang <b>Tiện ích</b>, chọn nút <b>Quản lý</b> dưới mục <b>Giao dịch định kỳ</b>, trong màn hình Quản lý, chọn nút <b>dấu cộng (+)</b>, nhập thông tin và nhấn nút <b>Lưu</b></string>
+    <string name="q5">Có thể tùy biến giao diện ứng dụng không?</string>
+    <string name="a5">Được! Hiện tại bạn có thể thay đổi <b>Định dạng hiển thị ngày tháng</b> và <b>Màu sắc chủ đề</b> của ứng dụng. Hãy thử vào mục cài đặt và chọn các mục cài đặt tương ứng nhé!.</string>
 
 </resources>
