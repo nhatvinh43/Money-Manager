@@ -1,13 +1,11 @@
 package com.example.moneymanager;
 
-
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
-public class Transaction implements Parcelable {
+public class PeriodicTransaction implements Parcelable {
     private String description;
     private String expenditureId;
     private String expenditureName;
@@ -16,9 +14,9 @@ public class Transaction implements Parcelable {
     private String moneySourceId;
     private boolean transactionIsIncome;
     private Timestamp transactionTime;
-    private boolean isPeriodic;
+    private String periodicType;
 
-    public Transaction(){
+    public PeriodicTransaction() {
         this.description = "";
         this.expenditureId = "";
         this.expenditureName = "";
@@ -27,11 +25,10 @@ public class Transaction implements Parcelable {
         this.moneySourceId = "";
         this.transactionIsIncome = true;
         this.transactionTime = null;
-        this.isPeriodic = false;
+        this.periodicType = "";
     }
 
-    public Transaction(String description, String expenditureId, String expenditureName,
-                       Number transactionAmount, String transactionId, String moneySourceId, boolean transactionIsIncome, Timestamp transactionTime, boolean isPeriodic) {
+    public PeriodicTransaction(String description, String expenditureId, String expenditureName, Number transactionAmount, String transactionId, String moneySourceId, boolean transactionIsIncome, Timestamp transactionTime, String periodicType) {
         this.description = description;
         this.expenditureId = expenditureId;
         this.expenditureName = expenditureName;
@@ -40,10 +37,10 @@ public class Transaction implements Parcelable {
         this.moneySourceId = moneySourceId;
         this.transactionIsIncome = transactionIsIncome;
         this.transactionTime = transactionTime;
-        this.isPeriodic = isPeriodic;
+        this.periodicType = periodicType;
     }
 
-    protected Transaction(Parcel in) {
+    protected PeriodicTransaction(Parcel in) {
         description = in.readString();
         expenditureId = in.readString();
         expenditureName = in.readString();
@@ -51,39 +48,39 @@ public class Transaction implements Parcelable {
         transactionId = in.readString();
         moneySourceId = in.readString();
         transactionIsIncome = in.readByte() != 0;
+        periodicType = in.readString();
         transactionTime = new Timestamp(in.readLong());
-        isPeriodic = in.readByte() != 0;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(description);
-        dest.writeString(expenditureId);
-        dest.writeString(expenditureName);
-        dest.writeDouble(transactionAmount.doubleValue());
-        dest.writeString(transactionId);
-        dest.writeString(moneySourceId);
-        dest.writeByte((byte) (transactionIsIncome ? 1 : 0));
-        dest.writeLong(transactionTime.getTime());
-        dest.writeByte((byte) (isPeriodic ? 1 : 0));
-    }
+    public static final Creator<PeriodicTransaction> CREATOR = new Creator<PeriodicTransaction>() {
+        @Override
+        public PeriodicTransaction createFromParcel(Parcel in) {
+            return new PeriodicTransaction(in);
+        }
+
+        @Override
+        public PeriodicTransaction[] newArray(int size) {
+            return new PeriodicTransaction[size];
+        }
+    };
 
     @Override
     public int describeContents() {
         return 0;
     }
 
-    public static final Creator<Transaction> CREATOR = new Creator<Transaction>() {
-        @Override
-        public Transaction createFromParcel(Parcel in) {
-            return new Transaction(in);
-        }
-
-        @Override
-        public Transaction[] newArray(int size) {
-            return new Transaction[size];
-        }
-    };
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(description);
+        parcel.writeString(expenditureId);
+        parcel.writeString(expenditureName);
+        parcel.writeDouble(transactionAmount.doubleValue());
+        parcel.writeString(transactionId);
+        parcel.writeString(moneySourceId);
+        parcel.writeByte((byte) (transactionIsIncome ? 1 : 0));
+        parcel.writeString(periodicType);
+        parcel.writeLong(transactionTime.getTime());
+    }
 
     public String getDescription() {
         return description;
@@ -125,6 +122,14 @@ public class Transaction implements Parcelable {
         this.transactionId = transactionId;
     }
 
+    public String getMoneySourceId() {
+        return moneySourceId;
+    }
+
+    public void setMoneySourceId(String moneySourceId) {
+        this.moneySourceId = moneySourceId;
+    }
+
     public boolean getTransactionIsIncome() {
         return transactionIsIncome;
     }
@@ -141,19 +146,12 @@ public class Transaction implements Parcelable {
         this.transactionTime = transactionTime;
     }
 
-    public String getMoneySourceId() {
-        return moneySourceId;
+    public String getPeriodicType() {
+        return periodicType;
     }
 
-    public void setMoneySourceId(String moneySourceId) {
-        this.moneySourceId = moneySourceId;
+    public void setPeriodicType(String periodicType) {
+        this.periodicType = periodicType;
     }
 
-    public boolean getIsPeriodic() {
-        return isPeriodic;
-    }
-
-    public void setIsPeriodic(boolean periodic) {
-        isPeriodic = periodic;
-    }
 }

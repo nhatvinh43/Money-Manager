@@ -24,8 +24,8 @@ import com.google.type.Money;
 import java.util.ArrayList;
 
 public class MoneySourceDetailsActivity extends AppCompatActivity {
-    private TextView name, amount, cur;
-    private EditText eName, eAmount, eCur;
+    private TextView name, amount, cur, limit;
+    private EditText eName, eAmount, eCur, elimit;
     private FirebaseAuth firebaseAuth;
     private DataHelper dataHelper;
     private RecyclerView recyclerView;
@@ -107,6 +107,7 @@ public class MoneySourceDetailsActivity extends AppCompatActivity {
 
             }
         }, MSId);
+
         currencies.add(new Currency("Cur01", "VND"));
         currencies.add(new Currency("Cur02", "$"));
         currencies.add(new Currency("Cur03", "AUD"));
@@ -120,6 +121,7 @@ public class MoneySourceDetailsActivity extends AppCompatActivity {
         eName = findViewById(R.id.moneySourceName_moneySourceDetails);
         eAmount = findViewById(R.id.moneySourceAmount_moneySourceDetails);
         eCur = findViewById(R.id.moneySourceUnit_moneySourceDetails);
+        elimit = findViewById(R.id.moneySourceLimit_moneySourceDetails);
 
         final MoneyToStringConverter converter = new MoneyToStringConverter();
 
@@ -128,6 +130,8 @@ public class MoneySourceDetailsActivity extends AppCompatActivity {
 
         amount.setText(converter.moneyToString((double) MS.getAmount()));
         eAmount.setText(converter.moneyToString((double) MS.getAmount()));
+
+        elimit.setText(converter.moneyToString((double) MS.getLimit()));
 
         cur.setText(MS.getCurrencyName());
         eCur.setText(MS.getCurrencyName());
@@ -157,7 +161,6 @@ public class MoneySourceDetailsActivity extends AppCompatActivity {
                 recyclerView.setLayoutManager(layoutManager);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
-
                 adapter.setOnItemClickListener(new AddMoneySourceCurrencyAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(int position) {
@@ -193,7 +196,7 @@ public class MoneySourceDetailsActivity extends AppCompatActivity {
                 dialog.hide();
                 //Thất Bại
                 if (eAmount.getText().toString().length() == 0 || eName.getText().toString().length() == 0
-                || eCur.getText().toString().length() == 0) {
+                || eCur.getText().toString().length() == 0 || elimit.getText().toString().length() == 0) {
                     msg.setText("Vui lòng điền đầy đủ thông tin");
                     dialog.show();
                 } else {
@@ -202,7 +205,7 @@ public class MoneySourceDetailsActivity extends AppCompatActivity {
                     Toast.makeText(dialog.getContext(), "Chỉnh Sửa Thành Công", Toast.LENGTH_LONG).show();
                     MS.setMoneySourceName(eName.getText().toString());
                     MS.setAmount(converter.stringToMoney(eAmount.getText().toString()));
-
+                    MS.setLimit(converter.stringToMoney(elimit.getText().toString()));
                     Intent data = new Intent();
                     data.putExtra("moneysource", MS);
                     setResult(Activity.RESULT_OK, data);

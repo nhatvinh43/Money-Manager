@@ -222,13 +222,11 @@ public class HomeFragment extends Fragment {
 
 
         // Moneysource Info Initiation
-        final WaveLoadingView waveLoadingView = view.findViewById(R.id.waveLoadingView);
+        waveLoadingView = view.findViewById(R.id.waveLoadingView);
         todayIncome = view.findViewById(R.id.todayIncome_home);
         todaySpending = view.findViewById(R.id.todaySpending_home);
-
-        waveLoadingView.setCenterTitle(converter.moneyToString((double)selectedMoneySource.getLimit()));
-        todayIncome.setText("Thêm sau");
-        todaySpending.setText("Thêm sau");
+        todayIncome.setTextColor(Color.GREEN);
+        todaySpending.setTextColor(Color.RED);
 
         // Calendar Initiation
         dayOfWeek = view.findViewById(R.id.weekDay_home);
@@ -401,6 +399,8 @@ public class HomeFragment extends Fragment {
                     }
                 }
 
+                todayIncome.setText("+" + getTodayIncome());
+                todaySpending.setText("-" + getTodaySpending());
             }
 
             @Override
@@ -445,6 +445,9 @@ public class HomeFragment extends Fragment {
                                 renderError(transactionList, transactionsSection, noTransactionsSection);
                                 transactionAdapter.notifyDataSetChanged();
                                 transactionRecycleView.scheduleLayoutAnimation();
+
+                                todayIncome.setText("+" + getTodayIncome());
+                                todaySpending.setText("-" + getTodaySpending());
                             }
                         };
                         new DatePickerDialog(getContext(), R.style.DatePickerDialog, date, mYear, mMonth, mDay).show();
@@ -483,6 +486,9 @@ public class HomeFragment extends Fragment {
                                         renderError(transactionList, transactionsSection, noTransactionsSection);
                                         transactionAdapter.notifyDataSetChanged();
                                         transactionRecycleView.scheduleLayoutAnimation();
+
+                                        todayIncome.setText("+" + getTodayIncome());
+                                        todaySpending.setText("-" + getTodaySpending());
                                     }
                                 }, today.get(Calendar.YEAR), today.get(Calendar.MONTH));
 
@@ -537,6 +543,9 @@ public class HomeFragment extends Fragment {
                                         renderError(transactionList, transactionsSection, noTransactionsSection);
                                         transactionAdapter.notifyDataSetChanged();
                                         transactionRecycleView.scheduleLayoutAnimation();
+
+                                        todayIncome.setText("+" + getTodayIncome());
+                                        todaySpending.setText("-" + getTodaySpending());
                                     }
                                 }, today.get(Calendar.YEAR), today.get(Calendar.MONTH));
 
@@ -626,6 +635,9 @@ public class HomeFragment extends Fragment {
                                 renderError(transactionList, transactionsSection, noTransactionsSection);
                                 transactionAdapter.notifyDataSetChanged();
                                 transactionRecycleView.scheduleLayoutAnimation();
+
+                                todayIncome.setText("+" + getTodayIncome());
+                                todaySpending.setText("-" + getTodaySpending());
                                 chooseTimeDialog.dismiss();
                             }
                         });
@@ -666,7 +678,7 @@ public class HomeFragment extends Fragment {
                 Log.d("----------------------- Id moneysource",position + "    " + ms.getMoneySourceId());
                 Intent transactionDetailIntent = new Intent(getContext(), MoneySourceDetailsActivity.class);
                 transactionDetailIntent.putExtra("MoneySourceId", ms.getMoneySourceId());
-                startActivityForResult(transactionDetailIntent, HOME_CHANGE_MONEYSOURCE_RQCODE);
+                getActivity().startActivityForResult(transactionDetailIntent, HOME_CHANGE_MONEYSOURCE_RQCODE);
             }
         });
 
@@ -708,15 +720,24 @@ public class HomeFragment extends Fragment {
                     filterMenu.setSelection(0);
 
                     selectedMoneySource = moneySourceList.get(pos);
+
                     waveLoadingView.setCenterTitle(converter.moneyToString((double)selectedMoneySource.getLimit()));
-                    todayIncome.setText("Thêm sau");
-                    todaySpending.setText("Thêm sau");
+                    if(selectedMoneySource.getLimit().doubleValue() != 0) {
+                        int percent = (int) ((selectedMoneySource.getAmount().doubleValue() / selectedMoneySource.getLimit().doubleValue()) * 100);
+                        if (percent > 100) percent = 100;
+                        waveLoadingView.setProgressValue(percent);
+                    } else {
+                        waveLoadingView.setProgressValue(0);
+                    }
 
                     transactionList.clear();
                     transactionList.addAll(modifierTransactionListByViewMode());
                     renderError(transactionList, transactionsSection, noTransactionsSection);
                     transactionAdapter.notifyDataSetChanged();
                     transactionRecycleView.scheduleLayoutAnimation();
+
+                    todayIncome.setText("+" + getTodayIncome());
+                    todaySpending.setText("-" + getTodaySpending());
                     search.setText("");
                 }
 
@@ -733,6 +754,17 @@ public class HomeFragment extends Fragment {
         // Transaction RecycleView Initiation
         transactionRecycleView = view.findViewById(R.id.transactionList);
         transactionList.addAll(modifierTransactionListByViewMode());
+
+        waveLoadingView.setCenterTitle(converter.moneyToString((double)selectedMoneySource.getLimit()));
+        if(selectedMoneySource.getLimit().doubleValue() != 0) {
+            int percent = (int) ((selectedMoneySource.getAmount().doubleValue() / selectedMoneySource.getLimit().doubleValue()) * 100);
+            if (percent > 100) percent = 100;
+            waveLoadingView.setProgressValue(percent);
+        } else {
+            waveLoadingView.setProgressValue(1);
+        }
+        todayIncome.setText("+" + getTodayIncome());
+        todaySpending.setText("-" + getTodaySpending());
 
         GridLayoutManager transactionLayoutManager = new GridLayoutManager(getContext(), 2);
         transactionRecycleView.setLayoutManager(transactionLayoutManager);
@@ -827,6 +859,16 @@ public class HomeFragment extends Fragment {
                         transactionRecycleView.scheduleLayoutAnimation();
                         break;
                     case "Định kỳ":
+                        transactionList.clear();
+                        transactionList.addAll(modifierTransactionListByViewMode());
+                        for(Transaction trans : transactionList) {
+                            if(trans.getIsPeriodic()) filterList.add(trans);
+                        }
+
+                        transactionList.clear();
+                        transactionList.addAll(filterList);
+                        transactionAdapter.notifyDataSetChanged();
+                        transactionRecycleView.scheduleLayoutAnimation();
                         break;
                 }
             }
@@ -1021,6 +1063,30 @@ public class HomeFragment extends Fragment {
         return modifierTransactionList;
     }
 
+    private String getTodayIncome() {
+        MoneyToStringConverter converter = new MoneyToStringConverter();
+        double total = 0;
+        for(Transaction trans : transactionList) {
+            if(trans.getTransactionIsIncome()) {
+                total += trans.getTransactionAmount().doubleValue();
+            }
+        }
+
+        return converter.moneyToString(total);
+    }
+
+    private String getTodaySpending() {
+        MoneyToStringConverter converter = new MoneyToStringConverter();
+        double total = 0;
+        for(Transaction trans : transactionList) {
+            if(!trans.getTransactionIsIncome()) {
+                total += trans.getTransactionAmount().doubleValue();
+            }
+        }
+
+        return converter.moneyToString(total);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -1044,9 +1110,9 @@ public class HomeFragment extends Fragment {
 
                         // Cập nhập lại số tiền khi thêm transaction mới
                         if(resTransaction.getTransactionIsIncome()) {
-                            ms.setAmount((Double) ms.getAmount() + (Double) resTransaction.getTransactionAmount());
+                            ms.setAmount((double) ms.getAmount() + (double) resTransaction.getTransactionAmount());
                         } else {
-                            ms.setAmount((Double) ms.getAmount() - (Double) resTransaction.getTransactionAmount());
+                            ms.setAmount((double) ms.getAmount() - (double) resTransaction.getTransactionAmount());
                         }
                         dataHelper.updateMoneySource(ms);
                         moneySourceAdapter.notifyDataSetChanged();
@@ -1056,6 +1122,15 @@ public class HomeFragment extends Fragment {
                         if(selectedMoneySource.getMoneySourceId().equals(msId)) {
                             Log.d("-------------Test result from add trans ", "Equals");
                             selectedMoneySource = ms;
+
+                            if(selectedMoneySource.getLimit().doubleValue() != 0) {
+                                int percent = (int) ((selectedMoneySource.getAmount().doubleValue() / selectedMoneySource.getLimit().doubleValue()) * 100);
+                                if (percent > 100) percent = 100;
+                                Log.d("----------------------percent------------", String.valueOf(percent));
+                                waveLoadingView.setProgressValue(percent);
+                            } else {
+                                waveLoadingView.setProgressValue(0);
+                            }
 
                             transactionList.clear();
                             transactionList.addAll(modifierTransactionListByViewMode());
@@ -1144,6 +1219,14 @@ public class HomeFragment extends Fragment {
                             if (selectedMoneySource.getMoneySourceId().compareTo(msId) == 0) {
                                 selectedMoneySource = ms;
 
+                                if(selectedMoneySource.getLimit().doubleValue() != 0) {
+                                    int percent = (int) ((selectedMoneySource.getAmount().doubleValue() / selectedMoneySource.getLimit().doubleValue()) * 100);
+                                    if (percent > 100) percent = 100;
+                                    waveLoadingView.setProgressValue(percent);
+                                } else {
+                                    waveLoadingView.setProgressValue(0);
+                                }
+
                                 transactionList.clear();
                                 transactionList.addAll(modifierTransactionListByViewMode());
                                 transactionAdapter.notifyDataSetChanged();
@@ -1180,6 +1263,14 @@ public class HomeFragment extends Fragment {
                                 if (selectedMoneySource.getMoneySourceId().compareTo(msId) == 0) {
                                     selectedMoneySource = ms;
 
+                                    if(selectedMoneySource.getLimit().doubleValue() != 0) {
+                                        int percent = (int) ((selectedMoneySource.getAmount().doubleValue() / selectedMoneySource.getLimit().doubleValue()) * 100);
+                                        if (percent > 100) percent = 100;
+                                        waveLoadingView.setProgressValue(percent);
+                                    } else {
+                                        waveLoadingView.setProgressValue(0);
+                                    }
+
                                     transactionList.clear();
                                     transactionList.addAll(modifierTransactionListByViewMode());
                                     transactionAdapter.notifyDataSetChanged();
@@ -1200,12 +1291,24 @@ public class HomeFragment extends Fragment {
                 DataHelper dataHelper = new DataHelper();
                 MoneySource resMoneySource = (MoneySource) data.getParcelableExtra("moneysource");
                 String msId = resMoneySource.getMoneySourceId();
+                MoneyToStringConverter converter = new MoneyToStringConverter();
 
                 for(MoneySource ms : moneySourceList) {
                     if(ms.getMoneySourceId().equals(msId)) {
                         ms.setAmount(resMoneySource.getAmount());
                         ms.setMoneySourceName(resMoneySource.getMoneySourceName());
-                        // Đơn vị tiền tệ thêm sau
+                        ms.setLimit(resMoneySource.getLimit());
+                        ms.setCurrencyId(resMoneySource.getCurrencyId());
+                        ms.setCurrencyName(resMoneySource.getCurrencyName());
+
+                        waveLoadingView.setCenterTitle(converter.moneyToString((double)selectedMoneySource.getLimit()));
+                        if(selectedMoneySource.getLimit().doubleValue() != 0) {
+                            int percent = (int) ((selectedMoneySource.getAmount().doubleValue() / selectedMoneySource.getLimit().doubleValue()) * 100);
+                            if (percent > 100) percent = 100;
+                            waveLoadingView.setProgressValue(percent);
+                        } else {
+                            waveLoadingView.setProgressValue(0);
+                        }
 
                         dataHelper.updateMoneySource(ms);
                         moneySourceAdapter.notifyDataSetChanged();
@@ -1229,7 +1332,7 @@ public class HomeFragment extends Fragment {
             } else if(resultCode == Activity.RESULT_CANCELED) {
                 Log.d("-------------Test result from moneysource detail ", "CANCEL");
             }
-        } else if (requestCode == HOME_NEW_MONEYSOURCE_RQCODE) {
+        } else if (requestCode == HOME_NEW_MONEYSOURCE_RQCODE) { // Thêm mới nguồn tiền
             if(resultCode == Activity.RESULT_OK) {
                 Log.d("-------------Test result from add moneysource ", "OKE");
                 DataHelper dataHelper = new DataHelper();

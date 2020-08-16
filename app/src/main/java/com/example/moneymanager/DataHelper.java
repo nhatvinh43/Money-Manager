@@ -267,7 +267,7 @@ public class DataHelper {
 
     // Transaction model
     public String setTransaction(final TransactionCallBack transCallBack, String description, String expenditureId, String expenditureName, Number transactionAmount, String moneySourceId,
-                                    boolean transactionIsIncome, Timestamp transactionTime){
+                                    boolean transactionIsIncome, Timestamp transactionTime, boolean isPeriodic){
         String newTransactionId = db.collection("transactions").document().getId();
         Map<String, Object> transaction = new HashMap<>();
         transaction.put("moneySourceId", moneySourceId);
@@ -277,8 +277,9 @@ public class DataHelper {
         transaction.put("expenditureId", expenditureId);
         transaction.put("expenditureName", expenditureName);
         transaction.put("transactionTime", transactionTime);
+        transaction.put("isPeriodic", isPeriodic);
 
-        final Transaction trans = new Transaction(description, expenditureId, expenditureName, transactionAmount, newTransactionId, moneySourceId, transactionIsIncome, transactionTime);
+        final Transaction trans = new Transaction(description, expenditureId, expenditureName, transactionAmount, newTransactionId, moneySourceId, transactionIsIncome, transactionTime, isPeriodic);
         db.collection("transactions").document(newTransactionId).set(transaction)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -289,15 +290,46 @@ public class DataHelper {
                         Log.d("AddTran", "Successfully");
                     }
                 }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                transCallBack.onCallBackFail(e.getMessage());
-                Log.w("CreateNewMoneySource", "Error writing document", e);
-            }
-        });
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        transCallBack.onCallBackFail(e.getMessage());
+                    }
+                });
         return newTransactionId;
     }
 
+    public void setTransactionFromPeriodicTransaction(PeriodicTransaction periodicTransaction) {
+        String newTransactionId = db.collection("transactions").document().getId();
+        Map<String, Object> transaction = new HashMap<>();
+        transaction.put("moneySourceId", periodicTransaction.getMoneySourceId());
+        transaction.put("transactionAmount", periodicTransaction.getTransactionAmount().doubleValue());
+        transaction.put("transactionIsIncome", periodicTransaction.getTransactionIsIncome());
+        transaction.put("description", periodicTransaction.getDescription());
+        transaction.put("expenditureId", periodicTransaction.getExpenditureId());
+        transaction.put("expenditureName", periodicTransaction.getExpenditureName());
+        transaction.put("transactionTime", periodicTransaction.getTransactionTime());
+        transaction.put("isPeriodic", true);
+
+//        final Transaction trans = new Transaction();
+//        trans.setDescription(periodicTransaction.getDescription());
+//        trans.setExpenditureId(periodicTransaction.getExpenditureId());
+//        trans.setExpenditureName(periodicTransaction.getExpenditureName());
+//        trans.setTransactionAmount(periodicTransaction.getTransactionAmount());
+//        trans.setTransactionId(newTransactionId);
+//        trans.setMoneySourceId(periodicTransaction.getMoneySourceId());
+//        trans.setTransactionIsIncome(periodicTransaction.getTransactionIsIncome());
+//        trans.setTransactionTime(periodicTransaction.getTransactionTime());
+        db.collection("transactions").document(newTransactionId).set(transaction)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                    }
+                });
+    }
 
     public void getTransaction(final TransactionCallBack transCallBack, String msID) {
 
@@ -317,6 +349,7 @@ public class DataHelper {
                                 ts.setExpenditureId((String) document.getData().get("expenditureId"));
                                 ts.setExpenditureName((String) document.getData().get("expenditureName"));
                                 ts.setTransactionTime(new Timestamp((document.getDate("transactionTime")).getTime()));
+                                ts.setIsPeriodic((boolean) document.getData().get("isPeriodic"));
 
                                 transactionList.add(ts);
                             }
@@ -345,6 +378,8 @@ public class DataHelper {
                             ts.setExpenditureId((String) document.getData().get("expenditureId"));
                             ts.setExpenditureName((String) document.getData().get("expenditureName"));
                             ts.setTransactionTime(new Timestamp((document.getDate("transactionTime")).getTime()));
+                            ts.setIsPeriodic((boolean) document.getData().get("isPeriodic"));
+
                             singleTransCallBack.onCallBack(ts);
                         } else {
                             singleTransCallBack.onCallBackFailed(task.getException().getMessage());
@@ -362,6 +397,7 @@ public class DataHelper {
         transaction.put("expenditureId", trans.getExpenditureId());
         transaction.put("expenditureName", trans.getExpenditureName());
         transaction.put("transactionTime", trans.getTransactionTime());
+        transaction.put("isPeriodic", trans.getIsPeriodic());
 
         db.collection("transactions").document(trans.getTransactionId()).set(transaction)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -394,6 +430,124 @@ public class DataHelper {
                 });
     }
 
+    // PeriodicTransaction Model
+    public String setPeriodicTransaction(final PeriodicTransactionCallBack transCallBack, String description, String expenditureId, String expenditureName, Number transactionAmount, String moneySourceId,
+                                 boolean transactionIsIncome, Timestamp transactionTime, String periodicType){
+        String newTransactionId = db.collection("periodicTransactions").document().getId();
+        Map<String, Object> transaction = new HashMap<>();
+        transaction.put("moneySourceId", moneySourceId);
+        transaction.put("transactionAmount", transactionAmount);
+        transaction.put("transactionIsIncome", transactionIsIncome);
+        transaction.put("description", description);
+        transaction.put("expenditureId", expenditureId);
+        transaction.put("expenditureName", expenditureName);
+        transaction.put("transactionTime", transactionTime);
+        transaction.put("periodicType", periodicType);
+
+        final PeriodicTransaction trans = new PeriodicTransaction(description, expenditureId, expenditureName, transactionAmount, newTransactionId, moneySourceId, transactionIsIncome, transactionTime, periodicType);
+        db.collection("periodicTransactions").document(newTransactionId).set(transaction)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        ArrayList<PeriodicTransaction> arrayList = new ArrayList<>();
+                        arrayList.add(trans);
+                        transCallBack.onCallBack(arrayList);
+                        Log.d("AddTran", "Successfully");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        transCallBack.onCallBackFail(e.getMessage());
+                    }
+                });
+        return newTransactionId;
+    }
+
+    public void getPeriodicTransaction(final PeriodicTransactionCallBack transCallBack, String userID) {
+        getMoneySourceWithoutTransactionList(new MoneySourceCallBack() {
+            @Override
+            public void onCallBack(final ArrayList<MoneySource> list) {
+                db.collection("periodicTransactions").get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                ArrayList<PeriodicTransaction> transactionList = new ArrayList<>();
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    String msId = (String) document.getData().get("moneySourceId");
+
+                                    for(MoneySource ms : list) {
+                                        if (msId.equals(ms.getMoneySourceId())) {
+                                            PeriodicTransaction ts = new PeriodicTransaction();
+                                            ts.setMoneySourceId((String) document.getData().get("moneySourceId"));
+                                            ts.setTransactionId(document.getId());
+                                            ts.setTransactionAmount(document.getDouble("transactionAmount"));
+                                            ts.setTransactionIsIncome((boolean) document.getData().get("transactionIsIncome"));
+                                            ts.setDescription((String) document.getData().get("description"));
+                                            ts.setExpenditureId((String) document.getData().get("expenditureId"));
+                                            ts.setExpenditureName((String) document.getData().get("expenditureName"));
+                                            ts.setTransactionTime(new Timestamp((document.getDate("transactionTime")).getTime()));
+                                            ts.setPeriodicType((String) document.getData().get("periodicType"));
+
+                                            transactionList.add(ts);
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                transCallBack.onCallBack(transactionList);
+                            }
+                        });
+            }
+
+            @Override
+            public void onCallBackFail(String message) {
+
+            }
+        }, userID);
+    }
+
+    public void updatePeriodicTransaction(PeriodicTransaction trans) {
+        Map<String, Object> transaction = new HashMap<>();
+        transaction.put("moneySourceId", trans.getMoneySourceId());
+        transaction.put("transactionAmount", trans.getTransactionAmount());
+        transaction.put("transactionIsIncome", trans.getTransactionIsIncome());
+        transaction.put("description", trans.getDescription());
+        transaction.put("expenditureId", trans.getExpenditureId());
+        transaction.put("expenditureName", trans.getExpenditureName());
+        transaction.put("transactionTime", trans.getTransactionTime());
+        transaction.put("periodicType", trans.getPeriodicType());
+
+        db.collection("periodicTransactions").document(trans.getTransactionId()).set(transaction)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("-------- Update periodic transaction --------", "Success");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("-------- Update periodic transacion --------", "Fail");
+                    }
+                });
+    }
+
+    public void deletePeriodicTransaction(PeriodicTransaction trans) {
+        db.collection("periodicTransactions").document(trans.getTransactionId()).delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("-------- Delete periodic transaction --------", "Success");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("-------- Delete periodic transacion --------", "Fail");
+                    }
+                });
+    }
+
     // Avatar model
     public void uploadAvatar(final UserAvatarCallBack userAvatarCallBack, Uri pickedImgUri) {
         StorageReference mStorage = FirebaseStorage.getInstance().getReference().child("userAvatar");
@@ -417,111 +571,6 @@ public class DataHelper {
         });
     }
 
-    //get List MoneySource
-    public ArrayList<MoneySource> getListMoneySource(String uID){
-        final ArrayList<MoneySource> moneySources = new ArrayList<>();
-        db.collection("moneySources").whereEqualTo("userId", uID).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        //if !task.isComplete ....
-                        if (task.isSuccessful()){
-                            for (QueryDocumentSnapshot document : task.getResult()){
-                                MoneySource moneySource = new MoneySource();
-                                moneySource.setUserId(document.get("userId").toString());
-                                moneySource.setMoneySourceId(document.getId().toString());
-                                moneySource.setAmount(document.getDouble("amount"));
-                                moneySource.setLimit(document.getDouble("limit"));
-                                moneySource.setMoneySourceName(document.get("moneySourceName").toString());
-                                moneySource.setCurrencyId(document.get("currencyId").toString());
-                                moneySource.setCurrencyName(document.get("currencyName").toString());
-                                moneySources.add(moneySource);
-                            }
-                        }
-                        else {
-                            Log.d("GetListMoneySource", "Error getting documents: " + task.getException());
-                        }
-                    }
-                });
-        return moneySources;
-    }
-    public String createMoneySource(String uId, String moneySourceName, Number amount, Number limit,
-                                   String currencyId, String currencyName){
-        String newMoneySourceId = db.collection("moneySources").document().getId();
-        Map<String, Object> moneySource = new HashMap<>();
-        moneySource.put("amount", amount);
-        moneySource.put("currencyId", currencyId);
-        moneySource.put("currencyName", currencyName);
-        moneySource.put("limit", limit);
-        moneySource.put("moneySourceName", moneySourceName);
-        moneySource.put("userId", uId);
-
-        db.collection("moneySources").document(newMoneySourceId).set(moneySource)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("CreateNewMoneySource", "DocumentSnapshot successfully written!");
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("CreateNewMoneySource", "Error writing document", e);
-                    }
-        });
-        return newMoneySourceId;
-    }
-
-
-    public void updateMoneySource(String MSId, String moneySourceName, Number amount, Number limit,
-                                  String currencyId, String currencyName){
-        Map<String, Object> moneySource = new HashMap<>();
-        moneySource.put("amount", amount);
-        moneySource.put("currencyId", currencyId);
-        moneySource.put("currencyName", currencyName);
-        moneySource.put("limit", limit);
-        moneySource.put("moneySourceName", moneySourceName);
-        db.collection("moneySources").document(MSId).update(moneySource)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("UpdateMS", "Completely Update!");
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w("UpdateMS", "Error deleting document", e);
-            }
-        });
-    }
-
-    public String createTransaction(final TransactionCallBack transCallBack, String description, String expenditureId, String expenditureName,
-                                    Number transactionAmount, String moneySourceId,
-                                    boolean transactionIsIncome, Timestamp transactionTime){
-        String newTransactionId = db.collection("transactions").document().getId();
-        Map<String, Object> transaction = new HashMap<>();
-        transaction.put("moneySourceId", moneySourceId);
-        transaction.put("transactionAmount", transactionAmount);
-        transaction.put("transactionIsIncome", transactionIsIncome);
-        transaction.put("description", description);
-        transaction.put("expenditureId", expenditureId);
-        transaction.put("expenditureName", expenditureName);
-        transaction.put("transactionTime", transactionTime);
-        db.collection("transactions").document(newTransactionId).set(transaction)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        transCallBack.onCallBack(new ArrayList<Transaction>());
-                        Log.d("AddTran", "Successfully");
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        transCallBack.onCallBackFail(e.getMessage());
-                        Log.w("CreateNewMoneySource", "Error writing document", e);
-                    }
-        });
-        return newTransactionId;
-    }
     // Currency model
     // Expenditure model
 }

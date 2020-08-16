@@ -17,7 +17,9 @@
         <activity android:name=".FAQActivity"></activity>
         <activity
             android:name=".PeriodicTransactionDetails"
-            android:label="@string/title_activity_periodic_transaction_details"></activity>
+            android:label="@string/title_activity_periodic_transaction_details">
+        </activity>
+
         <activity android:name=".AddPeriodicTransaction" />
         <activity android:name=".ManagePeriodicTransactions" />
         <activity android:name=".MoneySourceDetailsActivity" />
@@ -65,6 +67,9 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".NewDayReceiver"/>
+        <service android:name=".PeriodicTransactionService"/>
     </application>
 
 </manifest>

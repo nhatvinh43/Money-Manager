@@ -156,6 +156,10 @@ public class SettingsFragment extends Fragment {
                         }
 
                         fAuth.getInstance().signOut();
+                        // Xóa dữ liệu offline
+                        SharedPreferences preferences = getActivity().getSharedPreferences("periodicTransactionList", MODE_PRIVATE);
+                        preferences.edit().remove("list").commit();
+
                         startActivity(new Intent(getActivity(), LoginActivity.class));
                         getActivity().finish();
                     }

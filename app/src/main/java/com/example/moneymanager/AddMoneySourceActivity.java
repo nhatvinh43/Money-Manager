@@ -85,6 +85,7 @@ public class AddMoneySourceActivity extends AppCompatActivity {
         resMoneySource.setUserId(firebaseAuth.getCurrentUser().getUid());
 
         //prepare data
+        currencies.clear();
         currencies.add(new Currency("Cur01", "VND"));
         currencies.add(new Currency("Cur02", "$"));
         currencies.add(new Currency("Cur03", "AUD"));

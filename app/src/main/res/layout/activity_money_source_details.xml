@@ -134,7 +134,7 @@
 
                 <EditText
                     android:layout_marginTop="15dp"
-                    android:id="@+id/moneySourceLimit_moneySourceDetails"
+                    android:id="@+id/moneySourceAmount_moneySourceDetails"
                     android:fontFamily="sans-serif-light"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
@@ -154,7 +154,7 @@
 
                 <EditText
                     android:layout_marginTop="15dp"
-                    android:id="@+id/moneySourceAmount_moneySourceDetails"
+                    android:id="@+id/moneySourceLimit_moneySourceDetails"
                     android:fontFamily="sans-serif-light"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"

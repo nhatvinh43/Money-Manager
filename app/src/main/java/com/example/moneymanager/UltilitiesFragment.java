@@ -2,6 +2,7 @@ package com.example.moneymanager;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -13,15 +14,24 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.google.type.Money;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,6 +41,7 @@ import java.util.ArrayList;
 public class UltilitiesFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    public static final int ULTILITIES_MANAGE_PERIODICTRANSACION_RQCODE = 20;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -57,6 +68,10 @@ public class UltilitiesFragment extends Fragment {
     DataHelper dataHelper = new DataHelper();
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     String uId = firebaseAuth.getCurrentUser().getUid();
+    int msCount = 0;
+
+    private TextView periodicTransactionCount;
+    private TextView moneySourceCount;
 
     // TODO: Rename and change types and number of parameters
     public static UltilitiesFragment newInstance(String param1, String param2) {
@@ -92,6 +107,12 @@ public class UltilitiesFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
+        periodicTransactionCount = view.findViewById(R.id.specialTransactionsCount_statistics);
+        periodicTransactionCount.setText(getPeriodicTrasactionNumber());
+        moneySourceCount = view.findViewById(R.id.moneySourcesCount_statistics);
+        getMoneySourceNumber();
+
+        //Quản lý nguồn tiền
         view.findViewById(R.id.manageMoneySourcesButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -180,14 +201,51 @@ public class UltilitiesFragment extends Fragment {
                 builder.setView(R.layout.dialog_calculate_tax);
                 final AlertDialog calculateTaxPanel  = builder.create();
                 calculateTaxPanel.show();
-                calculateTaxPanel.getWindow().setLayout(1000,1200);
+                calculateTaxPanel.getWindow().setLayout(1000,1400);
                 calculateTaxPanel.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
                 calculateTaxPanel.findViewById(R.id.calculate_calculateTax).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        calculateTaxPanel.findViewById(R.id.resultTitle_calculateTax).setVisibility(View.VISIBLE);
-                        calculateTaxPanel.findViewById(R.id.result_calculateTax).setVisibility(View.VISIBLE);
+                        //chuẩn bị AlertDialog
+                        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                        builder.setView(R.layout.dialog_one_button);
+                        final AlertDialog dialog = builder.create();
+                        dialog.show();
+                        dialog.getWindow().setLayout(850,400);
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        final TextView msg = dialog.findViewById(R.id.message_one_button_dialog);
+                        dialog.findViewById(R.id.confirm_one_button_dialog).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.hide();
+
+                        EditText totalIncome, insAmount, dependPer;
+                        TextView totalTax;
+                        totalIncome = calculateTaxPanel.findViewById(R.id.moneyAmount_calculateTax);
+                        insAmount = calculateTaxPanel.findViewById(R.id.insuranceAmount_calculateTax);
+                        dependPer = calculateTaxPanel.findViewById(R.id.dependentPersons_calculateTax);
+                        totalTax = calculateTaxPanel.findViewById(R.id.result_calculateTax);
+
+                        if (totalIncome.getText().toString().isEmpty() || insAmount.getText().toString().isEmpty() ||
+                        dependPer.getText().toString().isEmpty()){
+                            dialog.show();
+                            msg.setText("Vui lòng nhập đầy đủ thông tin!");
+                        } else if (Double.valueOf(dependPer.getText().toString()) > 1){
+                            dialog.show();
+                            msg.setText("Số người phụ thuộc không quá 1!");
+                        } else {
+                            double totalTaxD = calculateTax(Double.valueOf(totalIncome.getText().toString()),
+                                    Double.valueOf(insAmount.getText().toString()), Double.valueOf(dependPer.getText().toString()));
+                            MoneyToStringConverter converter = new MoneyToStringConverter();
+                            totalTax.setText(converter.moneyToString(totalTaxD));
+                            calculateTaxPanel.findViewById(R.id.resultTitle_calculateTax).setVisibility(View.VISIBLE);
+                            calculateTaxPanel.findViewById(R.id.result_calculateTax).setVisibility(View.VISIBLE);
+//                            totalTax.setVisibility(View.VISIBLE);
+                        }
                     }
                 });
             }
@@ -207,8 +265,39 @@ public class UltilitiesFragment extends Fragment {
                 calculateProfitPanel.findViewById(R.id.calculate_calculateProfit).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        calculateProfitPanel.findViewById(R.id.resultTitle_calculateProfit).setVisibility(View.VISIBLE);
-                        calculateProfitPanel.findViewById(R.id.result_calculateProfit).setVisibility(View.VISIBLE);
+                        //chuẩn bị AlertDialog
+                        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                        builder.setView(R.layout.dialog_one_button);
+                        final AlertDialog dialog = builder.create();
+                        dialog.show();
+                        dialog.getWindow().setLayout(850,400);
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        final TextView msg = dialog.findViewById(R.id.message_one_button_dialog);
+                        dialog.findViewById(R.id.confirm_one_button_dialog).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.hide();
+                        EditText amountOfMoney, period, interesRate;
+                        TextView profitRes;
+                        amountOfMoney = calculateProfitPanel.findViewById(R.id.moneyAmount_calculateProfit);
+                        period = calculateProfitPanel.findViewById(R.id.timePeriod_calculateProfit);
+                        interesRate = calculateProfitPanel.findViewById(R.id.profitRatio_calculateProfit);
+                        profitRes = calculateProfitPanel.findViewById(R.id.result_calculateProfit);
+                        if (amountOfMoney.getText().toString().isEmpty() || period.getText().toString().isEmpty() ||
+                        interesRate.getText().toString().isEmpty()){
+                            dialog.show();
+                            msg.setText("Vui lòng nhập đầy đủ thông tin!");
+                        } else {
+                            double resProfit = calculateProfit(Double.valueOf(amountOfMoney.getText().toString()),
+                                    Double.valueOf(period.getText().toString()), Double.valueOf(interesRate.getText().toString()));
+                            MoneyToStringConverter converter = new MoneyToStringConverter();
+                            profitRes.setText(converter.moneyToString(resProfit));
+                            calculateProfitPanel.findViewById(R.id.resultTitle_calculateProfit).setVisibility(View.VISIBLE);
+                            calculateProfitPanel.findViewById(R.id.result_calculateProfit).setVisibility(View.VISIBLE);
+                        }
                     }
                 });
             }
@@ -224,11 +313,145 @@ public class UltilitiesFragment extends Fragment {
                 exchangeMoneyPanel.show();
                 exchangeMoneyPanel.getWindow().setLayout(1000,1200);
                 exchangeMoneyPanel.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                final MoneySource[] sourceMS = {new MoneySource()};
+                final MoneySource[] desMS = {new MoneySource()};
+                exchangeMoneyPanel.findViewById(R.id.chooseSource_exchange_money).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(v.getContext());
+                        builder.setView(R.layout.dialog_choose_money_source);
+                        final AlertDialog chooseSourceMS  = builder.create();
+                        chooseSourceMS.show();
+                        chooseSourceMS.getWindow().setLayout(1000,1200);
+                        chooseSourceMS.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        final ArrayList<MoneySource> sourcesMS = new ArrayList<>();
+//                        UltilitiesMoneySourceManageAdapter adapter = new UltilitiesMoneySourceManageAdapter(v.getContext(), sourcesMS);
+                        final RecyclerView recyclerView = chooseSourceMS.findViewById(R.id.moneySourceList_chooseMoneySource);
+                        final ProgressBar loading = chooseSourceMS.findViewById(R.id.loading);
+                        loading.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.INVISIBLE);
+                        dataHelper.getMoneySourceWithoutTransactionList(new MoneySourceCallBack() {
+                            @Override
+                            public void onCallBack(ArrayList<MoneySource> list) {
+                                sourcesMS.clear();
+                                sourcesMS.addAll(list);
+                                loading.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
+                                UltilitiesMoneySourceManageAdapter adapter = new UltilitiesMoneySourceManageAdapter(chooseSourceMS.getContext(), list);
+                                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(chooseSourceMS.getContext());
+                                recyclerView.setLayoutManager(layoutManager);
+                                recyclerView.setAdapter(adapter);
+                                adapter.notifyDataSetChanged();
+
+                                adapter.setOnItemClickListener(new UltilitiesMoneySourceManageAdapter.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(int position) {
+                                        sourceMS[0] = sourcesMS.get(position);
+                                        chooseSourceMS.dismiss();
+                                        EditText SMS = exchangeMoneyPanel.findViewById(R.id.source_exchange_money);
+                                        SMS.setText(sourceMS[0].getMoneySourceName());
+                                    }
+                                });
+                            }
+                            @Override
+                            public void onCallBackFail(String message) {
+
+                            }
+                        }, uId);
+                    }
+                });
+
+                exchangeMoneyPanel.findViewById(R.id.chooseDestination_exchange_money).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(v.getContext());
+                        builder.setView(R.layout.dialog_choose_money_source);
+                        final AlertDialog chooseSourceMS  = builder.create();
+                        chooseSourceMS.show();
+                        chooseSourceMS.getWindow().setLayout(1000,1200);
+                        chooseSourceMS.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        final ArrayList<MoneySource> sourcesMS = new ArrayList<>();
+//                        UltilitiesMoneySourceManageAdapter adapter = new UltilitiesMoneySourceManageAdapter(v.getContext(), sourcesMS);
+                        final RecyclerView recyclerView = chooseSourceMS.findViewById(R.id.moneySourceList_chooseMoneySource);
+                        final ProgressBar loading = chooseSourceMS.findViewById(R.id.loading);
+                        loading.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.INVISIBLE);
+                        dataHelper.getMoneySourceWithoutTransactionList(new MoneySourceCallBack() {
+                            @Override
+                            public void onCallBack(ArrayList<MoneySource> list) {
+                                sourcesMS.clear();
+                                sourcesMS.addAll(list);
+                                loading.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
+                                UltilitiesMoneySourceManageAdapter adapter = new UltilitiesMoneySourceManageAdapter(chooseSourceMS.getContext(), list);
+                                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(chooseSourceMS.getContext());
+                                recyclerView.setLayoutManager(layoutManager);
+                                recyclerView.setAdapter(adapter);
+                                adapter.notifyDataSetChanged();
+
+                                adapter.setOnItemClickListener(new UltilitiesMoneySourceManageAdapter.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(int position) {
+                                        desMS[0] = sourcesMS.get(position);
+                                        chooseSourceMS.dismiss();
+                                        EditText SMS = exchangeMoneyPanel.findViewById(R.id.destination_exchange_money);
+                                        SMS.setText(desMS[0].getMoneySourceName());
+                                    }
+                                });
+                            }
+                            @Override
+                            public void onCallBackFail(String message) {
+
+                            }
+                        }, uId);
+                    }
+                });
 
                 exchangeMoneyPanel.findViewById(R.id.confirm_exchange_money).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        //chuẩn bị AlertDialog
+                        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                        builder.setView(R.layout.dialog_one_button);
+                        final AlertDialog dialog = builder.create();
+                        dialog.show();
+                        dialog.getWindow().setLayout(850,600);
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        final TextView msg = dialog.findViewById(R.id.message_one_button_dialog);
+                        dialog.findViewById(R.id.confirm_one_button_dialog).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.hide();
 
+                        EditText money, sourceMS1, desMS1;
+                        money = exchangeMoneyPanel.findViewById(R.id.amount_exchange_money);
+                        sourceMS1 = exchangeMoneyPanel.findViewById(R.id.source_exchange_money);
+                        desMS1 = exchangeMoneyPanel.findViewById(R.id.destination_exchange_money);
+                        if (money.getText().toString().isEmpty() || sourceMS1.getText().toString().isEmpty() ||
+                        desMS1.getText().toString().isEmpty()){
+                            //chưa đủ thông tin
+                            dialog.show();
+                            msg.setText("Vui lòng nhập đầy đủ thông tin!");
+                        } else if (!sourceMS[0].getCurrencyName().equals(desMS[0].getCurrencyName())) {
+                            //2 nguồn tiền khác đơn vị
+                            dialog.show();
+                            msg.setText("2 nguồn tiền không chung đơn vị!");
+                        } else if (sourceMS[0].getMoneySourceId().equals(desMS[0].getMoneySourceId())){
+                            //chuyển cùng 1 nguồn tiền
+                            dialog.show();
+                            msg.setText("Không thể chuyển cùng 1 nguồn tiền!");
+                        } else {
+                            double exchangeAmount = Double.valueOf(money.getText().toString());
+                            sourceMS[0].setAmount((double)sourceMS[0].getAmount() - exchangeAmount);
+                            desMS[0].setAmount((double)desMS[0].getAmount() + exchangeAmount);
+                            Toast.makeText(v.getContext(),"chuyển thành công", Toast.LENGTH_LONG).show();
+                            dataHelper.updateMoneySource(sourceMS[0]);
+                            dataHelper.updateMoneySource(desMS[0]);
+                            exchangeMoneyPanel.dismiss();
+                        }
                     }
                 });
             }
@@ -239,12 +462,93 @@ public class UltilitiesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                Intent intent = new Intent(v.getContext(), ManagePeriodicTransactions.class);
-               startActivity(intent);
+               startActivityForResult(intent, ULTILITIES_MANAGE_PERIODICTRANSACION_RQCODE);
             }
         });
     }
 
+    private String getPeriodicTrasactionNumber() {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("periodicTransactionList", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("list", null);
+        Type type = new TypeToken<ArrayList<PeriodicTransaction>>() {}.getType();
 
+        ArrayList<PeriodicTransaction> periodicTrasactionListFull = gson.fromJson(json, type);
+        if(periodicTrasactionListFull == null) {
+            return "0";
+        }
+        return String.valueOf(periodicTrasactionListFull.size());
+    }
+
+    private void getMoneySourceNumber() {
+        dataHelper.getMoneySourceWithoutTransactionList(new MoneySourceCallBack() {
+            @Override
+            public void onCallBack(ArrayList<MoneySource> list) {
+                msCount = list.size();
+                moneySourceCount.setText(String.valueOf(msCount));
+            }
+
+            @Override
+            public void onCallBackFail(String message) {
+
+            }
+        }, firebaseAuth.getCurrentUser().getUid());
+    }
+
+    private void deletePeriodicTransaction(String msId) {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("periodicTransactionList", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("list", null);
+        Type type = new TypeToken<ArrayList<PeriodicTransaction>>() {}.getType();
+
+        DataHelper dataHelper = new DataHelper();
+        ArrayList<PeriodicTransaction> periodicTrasactionListFull = gson.fromJson(json, type);
+        ArrayList<PeriodicTransaction> newPeriodicTrasactionListFull = new ArrayList<>();
+
+        if(periodicTrasactionListFull != null) {
+            for(int i=0; i<periodicTrasactionListFull.size(); i++) {
+                PeriodicTransaction peTrans = periodicTrasactionListFull.get(i);
+                if(peTrans.getMoneySourceId().equals(msId)) {
+                    dataHelper.deletePeriodicTransaction(peTrans);
+                } else {
+                    newPeriodicTrasactionListFull.add(peTrans);
+                }
+            }
+        }
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson1 = new Gson();
+        String json1 = gson1.toJson(newPeriodicTrasactionListFull);
+        editor.putString("list", json1);
+        editor.apply();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == ULTILITIES_MANAGE_PERIODICTRANSACION_RQCODE) {
+            if(resultCode == Activity.RESULT_CANCELED) {
+                periodicTransactionCount.setText(getPeriodicTrasactionNumber());
+            }
+        } else if (requestCode == HomeFragment.HOME_CHANGE_MONEYSOURCE_RQCODE) {
+            if(resultCode == Activity.RESULT_FIRST_USER) {
+                msCount -= 1;
+                moneySourceCount.setText(String.valueOf(msCount));
+
+                // Xóa giao dịch định kỳ
+                MoneySource resMoneySource = (MoneySource) data.getParcelableExtra("moneysource");
+                String msId = resMoneySource.getMoneySourceId();
+                deletePeriodicTransaction(msId);
+
+                periodicTransactionCount.setText(getPeriodicTrasactionNumber());
+            }
+        } else if (requestCode == HomeFragment.HOME_NEW_MONEYSOURCE_RQCODE) { // Thêm mới nguồn tiền
+            if(resultCode == Activity.RESULT_OK) {
+                msCount += 1;
+                moneySourceCount.setText(String.valueOf(msCount));
+            }
+        }
+    }
 
     @Override
     public void onResume() {
@@ -255,4 +559,49 @@ public class UltilitiesFragment extends Fragment {
     public void onPause() {
         super.onPause();
     }
+    public double calculateTax(double totalIncome, double salaryWithIns, double dependencePerson){
+        double totalTax = 0;
+        double reduceForIncs = salaryWithIns*(10.5/100);
+        double reduceForDependPer = dependencePerson * 4400000;
+        double totalReduce = reduceForIncs + reduceForDependPer + 11000000;
+        double totalAmountForTax = totalIncome - totalReduce;
+        boolean flag = false; //có cần nộp thuế hay không
+        if (dependencePerson == 0){
+            if (totalIncome > 11000000){
+                flag = true;
+            }
+        }
+        if (dependencePerson == 1){
+            if (totalIncome > 15400000){
+                flag = true;
+            }
+        }
+        if (flag == false) {
+            totalTax = 0;
+        } else {
+            if (totalAmountForTax <= 5000000){
+                totalTax = totalAmountForTax*0.05;
+            } else if (totalAmountForTax <= 10000000){
+                totalTax = totalAmountForTax*0.1 - 250000;
+            } else if (totalAmountForTax <= 18000000){
+                totalTax = totalAmountForTax*0.15 - 750000;
+            } else if (totalAmountForTax <= 32000000){
+                totalTax = totalAmountForTax*0.2 - 1650000;
+            } else if (totalAmountForTax <= 52000000){
+                totalTax = totalAmountForTax*0.25 - 3250000;
+            } else if (totalAmountForTax <= 80000000){
+                totalTax = totalAmountForTax*0.3 - 5850000;
+            } else {
+                totalTax = totalAmountForTax*0.35 - 9850000;
+            }
+        }
+        return totalTax;
+    }
+    public double calculateProfit(double amountOfMoney, double period, double interesRate){
+        double totalProfit = 0;
+        totalProfit = amountOfMoney*(interesRate/100)/12*period;
+        return totalProfit;
+    }
+
+
 }

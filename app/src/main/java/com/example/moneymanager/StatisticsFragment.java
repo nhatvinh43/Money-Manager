@@ -95,6 +95,7 @@ public class StatisticsFragment extends Fragment {
     private String[] incomeTitle = {"Thưởng", "Lãi", "Lương", "Được tặng", "Khác"};
     private String[] spendTitle = {"Ăn uống", "Sinh hoạt", "Đi lại", "Sức khỏe", "Đám tiệc", "Khác"};
     private AnyChartView overallChart, incomeChart, spendChart;
+    private TextView totalIncome, totalSpending;
     private Pie overallPieChart;
     private Cartesian incomeCartesianChart, spendingCartersianChart;
     private Column incomeColumn, spendingColumn;
@@ -196,6 +197,8 @@ public class StatisticsFragment extends Fragment {
         dateHome = view.findViewById(R.id.date_statistics);
         dateArrow = view.findViewById(R.id.dateArrow_statistics);
         recyclerView = view.findViewById(R.id.moneySourceList_statistics);
+        totalIncome = view.findViewById(R.id.totalIncome);
+        totalSpending = view.findViewById(R.id.totalSpending);
 
         // prepare Overall chart
         dataEntries.add(new ValueDataEntry(overallTitle[0], 10));
@@ -642,8 +645,10 @@ public class StatisticsFragment extends Fragment {
             @Override
             public void run() {
                 RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(0);
-//                CardView cv = viewHolder.itemView.findViewById(R.id.cardContainer);
-//                cv.animate().setDuration(100).scaleX(1).scaleY(1).setInterpolator(new AccelerateInterpolator()).start();
+                if(viewHolder != null) {
+                    CardView cv = viewHolder.itemView.findViewById(R.id.cardContainer);
+                    cv.animate().setDuration(100).scaleX(1).scaleY(1).setInterpolator(new AccelerateInterpolator()).start();
+                }
             }
         }, 100);
 
@@ -855,6 +860,11 @@ public class StatisticsFragment extends Fragment {
         System.out.println(dataEntries.size());
         APIlib.getInstance().setActiveAnyChartView(overallChart);
         overallPieChart.data(dataEntries);
+        //setup income/spending
+        MoneyToStringConverter moneyToStringConverter = new MoneyToStringConverter();
+        totalIncome.setText(moneyToStringConverter.moneyToString((double)(res.get(0))));
+        totalSpending.setText(moneyToStringConverter.moneyToString((double)(res.get(1))));
+
         //income Chart
         ArrayList<Double> resIncome = new ArrayList<>();
         resIncome = incomeRate();
