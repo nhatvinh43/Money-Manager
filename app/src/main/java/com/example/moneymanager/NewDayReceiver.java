@@ -75,7 +75,7 @@ public class NewDayReceiver extends BroadcastReceiver {
                 peTrans.setTransactionTime(new Timestamp(newPeriodicTime_day.getTimeInMillis()));
 
                 dataHelper.setTransactionFromPeriodicTransaction(peTrans);
-                notificationBuil(peTrans);
+                updateMoneySourceAndPushNotification(peTrans);
                 break;
             case "month":
                 Calendar periodicTime_month = Calendar.getInstance();
@@ -88,7 +88,7 @@ public class NewDayReceiver extends BroadcastReceiver {
                     peTrans.setTransactionTime(new Timestamp(newPeriodicTime_month.getTimeInMillis()));
 
                     dataHelper.setTransactionFromPeriodicTransaction(peTrans);
-                    notificationBuil(peTrans);
+                    updateMoneySourceAndPushNotification(peTrans);
                 }
                 break;
             case "year":
@@ -102,10 +102,31 @@ public class NewDayReceiver extends BroadcastReceiver {
                     peTrans.setTransactionTime(new Timestamp(newPeriodicTime_year.getTimeInMillis()));
 
                     dataHelper.setTransactionFromPeriodicTransaction(peTrans);
-                    notificationBuil(peTrans);
+                    updateMoneySourceAndPushNotification(peTrans);
                 }
                 break;
         }
+    }
+
+    public void updateMoneySourceAndPushNotification(final PeriodicTransaction periodicTransaction) {
+        dataHelper.getMoneySourceById(new SingleMoneySourceCallBack() {
+            @Override
+            public void onCallBack(MoneySource moneySource) {
+                if(periodicTransaction.getTransactionIsIncome()) {
+                    moneySource.setAmount(moneySource.getAmount().doubleValue() + periodicTransaction.getTransactionAmount().doubleValue());
+                } else {
+                    moneySource.setAmount(moneySource.getAmount().doubleValue() - periodicTransaction.getTransactionAmount().doubleValue());
+                }
+
+                dataHelper.updateMoneySource(moneySource);
+                notificationBuil(periodicTransaction);
+            }
+
+            @Override
+            public void onCallBackFailed(String msg) {
+
+            }
+        }, periodicTransaction.getMoneySourceId());
     }
 
     public void notificationBuil(PeriodicTransaction resPeriodicTransaction) {

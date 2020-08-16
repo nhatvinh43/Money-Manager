@@ -222,7 +222,7 @@ public class HomeFragment extends Fragment {
 
 
         // Moneysource Info Initiation
-        final WaveLoadingView waveLoadingView = view.findViewById(R.id.waveLoadingView);
+        waveLoadingView = view.findViewById(R.id.waveLoadingView);
         todayIncome = view.findViewById(R.id.todayIncome_home);
         todaySpending = view.findViewById(R.id.todaySpending_home);
         todayIncome.setTextColor(Color.GREEN);
@@ -720,7 +720,15 @@ public class HomeFragment extends Fragment {
                     filterMenu.setSelection(0);
 
                     selectedMoneySource = moneySourceList.get(pos);
+
                     waveLoadingView.setCenterTitle(converter.moneyToString((double)selectedMoneySource.getLimit()));
+                    if(selectedMoneySource.getLimit().doubleValue() != 0) {
+                        int percent = (int) ((selectedMoneySource.getAmount().doubleValue() / selectedMoneySource.getLimit().doubleValue()) * 100);
+                        if (percent > 100) percent = 100;
+                        waveLoadingView.setProgressValue(percent);
+                    } else {
+                        waveLoadingView.setProgressValue(0);
+                    }
 
                     transactionList.clear();
                     transactionList.addAll(modifierTransactionListByViewMode());
@@ -748,6 +756,13 @@ public class HomeFragment extends Fragment {
         transactionList.addAll(modifierTransactionListByViewMode());
 
         waveLoadingView.setCenterTitle(converter.moneyToString((double)selectedMoneySource.getLimit()));
+        if(selectedMoneySource.getLimit().doubleValue() != 0) {
+            int percent = (int) ((selectedMoneySource.getAmount().doubleValue() / selectedMoneySource.getLimit().doubleValue()) * 100);
+            if (percent > 100) percent = 100;
+            waveLoadingView.setProgressValue(percent);
+        } else {
+            waveLoadingView.setProgressValue(1);
+        }
         todayIncome.setText("+" + getTodayIncome());
         todaySpending.setText("-" + getTodaySpending());
 
@@ -1095,9 +1110,9 @@ public class HomeFragment extends Fragment {
 
                         // Cập nhập lại số tiền khi thêm transaction mới
                         if(resTransaction.getTransactionIsIncome()) {
-                            ms.setAmount((Double) ms.getAmount() + (Double) resTransaction.getTransactionAmount());
+                            ms.setAmount((double) ms.getAmount() + (double) resTransaction.getTransactionAmount());
                         } else {
-                            ms.setAmount((Double) ms.getAmount() - (Double) resTransaction.getTransactionAmount());
+                            ms.setAmount((double) ms.getAmount() - (double) resTransaction.getTransactionAmount());
                         }
                         dataHelper.updateMoneySource(ms);
                         moneySourceAdapter.notifyDataSetChanged();
@@ -1107,6 +1122,15 @@ public class HomeFragment extends Fragment {
                         if(selectedMoneySource.getMoneySourceId().equals(msId)) {
                             Log.d("-------------Test result from add trans ", "Equals");
                             selectedMoneySource = ms;
+
+                            if(selectedMoneySource.getLimit().doubleValue() != 0) {
+                                int percent = (int) ((selectedMoneySource.getAmount().doubleValue() / selectedMoneySource.getLimit().doubleValue()) * 100);
+                                if (percent > 100) percent = 100;
+                                Log.d("----------------------percent------------", String.valueOf(percent));
+                                waveLoadingView.setProgressValue(percent);
+                            } else {
+                                waveLoadingView.setProgressValue(0);
+                            }
 
                             transactionList.clear();
                             transactionList.addAll(modifierTransactionListByViewMode());
@@ -1195,6 +1219,14 @@ public class HomeFragment extends Fragment {
                             if (selectedMoneySource.getMoneySourceId().compareTo(msId) == 0) {
                                 selectedMoneySource = ms;
 
+                                if(selectedMoneySource.getLimit().doubleValue() != 0) {
+                                    int percent = (int) ((selectedMoneySource.getAmount().doubleValue() / selectedMoneySource.getLimit().doubleValue()) * 100);
+                                    if (percent > 100) percent = 100;
+                                    waveLoadingView.setProgressValue(percent);
+                                } else {
+                                    waveLoadingView.setProgressValue(0);
+                                }
+
                                 transactionList.clear();
                                 transactionList.addAll(modifierTransactionListByViewMode());
                                 transactionAdapter.notifyDataSetChanged();
@@ -1231,6 +1263,14 @@ public class HomeFragment extends Fragment {
                                 if (selectedMoneySource.getMoneySourceId().compareTo(msId) == 0) {
                                     selectedMoneySource = ms;
 
+                                    if(selectedMoneySource.getLimit().doubleValue() != 0) {
+                                        int percent = (int) ((selectedMoneySource.getAmount().doubleValue() / selectedMoneySource.getLimit().doubleValue()) * 100);
+                                        if (percent > 100) percent = 100;
+                                        waveLoadingView.setProgressValue(percent);
+                                    } else {
+                                        waveLoadingView.setProgressValue(0);
+                                    }
+
                                     transactionList.clear();
                                     transactionList.addAll(modifierTransactionListByViewMode());
                                     transactionAdapter.notifyDataSetChanged();
@@ -1251,12 +1291,24 @@ public class HomeFragment extends Fragment {
                 DataHelper dataHelper = new DataHelper();
                 MoneySource resMoneySource = (MoneySource) data.getParcelableExtra("moneysource");
                 String msId = resMoneySource.getMoneySourceId();
+                MoneyToStringConverter converter = new MoneyToStringConverter();
 
                 for(MoneySource ms : moneySourceList) {
                     if(ms.getMoneySourceId().equals(msId)) {
                         ms.setAmount(resMoneySource.getAmount());
                         ms.setMoneySourceName(resMoneySource.getMoneySourceName());
-                        // Đơn vị tiền tệ thêm sau
+                        ms.setLimit(resMoneySource.getLimit());
+                        ms.setCurrencyId(resMoneySource.getCurrencyId());
+                        ms.setCurrencyName(resMoneySource.getCurrencyName());
+
+                        waveLoadingView.setCenterTitle(converter.moneyToString((double)selectedMoneySource.getLimit()));
+                        if(selectedMoneySource.getLimit().doubleValue() != 0) {
+                            int percent = (int) ((selectedMoneySource.getAmount().doubleValue() / selectedMoneySource.getLimit().doubleValue()) * 100);
+                            if (percent > 100) percent = 100;
+                            waveLoadingView.setProgressValue(percent);
+                        } else {
+                            waveLoadingView.setProgressValue(0);
+                        }
 
                         dataHelper.updateMoneySource(ms);
                         moneySourceAdapter.notifyDataSetChanged();
