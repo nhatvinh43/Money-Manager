@@ -225,8 +225,6 @@ public class HomeFragment extends Fragment {
         waveLoadingView = view.findViewById(R.id.waveLoadingView);
         todayIncome = view.findViewById(R.id.todayIncome_home);
         todaySpending = view.findViewById(R.id.todaySpending_home);
-        todayIncome.setTextColor(Color.GREEN);
-        todaySpending.setTextColor(Color.RED);
 
         // Calendar Initiation
         dayOfWeek = view.findViewById(R.id.weekDay_home);
@@ -399,8 +397,8 @@ public class HomeFragment extends Fragment {
                     }
                 }
 
-                todayIncome.setText("+" + getTodayIncome());
-                todaySpending.setText("-" + getTodaySpending());
+                todayIncome.setText(getTodayIncome());
+                todaySpending.setText(getTodaySpending());
             }
 
             @Override
@@ -446,8 +444,8 @@ public class HomeFragment extends Fragment {
                                 transactionAdapter.notifyDataSetChanged();
                                 transactionRecycleView.scheduleLayoutAnimation();
 
-                                todayIncome.setText("+" + getTodayIncome());
-                                todaySpending.setText("-" + getTodaySpending());
+                                todayIncome.setText(getTodayIncome());
+                                todaySpending.setText(getTodaySpending());
                             }
                         };
                         new DatePickerDialog(getContext(), R.style.DatePickerDialog, date, mYear, mMonth, mDay).show();
@@ -487,8 +485,8 @@ public class HomeFragment extends Fragment {
                                         transactionAdapter.notifyDataSetChanged();
                                         transactionRecycleView.scheduleLayoutAnimation();
 
-                                        todayIncome.setText("+" + getTodayIncome());
-                                        todaySpending.setText("-" + getTodaySpending());
+                                        todayIncome.setText(getTodayIncome());
+                                        todaySpending.setText(getTodaySpending());
                                     }
                                 }, today.get(Calendar.YEAR), today.get(Calendar.MONTH));
 
@@ -544,8 +542,8 @@ public class HomeFragment extends Fragment {
                                         transactionAdapter.notifyDataSetChanged();
                                         transactionRecycleView.scheduleLayoutAnimation();
 
-                                        todayIncome.setText("+" + getTodayIncome());
-                                        todaySpending.setText("-" + getTodaySpending());
+                                        todayIncome.setText(getTodayIncome());
+                                        todaySpending.setText(getTodaySpending());
                                     }
                                 }, today.get(Calendar.YEAR), today.get(Calendar.MONTH));
 
@@ -636,8 +634,8 @@ public class HomeFragment extends Fragment {
                                 transactionAdapter.notifyDataSetChanged();
                                 transactionRecycleView.scheduleLayoutAnimation();
 
-                                todayIncome.setText("+" + getTodayIncome());
-                                todaySpending.setText("-" + getTodaySpending());
+                                todayIncome.setText(getTodayIncome());
+                                todaySpending.setText(getTodaySpending());
                                 chooseTimeDialog.dismiss();
                             }
                         });
@@ -736,8 +734,8 @@ public class HomeFragment extends Fragment {
                     transactionAdapter.notifyDataSetChanged();
                     transactionRecycleView.scheduleLayoutAnimation();
 
-                    todayIncome.setText("+" + getTodayIncome());
-                    todaySpending.setText("-" + getTodaySpending());
+                    todayIncome.setText(getTodayIncome());
+                    todaySpending.setText(getTodaySpending());
                     search.setText("");
                 }
 
@@ -763,8 +761,8 @@ public class HomeFragment extends Fragment {
         } else {
             waveLoadingView.setProgressValue(1);
         }
-        todayIncome.setText("+" + getTodayIncome());
-        todaySpending.setText("-" + getTodaySpending());
+        todayIncome.setText(getTodayIncome());
+        todaySpending.setText(getTodaySpending());
 
         GridLayoutManager transactionLayoutManager = new GridLayoutManager(getContext(), 2);
         transactionRecycleView.setLayoutManager(transactionLayoutManager);
