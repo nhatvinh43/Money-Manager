@@ -135,6 +135,9 @@ public class HomeFragment extends Fragment {
     ArrayList<Transaction> transactionList;
     HomeTransactionAdapter transactionAdapter;
     LayoutAnimationController aController;
+    LinearLayout transactionsSection;
+    LinearLayout noTransactionsSection;
+
 
     // Filter and Sort
     Spinner sortMenu;
@@ -217,8 +220,8 @@ public class HomeFragment extends Fragment {
     private void initView(View view) {
         final MoneyToStringConverter converter = new MoneyToStringConverter();
 
-        final LinearLayout transactionsSection = view.findViewById(R.id.transactions_home);
-        final LinearLayout noTransactionsSection = view.findViewById(R.id.noTodayTransaction_home);
+        transactionsSection = view.findViewById(R.id.transactions_home);
+        noTransactionsSection = view.findViewById(R.id.noTodayTransaction_home);
 
 
         // Moneysource Info Initiation
@@ -1132,6 +1135,7 @@ public class HomeFragment extends Fragment {
 
                             transactionList.clear();
                             transactionList.addAll(modifierTransactionListByViewMode());
+                            renderError(transactionList, transactionsSection, noTransactionsSection);
                             transactionAdapter.notifyDataSetChanged();
                             transactionRecycleView.scheduleLayoutAnimation();
                         }
@@ -1227,6 +1231,7 @@ public class HomeFragment extends Fragment {
 
                                 transactionList.clear();
                                 transactionList.addAll(modifierTransactionListByViewMode());
+                                renderError(transactionList, transactionsSection, noTransactionsSection);
                                 transactionAdapter.notifyDataSetChanged();
                                 transactionRecycleView.scheduleLayoutAnimation();
                             }
@@ -1271,6 +1276,7 @@ public class HomeFragment extends Fragment {
 
                                     transactionList.clear();
                                     transactionList.addAll(modifierTransactionListByViewMode());
+                                    renderError(transactionList, transactionsSection, noTransactionsSection);
                                     transactionAdapter.notifyDataSetChanged();
                                     transactionRecycleView.scheduleLayoutAnimation();
                                 }
