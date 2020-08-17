@@ -1,6 +1,8 @@
 package com.example.moneymanager;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -896,6 +898,29 @@ public class StatisticsFragment extends Fragment {
 
     private void setupManualChar(View view){
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        System.out.println("Resume");
+        dataHelper.getMoneySource(new MoneySourceCallBack() {
+            @Override
+            public void onCallBack(ArrayList<MoneySource> list) {
+                getMoneySourceList(list);
+                setupDateChart();
+            }
+
+            @Override
+            public void onCallBackFail(String message) {
+
+            }
+        }, firebaseAuth.getCurrentUser().getUid());
     }
 
     private String getDayOfWeek(int value) {
