@@ -1136,8 +1136,8 @@ public class HomeFragment extends Fragment {
                             transactionList.clear();
                             transactionList.addAll(modifierTransactionListByViewMode());
 
-                            todayIncome.setText("+" + getTodayIncome());
-                            todaySpending.setText("-" + getTodaySpending());
+                            todayIncome.setText(getTodayIncome());
+                            todaySpending.setText(getTodaySpending());
 
                             renderError(transactionList, transactionsSection, noTransactionsSection);
                             transactionAdapter.notifyDataSetChanged();
@@ -1236,8 +1236,8 @@ public class HomeFragment extends Fragment {
                                 transactionList.clear();
                                 transactionList.addAll(modifierTransactionListByViewMode());
 
-                                todayIncome.setText("+" + getTodayIncome());
-                                todaySpending.setText("-" + getTodaySpending());
+                                todayIncome.setText(getTodayIncome());
+                                todaySpending.setText(getTodaySpending());
 
                                 renderError(transactionList, transactionsSection, noTransactionsSection);
                                 transactionAdapter.notifyDataSetChanged();
@@ -1285,8 +1285,8 @@ public class HomeFragment extends Fragment {
                                     transactionList.clear();
                                     transactionList.addAll(modifierTransactionListByViewMode());
 
-                                    todayIncome.setText("+" + getTodayIncome());
-                                    todaySpending.setText("-" + getTodaySpending());
+                                    todayIncome.setText(getTodayIncome());
+                                    todaySpending.setText(getTodaySpending());
 
                                     renderError(transactionList, transactionsSection, noTransactionsSection);
                                     transactionAdapter.notifyDataSetChanged();
