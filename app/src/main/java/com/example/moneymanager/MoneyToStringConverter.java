@@ -7,6 +7,7 @@ import java.text.DecimalFormat;
 
 public class MoneyToStringConverter {
     public String moneyToString(double amount) {
+        if(amount < 0) return "-" + moneyToString(-amount);
         if(amount == 0) return "0";
         StringBuilder mString = new StringBuilder();
         long mAmount = (long) amount;
@@ -33,6 +34,7 @@ public class MoneyToStringConverter {
     }
 
     public double stringToMoney(String amountStr) {
+        if(amountStr.charAt(0) == '-') return -stringToMoney(amountStr.substring(1, amountStr.length()));
         if(amountStr.equals("0")) return 0.0;
         StringBuilder mString = new StringBuilder(amountStr);
         int index = mString.indexOf(",");
