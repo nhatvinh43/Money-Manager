@@ -63,6 +63,7 @@ import com.whiteelephant.monthpicker.MonthPickerDialog;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -400,6 +401,7 @@ public class HomeFragment extends Fragment {
                     }
                 }
 
+                setLimitByViewMode();
                 todayIncome.setText(getTodayIncome());
                 todaySpending.setText(getTodaySpending());
             }
@@ -447,6 +449,7 @@ public class HomeFragment extends Fragment {
                                 transactionAdapter.notifyDataSetChanged();
                                 transactionRecycleView.scheduleLayoutAnimation();
 
+                                setLimitByViewMode();
                                 todayIncome.setText(getTodayIncome());
                                 todaySpending.setText(getTodaySpending());
                             }
@@ -488,6 +491,7 @@ public class HomeFragment extends Fragment {
                                         transactionAdapter.notifyDataSetChanged();
                                         transactionRecycleView.scheduleLayoutAnimation();
 
+                                        setLimitByViewMode();
                                         todayIncome.setText(getTodayIncome());
                                         todaySpending.setText(getTodaySpending());
                                     }
@@ -545,6 +549,7 @@ public class HomeFragment extends Fragment {
                                         transactionAdapter.notifyDataSetChanged();
                                         transactionRecycleView.scheduleLayoutAnimation();
 
+                                        setLimitByViewMode();
                                         todayIncome.setText(getTodayIncome());
                                         todaySpending.setText(getTodaySpending());
                                     }
@@ -637,6 +642,7 @@ public class HomeFragment extends Fragment {
                                 transactionAdapter.notifyDataSetChanged();
                                 transactionRecycleView.scheduleLayoutAnimation();
 
+                                setLimitByViewMode();
                                 todayIncome.setText(getTodayIncome());
                                 todaySpending.setText(getTodaySpending());
                                 chooseTimeDialog.dismiss();
@@ -723,13 +729,6 @@ public class HomeFragment extends Fragment {
                     selectedMoneySource = moneySourceList.get(pos);
 
                     waveLoadingView.setCenterTitle(converter.moneyToString((double)selectedMoneySource.getLimit()));
-                    if(selectedMoneySource.getLimit().doubleValue() != 0) {
-                        int percent = (int) ((selectedMoneySource.getAmount().doubleValue() / selectedMoneySource.getLimit().doubleValue()) * 100);
-                        if (percent > 100) percent = 100;
-                        waveLoadingView.setProgressValue(percent);
-                    } else {
-                        waveLoadingView.setProgressValue(0);
-                    }
 
                     transactionList.clear();
                     transactionList.addAll(modifierTransactionListByViewMode());
@@ -737,6 +736,7 @@ public class HomeFragment extends Fragment {
                     transactionAdapter.notifyDataSetChanged();
                     transactionRecycleView.scheduleLayoutAnimation();
 
+                    setLimitByViewMode();
                     todayIncome.setText(getTodayIncome());
                     todaySpending.setText(getTodaySpending());
                     search.setText("");
@@ -757,13 +757,7 @@ public class HomeFragment extends Fragment {
         transactionList.addAll(modifierTransactionListByViewMode());
 
         waveLoadingView.setCenterTitle(converter.moneyToString((double)selectedMoneySource.getLimit()));
-        if(selectedMoneySource.getLimit().doubleValue() != 0) {
-            int percent = (int) ((selectedMoneySource.getAmount().doubleValue() / selectedMoneySource.getLimit().doubleValue()) * 100);
-            if (percent > 100) percent = 100;
-            waveLoadingView.setProgressValue(percent);
-        } else {
-            waveLoadingView.setProgressValue(1);
-        }
+        setLimitByViewMode();
         todayIncome.setText(getTodayIncome());
         todaySpending.setText(getTodaySpending());
 
@@ -1088,6 +1082,45 @@ public class HomeFragment extends Fragment {
         return converter.moneyToString(total);
     }
 
+    private void setLimitByViewMode(){
+        MoneyToStringConverter converter = new MoneyToStringConverter();
+        YearMonth yearMonth = YearMonth.of(mYear, mMonth);
+        int numDay = yearMonth.lengthOfMonth();
+        double total = 0;
+        double limit = selectedMoneySource.getLimit().doubleValue();
+        int percent = 0;
+
+        for(Transaction trans : transactionList) {
+            if(!trans.getTransactionIsIncome()) {
+                total += trans.getTransactionAmount().doubleValue();
+            }
+        }
+
+        if(limit != 0) {
+            if (viewMode.equals(ViewMode.DAY)) {
+                limit = limit / numDay;
+                percent = (int) ((total / limit) * 100);
+                waveLoadingView.setCenterTitle(converter.moneyToString(limit));
+                waveLoadingView.setProgressValue(percent);
+            } else if (viewMode.equals(ViewMode.MONTH)) {
+                percent = (int) ((total / limit) * 100);
+                waveLoadingView.setCenterTitle(converter.moneyToString(limit));
+                waveLoadingView.setProgressValue(percent);
+            } else if (viewMode.equals(ViewMode.YEAR)) {
+                limit = limit * 12;
+                percent = (int) ((total / limit) * 100);
+                waveLoadingView.setCenterTitle(converter.moneyToString(limit));
+                waveLoadingView.setProgressValue(percent);
+            } else if (viewMode.equals(ViewMode.MANUAL)) {
+                waveLoadingView.setCenterTitle("Không hạn mức");
+                waveLoadingView.setProgressValue(0);
+            }
+        } else {
+            waveLoadingView.setCenterTitle(converter.moneyToString(limit));
+            waveLoadingView.setProgressValue(0);
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -1124,18 +1157,10 @@ public class HomeFragment extends Fragment {
                             Log.d("-------------Test result from add trans ", "Equals");
                             selectedMoneySource = ms;
 
-                            if(selectedMoneySource.getLimit().doubleValue() != 0) {
-                                int percent = (int) ((selectedMoneySource.getAmount().doubleValue() / selectedMoneySource.getLimit().doubleValue()) * 100);
-                                if (percent > 100) percent = 100;
-                                Log.d("----------------------percent------------", String.valueOf(percent));
-                                waveLoadingView.setProgressValue(percent);
-                            } else {
-                                waveLoadingView.setProgressValue(0);
-                            }
-
                             transactionList.clear();
                             transactionList.addAll(modifierTransactionListByViewMode());
 
+                            setLimitByViewMode();
                             todayIncome.setText(getTodayIncome());
                             todaySpending.setText(getTodaySpending());
 
@@ -1225,17 +1250,10 @@ public class HomeFragment extends Fragment {
                             if (selectedMoneySource.getMoneySourceId().compareTo(msId) == 0) {
                                 selectedMoneySource = ms;
 
-                                if(selectedMoneySource.getLimit().doubleValue() != 0) {
-                                    int percent = (int) ((selectedMoneySource.getAmount().doubleValue() / selectedMoneySource.getLimit().doubleValue()) * 100);
-                                    if (percent > 100) percent = 100;
-                                    waveLoadingView.setProgressValue(percent);
-                                } else {
-                                    waveLoadingView.setProgressValue(0);
-                                }
-
                                 transactionList.clear();
                                 transactionList.addAll(modifierTransactionListByViewMode());
 
+                                setLimitByViewMode();
                                 todayIncome.setText(getTodayIncome());
                                 todaySpending.setText(getTodaySpending());
 
@@ -1248,7 +1266,7 @@ public class HomeFragment extends Fragment {
                         break;
                     }
                 }
-            } else if(resultCode == Activity.RESULT_FIRST_USER) {
+            } else if(resultCode == Activity.RESULT_FIRST_USER) { // Xóa giao dịch
                 Log.d("-------------Test result from trans detail ", "DELETE");
                 DataHelper dataHelper = new DataHelper();
                 Transaction resTransaction = (Transaction) data.getParcelableExtra("transaction");
@@ -1274,17 +1292,10 @@ public class HomeFragment extends Fragment {
                                 if (selectedMoneySource.getMoneySourceId().compareTo(msId) == 0) {
                                     selectedMoneySource = ms;
 
-                                    if(selectedMoneySource.getLimit().doubleValue() != 0) {
-                                        int percent = (int) ((selectedMoneySource.getAmount().doubleValue() / selectedMoneySource.getLimit().doubleValue()) * 100);
-                                        if (percent > 100) percent = 100;
-                                        waveLoadingView.setProgressValue(percent);
-                                    } else {
-                                        waveLoadingView.setProgressValue(0);
-                                    }
-
                                     transactionList.clear();
                                     transactionList.addAll(modifierTransactionListByViewMode());
 
+                                    setLimitByViewMode();
                                     todayIncome.setText(getTodayIncome());
                                     todaySpending.setText(getTodaySpending());
 
@@ -1318,13 +1329,7 @@ public class HomeFragment extends Fragment {
                         ms.setCurrencyName(resMoneySource.getCurrencyName());
 
                         waveLoadingView.setCenterTitle(converter.moneyToString((double)selectedMoneySource.getLimit()));
-                        if(selectedMoneySource.getLimit().doubleValue() != 0) {
-                            int percent = (int) ((selectedMoneySource.getAmount().doubleValue() / selectedMoneySource.getLimit().doubleValue()) * 100);
-                            if (percent > 100) percent = 100;
-                            waveLoadingView.setProgressValue(percent);
-                        } else {
-                            waveLoadingView.setProgressValue(0);
-                        }
+                        setLimitByViewMode();
 
                         dataHelper.updateMoneySource(ms);
                         moneySourceAdapter.notifyDataSetChanged();
