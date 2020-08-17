@@ -1137,6 +1137,10 @@ public class HomeFragment extends Fragment {
 
                             transactionList.clear();
                             transactionList.addAll(modifierTransactionListByViewMode());
+
+                            todayIncome.setText("+" + getTodayIncome());
+                            todaySpending.setText("-" + getTodaySpending());
+
                             renderError(transactionList, transactionsSection, noTransactionsSection);
                             transactionAdapter.notifyDataSetChanged();
                             transactionRecycleView.scheduleLayoutAnimation();
@@ -1233,6 +1237,10 @@ public class HomeFragment extends Fragment {
 
                                 transactionList.clear();
                                 transactionList.addAll(modifierTransactionListByViewMode());
+
+                                todayIncome.setText("+" + getTodayIncome());
+                                todaySpending.setText("-" + getTodaySpending());
+
                                 renderError(transactionList, transactionsSection, noTransactionsSection);
                                 transactionAdapter.notifyDataSetChanged();
                                 transactionRecycleView.scheduleLayoutAnimation();
@@ -1278,6 +1286,10 @@ public class HomeFragment extends Fragment {
 
                                     transactionList.clear();
                                     transactionList.addAll(modifierTransactionListByViewMode());
+
+                                    todayIncome.setText("+" + getTodayIncome());
+                                    todaySpending.setText("-" + getTodaySpending());
+
                                     renderError(transactionList, transactionsSection, noTransactionsSection);
                                     transactionAdapter.notifyDataSetChanged();
                                     transactionRecycleView.scheduleLayoutAnimation();
